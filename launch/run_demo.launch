@@ -6,6 +6,12 @@
     <arg name="frequency" default="50"/>
     <arg name="serial_device" default="/dev/ttyUSB0"/>
     <arg name="autostart" default="true"/>
+    <arg name="logging_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
+    <arg name="use_internal_logging" default="False"/>
+    <arg name="controller_config" default="$(find schunk_svh_driver)/etc/controller_user.yaml" />
+    <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
+    <arg name="use_arm" default="True" />
+
    
 	<!-- load high level -->	
     <include file="$(find pathloader)/launch/trajectoryExecution.launch">
@@ -15,12 +21,12 @@
         <!--<arg name="frequency" value="$(arg frequency)"/>-->
         <arg name="frequency" value="50.3"/>
     </include>
-   
     
     <group ns="$(arg ns)">
 
         <!-- Load the robot description that was loaded previously-->
-        <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-arm.urdf.xacro"/>
+        <param if="$(arg use_arm)" name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-arm.urdf.xacro"/>
+        <param unless="$(arg use_arm)" name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro"/>
 
         <!-- Robot state publisher for the TFs -->
         <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
@@ -33,10 +39,20 @@
         </node>
 
     	<!-- load hardware driver -->
-        <include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch">
+        <group if="$(arg use_arm)">
+          <include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch">
 		<arg name="frequency" value="$(arg frequency)" />
                 <arg name="autostart" value="$(arg autostart)" />
-	</include>
+   	  </include>
+        </group>
+        <!-- Launch actual driver node (if not in simulation)-->
+
+        <!-- load basic configuration -->
+        <rosparam unless="$(arg simulation)" file="$(arg general_config)" command="load" ns="svh_controller"/>
+        <!-- Load Yaml Configuration file-->
+        <rosparam unless="$(arg simulation)" file="$(find schunk_svh_driver)/etc/controller_default.yaml" command="load" ns="svh_controller"/>
+        <!-- Load the User Config file which will overwrite values from default -->
+        <rosparam unless="$(arg simulation)" file="$(arg controller_config)" command="load" ns="svh_controller"/>
 
         <remap from="svh_controller/channel_targets"  to="interpolator/joint_commands" />
 
