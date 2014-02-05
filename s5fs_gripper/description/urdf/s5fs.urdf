@@ -1,0 +1,249 @@
+<robot name="s5fs">
+  <!-- BASE_LINE LINKS -->
+  <link name="base_link">
+	<visual>
+      <geometry>
+        <box size="0.353 0.2026 .1"/>
+      </geometry>
+      <material name="green">
+          <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="d">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0.55"/>
+      <geometry>
+        <cylinder length="1.1" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <link name="h">
+    <visual>
+      <origin rpy="0 1.571 0" xyz="-0.125 0 0.825"/>
+      <geometry>
+        <cylinder length="0.25" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <link name="d2">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.25 0 0.95"/>
+      <geometry>
+        <cylinder length="0.275" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <!-- THUMB LINKS -->
+  <link name="z">
+	<visual>
+		<origin rpy="0 0 0" xyz="0 0 0.2298"/>
+	    <geometry>
+	      	<cylinder length="0.4596" radius="0.05"/>
+	    </geometry>
+	    <material name="green"/>
+    </visual>
+  </link>
+  <link name="a">
+	<visual>
+		<origin rpy="0 0 0" xyz="0 0 0.2425"/>
+      <geometry>
+        <cylinder length="0.485" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+ <link name="b">
+	<visual>
+    <origin rpy="0 0 0" xyz="0 0 0.15"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <link name="c">
+	<visual>
+    <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <cylinder length="0.2" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <!-- FOREFINGER LINKS -->
+  <link name="virtual_l">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.2402"/>
+    </visual>
+  </link> 
+  <link name="l">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.2402"/>
+      <geometry>
+        <cylinder length="0.4804" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  
+  <link name="p">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.13"/>
+      <geometry>
+        <cylinder length="0.26" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <link name="t">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.075"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+
+  <!-- MIDDLE FINGER LINKS -->
+  <link name="k">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.2502"/>
+      <geometry>
+        <cylinder length="0.5004" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <link name="o">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.16"/>
+      <geometry>
+        <cylinder length="0.32" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <link name="s">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.075"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.05"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  
+
+
+  <!-- BASE_LINE JOINTS -->
+  <joint name="j1" type="revolute">
+    <parent link="base_link"/>
+    <child link="z"/>
+    <limit effort="1000.0" lower="0.0" upper="0.9879" velocity="1"/>
+    <origin xyz="-0.1690 0.2626 0" rpy="0 0.2618 1.571" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <joint name="f1" type="fixed">
+    <parent link="base_link"/>
+    <child link="d"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <joint name="f2" type="fixed">
+    <parent link="d"/>
+    <child link="h"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <joint name="f3" type="fixed">
+    <parent link="h"/>
+    <child link="d2"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- THUMB JOINTS -->
+  <joint name="j2" type="revolute">
+    <parent link="z"/>
+    <child link="a"/>
+    <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1"/>
+    <origin xyz="0 0 .4596" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </joint>
+  <joint name="j3" type="revolute">
+    <parent link="a"/>
+    <child link="b"/>
+    <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1"/>
+    <origin xyz="0 0 0.4596" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </joint>
+  <joint name="j4" type="revolute">
+    <parent link="b"/>
+    <child link="c"/>
+    <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1"/>
+    <origin xyz="0 0 0.3" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </joint>
+
+  <!-- FOREFINGER JOINTS -->
+  <joint name="j6a" type="revolute">
+    <parent link="d2"/>
+    <child link="virtual_l"/>
+    <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1"/>
+    <origin xyz="-0.25 0 1.10" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </joint>
+  <joint name="j6b" type="revolute">
+    <parent link="virtual_l"/>
+    <child link="l"/>
+    <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <axis xyz="0 -1 0" />
+  </joint>
+  <joint name="j10" type="revolute">
+    <parent link="l"/>
+    <child link="p"/>
+    <limit effort="1000.0" lower="0" upper="1.334" velocity="1"/>
+    <origin xyz="0 0 0.4804" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </joint>
+  <joint name="j14" type="revolute">
+    <parent link="p"/>
+    <child link="t"/>
+    <limit effort="1000.0" lower="0" upper="1.394" velocity="1"/>
+    <origin xyz="0 0 0.26" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </joint>
+
+  <!-- MIDDLE FINGER JOINTS -->
+  <joint name="j7" type="revolute">
+    <parent link="d"/>
+    <child link="k"/>
+    <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1"/>
+    <origin xyz="0 0 1.10" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </joint>
+  <joint name="j11" type="revolute">
+    <parent link="k"/>
+    <child link="o"/>
+    <limit effort="1000.0" lower="0" upper="1.334" velocity="1"/>
+    <origin xyz="0 0 0.5004" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </joint>
+  <joint name="j15" type="revolute">
+    <parent link="o"/>
+    <child link="s"/>
+    <limit effort="1000.0" lower="0" upper="1.334" velocity="1"/>
+    <origin xyz="0 0 0.32" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </joint>
+
+  
+  
+</robot>
