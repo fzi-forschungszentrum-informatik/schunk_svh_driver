@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <robot name="s5fs">
     <!-- BASE_LINE LINKS -->
     <link name="base_link">
@@ -461,7 +460,7 @@
         <mimic joint="j8a_ringfinger" multiplier="1.42093" offset="0" />
     </joint>
 
-    
+
     <!-- LITTLE FINGER JOINTS -->
     <joint name="j9a_littlefinger" type="revolute">
         <parent link="e4" />
