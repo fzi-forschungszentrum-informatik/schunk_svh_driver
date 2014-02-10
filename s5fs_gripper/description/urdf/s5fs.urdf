@@ -294,6 +294,16 @@
         <origin xyz="-0.01690 0.02626 0" rpy="0 0.2618 1.571" />
         <axis xyz="0 0 -1" />
     </joint>
+
+    <joint name="j6b_spread" type="revolute">
+        <parent link="virtual_l" />
+        <child link="l" />
+        <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="0 -1 0" />
+    </joint>
+
+
     <joint name="f1" type="fixed">
         <parent link="base_link" />
         <child link="d" />
@@ -377,13 +387,6 @@
         <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
         <origin xyz="-0.025 0 0.110" rpy="0 0 0" />
         <axis xyz="-1 0 0" />
-    </joint>
-    <joint name="j6b_spread" type="revolute">
-        <parent link="virtual_l" />
-        <child link="l" />
-        <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <axis xyz="0 -1 0" />
     </joint>
     <joint name="j10_forefinger2" type="revolute">
         <parent link="l" />
