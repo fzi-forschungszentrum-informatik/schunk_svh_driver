@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  
+  <name>s5fh_controller</name>
+  <version>0.0.1</version>
+  <description>The s5fh_controller package</description>
+  
+  <maintainer email="pfotzer@fzi.de">Lars Pfotzer</maintainer>
+
+  <license>TODO</license>
+
+  <author email="pfotzer@fzi.de">Lars Pfotzer</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  
+</package>
