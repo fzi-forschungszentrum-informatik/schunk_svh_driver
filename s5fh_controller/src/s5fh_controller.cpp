@@ -51,24 +51,13 @@ void resetChannelCallback(const std_msgs::Int8ConstPtr& channel)
   // convert int8 channel into S5FHCHANNEL enum
   driver_s5fh::S5FHCHANNEL s5fh_channel = static_cast<driver_s5fh::S5FHCHANNEL>(channel->data);
 
-  if (s5fh_channel == driver_s5fh::eS5FH_ALL)
+  if (fm->resetChannel(s5fh_channel))
   {
-    ROS_ERROR("Reset of all finger channels at once is not implemented yet!");
-  }
-  else if (s5fh_channel > driver_s5fh::eS5FH_ALL && s5fh_channel < driver_s5fh::eS5FH_DIMENSION)
-  {
-    if (fm->resetChannel(s5fh_channel))
-    {
-      ROS_INFO("Channel %i successfully homed!", s5fh_channel);
-    }
-    else
-    {
-      ROS_ERROR("Could not reset channel %i !", s5fh_channel);
-    }
+    ROS_INFO("Channel %i successfully homed!", s5fh_channel);
   }
   else
   {
-    ROS_ERROR("Channel index %i out of range!", s5fh_channel);
+    ROS_ERROR("Could not reset channel %i !", s5fh_channel);
   }
 }
 
