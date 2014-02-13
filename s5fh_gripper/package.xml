@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
   
-  <name>s5fs_gripper</name>
+  <name>s5fh_gripper</name>
   <version>0.0.1</version>
-  <description>The s5fs_gripper package</description>
+  <description>The s5fh_gripper package</description>
   
   <maintainer email="ruehl@fzi.de">Steffen Rühl</maintainer>
 

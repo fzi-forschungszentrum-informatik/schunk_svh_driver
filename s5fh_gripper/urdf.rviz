@@ -6,8 +6,10 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1
+        - /TF1
       Splitter Ratio: 0.5
-    Tree Height: 562
+    Tree Height: 559
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -123,6 +125,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        i:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         j:
           Alpha: 1
           Show Axes: false
@@ -134,6 +141,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         l:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        m:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -153,6 +165,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        q:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         r:
           Alpha: 1
           Show Axes: false
@@ -164,6 +181,16 @@ Visualization Manager:
           Show Trail: false
           Value: true
         t:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_i:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_j:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -184,6 +211,111 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        a:
+          Value: true
+        b:
+          Value: true
+        base_link:
+          Value: true
+        c:
+          Value: true
+        d:
+          Value: true
+        d2:
+          Value: true
+        e:
+          Value: true
+        e1:
+          Value: true
+        e2:
+          Value: true
+        e3:
+          Value: true
+        e4:
+          Value: true
+        e5:
+          Value: true
+        h:
+          Value: true
+        i:
+          Value: true
+        j:
+          Value: true
+        k:
+          Value: true
+        l:
+          Value: true
+        m:
+          Value: true
+        n:
+          Value: true
+        o:
+          Value: true
+        p:
+          Value: true
+        q:
+          Value: true
+        r:
+          Value: true
+        s:
+          Value: true
+        t:
+          Value: true
+        virtual_i:
+          Value: true
+        virtual_j:
+          Value: true
+        virtual_l:
+          Value: true
+        z:
+          Value: true
+      Marker Scale: 0.1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        base_link:
+          d:
+            h:
+              d2:
+                virtual_l:
+                  l:
+                    p:
+                      t:
+                        {}
+            k:
+              o:
+                s:
+                  {}
+          e1:
+            e2:
+              e3:
+                e:
+                  e4:
+                    virtual_i:
+                      i:
+                        m:
+                          q:
+                            {}
+                  e5:
+                    virtual_j:
+                      j:
+                        n:
+                          r:
+                            {}
+          z:
+            a:
+              b:
+                c:
+                  {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -215,10 +347,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.559798
+      Pitch: 0.369798
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.9304
+      Yaw: 1.7554
     Saved: ~
 Window Geometry:
   Displays:
@@ -226,7 +358,7 @@ Window Geometry:
   Height: 846
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000013c000002bdfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006901000005fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000033000002bd000000d801000005fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002bdfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730100000033000002bd000000ab01000005fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b00000027f01000005fb0000000800540069006d006501000000000000045000000000000000000000025f000002bd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000013c000002bafc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005300fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000036000002ba000000b700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002bafc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730100000036000002ba0000009b00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b00000027a00fffffffb0000000800540069006d0065010000000000000450000000000000000000000259000002ba00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -236,5 +368,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 60
-  Y: 60
+  X: 2409
+  Y: 225
