@@ -1,7 +1,8 @@
 // ROS includes.
 #include <ros/ros.h>
 
-#include <std_msgs/UInt8.h>
+// Messages
+#include <std_msgs/Int8.h>
 #include <std_msgs/Empty.h>
 
 // Dynamic reconfigure
@@ -44,12 +45,14 @@ void connectCallback(const std_msgs::Empty&)
   }
 }
 
-void resetChannelCallback(const std_msgs::UInt8ConstPtr& channel)
+// Callback function to reset/home channels of SCHUNK five finger hand
+void resetChannelCallback(const std_msgs::Int8ConstPtr& channel)
 {
   fm->resetChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
 }
 
-void enableChannelCallback(const std_msgs::UInt8ConstPtr& channel)
+// Callback function to enable channels of SCHUNK five finger hand
+void enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
 {
 //  fm->enableChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
 }
@@ -77,10 +80,10 @@ int main(int argc, char **argv)
   // Subscribe connect topic (Empty)
   ros::Subscriber connect_sub = nh.subscribe("connect", 1, connectCallback);
 
-  // Subscribe reset channel topic (UInt8)
+  // Subscribe reset channel topic (Int8)
   ros::Subscriber reset_sub = nh.subscribe("reset_channel", 1, resetChannelCallback);
 
-  // Subscribe enable channel topic (UInt8)
+  // Subscribe enable channel topic (Int8)
   ros::Subscriber enable_sub = nh.subscribe("enable_channel", 1, enableChannelCallback);
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
