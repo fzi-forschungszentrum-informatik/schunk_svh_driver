@@ -57,7 +57,14 @@ void resetChannelCallback(const std_msgs::Int8ConstPtr& channel)
   }
   else if (s5fh_channel > driver_s5fh::eS5FH_ALL && s5fh_channel < driver_s5fh::eS5FH_DIMENSION)
   {
-    fm->resetChannel(s5fh_channel);
+    if (fm->resetChannel(s5fh_channel))
+    {
+      ROS_INFO("Channel %i successfully homed!", s5fh_channel);
+    }
+    else
+    {
+      ROS_ERROR("Could not reset channel %i !", s5fh_channel);
+    }
   }
   else
   {
