@@ -1,5 +1,5 @@
 <launch>
-	<arg name="gui" default="False" />
+	<arg name="gui" default="True" />
 	<param name="robot_description" textfile="$(find s5fh_gripper)/description/urdf/model.urdf" />
 	<param name="use_gui" value="$(arg gui)"/>
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
