@@ -48,7 +48,21 @@ void connectCallback(const std_msgs::Empty&)
 // Callback function to reset/home channels of SCHUNK five finger hand
 void resetChannelCallback(const std_msgs::Int8ConstPtr& channel)
 {
-  fm->resetChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
+  // convert int8 channel into S5FHCHANNEL enum
+  driver_s5fh::S5FHCHANNEL s5fh_channel = static_cast<driver_s5fh::S5FHCHANNEL>(channel->data);
+
+  if (s5fh_channel == driver_s5fh::eS5FH_ALL)
+  {
+    ROS_ERROR("Reset of all finger channels at once is not implemented yet!");
+  }
+  else if (s5fh_channel > driver_s5fh::eS5FH_ALL && s5fh_channel < driver_s5fh::eS5FH_DIMENSION)
+  {
+    fm->resetChannel(s5fh_channel);
+  }
+  else
+  {
+    ROS_ERROR("Channel index %i out of range!", s5fh_channel);
+  }
 }
 
 // Callback function to enable channels of SCHUNK five finger hand
