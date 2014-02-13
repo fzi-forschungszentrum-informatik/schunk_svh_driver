@@ -4,12 +4,12 @@
 #include <std_msgs/UInt8.h>
 #include <std_msgs/Empty.h>
 
+// Dynamic reconfigure
+#include <dynamic_reconfigure/server.h>
+#include <s5fh_controller/s5fhConfig.h>
+
 #include <driver_s5fh/S5FHFingerManager.h>
 
-/*--------------------------------------------------------------------
- * main()
- * Main function to set up ROS node.
- *------------------------------------------------------------------*/
 
 using driver_s5fh::S5FHFingerManager;
 
@@ -17,8 +17,20 @@ using driver_s5fh::S5FHFingerManager;
 S5FHFingerManager *fm = new S5FHFingerManager;
 
 // Set default serial device name
-std::string serial_device_name = "/dev/ttyUSB1";
+std::string serial_device_name = "";
 
+/*--------------------------------------------------------------------
+ * Callback functions
+ *------------------------------------------------------------------*/
+
+// Callback function for changing parameters dynamically
+void dynamic_reconfigure_callback(s5fh_controller::s5fhConfig &config, uint32_t level)
+{
+  ROS_INFO("Serial device set: %s", config.serial_device.c_str());
+  serial_device_name = config.serial_device;
+}
+
+// Callback function for connecting to SCHUNK five finger hand
 void connectCallback(const std_msgs::Empty&)
 {
   if (fm->isConnected())
@@ -42,6 +54,11 @@ void enableChannelCallback(const std_msgs::UInt8ConstPtr& channel)
 //  fm->enableChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
 }
 
+/*--------------------------------------------------------------------
+ * main()
+ * Main function to set up ROS node.
+ *------------------------------------------------------------------*/
+
 int main(int argc, char **argv)
 {
   // Set up ROS.
@@ -49,6 +66,13 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
 
   icl_core::logging::initialize();
+
+  // setting up dynamic reconfigure
+  dynamic_reconfigure::Server<s5fh_controller::s5fhConfig> server;
+  dynamic_reconfigure::Server<s5fh_controller::s5fhConfig>::CallbackType f;
+
+  f = boost::bind(&dynamic_reconfigure_callback, _1, _2);
+  server.setCallback(f);
 
   // Subscribe connect topic (Empty)
   ros::Subscriber connect_sub = nh.subscribe("connect", 1, connectCallback);
