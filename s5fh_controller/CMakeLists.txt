@@ -4,12 +4,18 @@ project(s5fh_controller)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
+    dynamic_reconfigure
 )
 
 ## System dependencies are found with CMake's conventions
 find_package(icl_comm)
 find_package(icl_core)
 find_package(driver_s5fh)
+
+#dynamic reconfigure files
+generate_dynamic_reconfigure_options(
+  cfg/s5fh.cfg
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -56,6 +62,7 @@ add_dependencies(s5fh_controller
   icl_comm
   icl_core
   driver_s5fh
+  ${PROJECT_NAME}_gencfg
 )
 
 ## Specify libraries to link a library or executable target against
