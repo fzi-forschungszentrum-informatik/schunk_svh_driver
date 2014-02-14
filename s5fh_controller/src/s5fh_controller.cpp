@@ -11,8 +11,7 @@
 
 #include <driver_s5fh/S5FHFingerManager.h>
 
-
-using driver_s5fh::S5FHFingerManager;
+using namespace driver_s5fh;
 
 // Create pointer to S5FH finger manager object.
 S5FHFingerManager *fm = new S5FHFingerManager;
@@ -21,14 +20,57 @@ S5FHFingerManager *fm = new S5FHFingerManager;
 std::string serial_device_name = "";
 
 /*--------------------------------------------------------------------
+ * General functions
+ *------------------------------------------------------------------*/
+
+void setTargetPositions(const std::vector<double>& positions)
+{
+  if (fm->isConnected())
+  {
+    for (size_t channel = 0; channel < eS5FH_DIMENSION; ++channel)
+    {
+      double cur_pos = 0.0;
+      if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
+      {
+        if (positions[channel] != cur_pos)
+        {
+          //ROS_INFO("channel %i: current pos = %f, new pos = %f", channel, cur_pos, positions[channel]);
+          fm->setTargetPosition(static_cast<S5FHCHANNEL>(channel), positions[channel], 0.0);
+        }
+      }
+      else
+      {
+        ROS_WARN("Could not get actual position from finger manager!");
+      }
+    }
+  }
+  else
+  {
+    ROS_WARN("SCHUNK five finger hand is not connected!");
+  }
+}
+
+/*--------------------------------------------------------------------
  * Callback functions
  *------------------------------------------------------------------*/
 
 // Callback function for changing parameters dynamically
 void dynamic_reconfigure_callback(s5fh_controller::s5fhConfig &config, uint32_t level)
 {
-  ROS_INFO("Serial device set: %s", config.serial_device.c_str());
   serial_device_name = config.serial_device;
+
+  std::vector<double> positions(eS5FH_DIMENSION);
+  positions[0] = config.channel0;
+  positions[1] = config.channel1;
+  positions[2] = config.channel2;
+  positions[3] = config.channel3;
+  positions[4] = config.channel4;
+  positions[5] = config.channel5;
+  positions[6] = config.channel6;
+  positions[7] = config.channel7;
+  positions[8] = config.channel8;
+
+  setTargetPositions(positions);
 }
 
 // Callback function for connecting to SCHUNK five finger hand
@@ -49,7 +91,7 @@ void connectCallback(const std_msgs::Empty&)
 void resetChannelCallback(const std_msgs::Int8ConstPtr& channel)
 {
   // convert int8 channel into S5FHCHANNEL enum
-  driver_s5fh::S5FHCHANNEL s5fh_channel = static_cast<driver_s5fh::S5FHCHANNEL>(channel->data);
+  S5FHCHANNEL s5fh_channel = static_cast<S5FHCHANNEL>(channel->data);
 
   if (fm->resetChannel(s5fh_channel))
   {
