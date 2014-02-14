@@ -438,14 +438,6 @@
         <origin xyz="0 0 0.0655" rpy="0 0 0" />
         <axis xyz="-1 0 0" />
     </joint>
-    <joint name="j8b" type="revolute">
-        <parent link="virtual_j" />
-        <child link="j" />
-        <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="${orientation*(0.00675)} 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${orientation*(1)} 0" />
-        <mimic joint="Finger_Spread" multiplier="1" offset="0" />
-    </joint>
     <joint name="j12" type="revolute">
         <parent link="j" />
         <child link="n" />
@@ -472,14 +464,6 @@
         <origin xyz="0 0 0.056" rpy="0 0 0" />
         <axis xyz="-1 0 0" />
     </joint>
-    <joint name="j9b" type="revolute">
-        <parent link="virtual_i" />
-        <child link="i" />
-        <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
-        <origin xyz="${orientation*(0.02825)} 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${orientation*(1)} 0" />
-        <mimic joint="Finger_Spread" multiplier="2.02164" offset="0" />
-    </joint>
     <joint name="j13" type="revolute">
         <parent link="i" />
         <child link="m" />
@@ -496,13 +480,28 @@
         <axis xyz="-1 0 0" />
         <mimic joint="Pinky" multiplier="1.42307" offset="0" />
     </joint>
-    
-        <joint name="Finger_Spread" type="revolute">
+        <joint name="j6b" type="revolute">
         <parent link="virtual_l" />
         <child link="l" />
         <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
         <origin xyz="0 0 0" rpy="0 0 0" />
         <axis xyz="0 ${orientation*(-1)} 0" />
+        <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
+    <joint name="j8b" type="revolute">
+        <parent link="virtual_j" />
+        <child link="j" />
+        <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
+        <origin xyz="${orientation*(0.00675)} 0 0" rpy="0 0 0" />
+        <axis xyz="0 ${orientation*(1)} 0" />
+        <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
+    </joint>
+    <joint name="Finger_Spread" type="revolute">
+        <parent link="virtual_i" />
+        <child link="i" />
+        <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
+        <origin xyz="${orientation*(0.02825)} 0 0" rpy="0 0 0" />
+        <axis xyz="0 ${orientation*(1)} 0" />
+     </joint>
     
 </robot>
