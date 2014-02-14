@@ -5,6 +5,9 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
     dynamic_reconfigure
+    rospy
+    rqt_gui
+    rqt_gui_py
 )
 
 ## System dependencies are found with CMake's conventions
@@ -12,10 +15,13 @@ find_package(icl_comm)
 find_package(icl_core)
 find_package(driver_s5fh)
 
+catkin_python_setup()
+
 #dynamic reconfigure files
 generate_dynamic_reconfigure_options(
   cfg/s5fh.cfg
 )
+
 
 ###################################
 ## catkin specific configuration ##
@@ -30,6 +36,7 @@ catkin_package(
   CATKIN_DEPENDS
   DEPENDS roscpp icl_core icl_comm driver_s5fh
 )
+
 
 ###########
 ## Build ##
@@ -75,4 +82,8 @@ target_link_libraries(s5fh_controller
 #############
 ## Install ##
 #############
+install(PROGRAMS
+  scripts/rqt_s5fh_reset_gui
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 

@@ -1,0 +1,20 @@
+<library path="src">
+  <class name="s5fh_reset_gui" type="rqt_s5fh_reset_gui.s5fh_reset_gui.S5FHResetGui" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      An example Python GUI plugin to create a great user interface.
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>S5fh Reset</label>
+      <icon type="theme">system-help</icon>
+      <statustip>Great user interface to provide real value.</statustip>
+    </qtgui>
+  </class>
+</library>
