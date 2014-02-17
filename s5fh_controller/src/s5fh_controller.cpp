@@ -106,7 +106,7 @@ void resetChannelCallback(const std_msgs::Int8ConstPtr& channel)
 // Callback function to enable channels of SCHUNK five finger hand
 void enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
 {
-//  fm->enableChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
+  fm->enableChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
 }
 
 /*--------------------------------------------------------------------
