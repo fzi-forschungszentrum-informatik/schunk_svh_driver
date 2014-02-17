@@ -162,5 +162,7 @@ int main(int argc, char **argv)
     rate.sleep();
   }
 
+  fm->disconnect();
+
   return 0;
 } // end main()
