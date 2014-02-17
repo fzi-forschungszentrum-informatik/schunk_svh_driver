@@ -1,12 +1,19 @@
 <?xml version="1.0"?>
-<robot name="s5fs" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:property name="cyl_radius" value="0.001" />
-    <!-- RIGHT HAND = 1, LEFT HAND = -1 -->
-    <xacro:property name="orientation" value="-1" />
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-
+<xacro:property name="cyl_radius" value="0.001" />
+<xacro:macro name="s5fh" params="parent name side *origin">
+   <!-- RIGHT HAND = 1, LEFT HAND = -1 -->
     <!-- BASE_LINE LINKS -->
-    <link name="base_link">
+    
+   <joint name="${name}_base_joint" type="fixed" >
+      <insert_block name="origin" />
+      <parent link="${parent}" />
+      <child link="${name}_base_link" />
+    </joint>
+    
+    <link name="${name}_base_link">
+        <xacro:insert_block name="origin" />
         <visual>
             <origin rpy="0 0 0" xyz="0 0.01313 0" />
             <geometry>
@@ -28,7 +35,7 @@
     </link>
     <link name="h">
         <visual>
-            <origin rpy="0 1.571 0" xyz="${orientation*(-0.0125)} 0 0.0825" />
+            <origin rpy="0 1.571 0" xyz="${side*(-0.0125)} 0 0.0825" />
             <geometry>
                 <cylinder length="0.025" radius="${cyl_radius}" />
             </geometry>
@@ -37,7 +44,7 @@
     </link>
     <link name="d2">
         <visual>
-            <origin rpy="0 0 0" xyz="${orientation*(-0.025)} 0 0.09625" />
+            <origin rpy="0 0 0" xyz="${side*(-0.025)} 0 0.09625" />
             <geometry>
                 <cylinder length="0.0275" radius="${cyl_radius}" />
             </geometry>
@@ -47,7 +54,7 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e1">
         <visual>
-            <origin rpy="0 0 0" xyz="${orientation*(0.01840)} 0 0.01875" />
+            <origin rpy="0 0 0" xyz="${side*(0.01840)} 0 0.01875" />
             <geometry>
                 <cylinder length="0.0375" radius="${cyl_radius}" />
             </geometry>
@@ -57,7 +64,7 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e2">
         <visual>
-            <origin rpy="0 1.571 0" xyz="${orientation*(0.00875)} 0 0" />
+            <origin rpy="0 1.571 0" xyz="${side*(0.00875)} 0 0" />
             <geometry>
                 <cylinder length="0.0175" radius="${cyl_radius}" />
             </geometry>
@@ -67,7 +74,7 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e3">
         <visual>
-            <origin rpy="0 0 0" xyz="${orientation*(0.0175)} 0 0.015" />
+            <origin rpy="0 0 0" xyz="${side*(0.0175)} 0 0.015" />
             <geometry>
                 <cylinder length="0.03" radius="${cyl_radius}" />
             </geometry>
@@ -76,7 +83,7 @@
     </link>
     <link name="e">
         <visual>
-            <origin rpy="0 1.571 0" xyz="${orientation*(0.0175)} 0 0.03" />
+            <origin rpy="0 1.571 0" xyz="${side*(0.0175)} 0 0.03" />
             <geometry>
                 <cylinder length="0.0215" radius="${cyl_radius}" />
             </geometry>
@@ -86,7 +93,7 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E4 = D-G-F!!! -->
     <link name="e4">
         <visual>
-            <origin rpy="0 0 0" xyz="${orientation*(0.02825)} 0 0.043" />
+            <origin rpy="0 0 0" xyz="${side*(0.02825)} 0 0.043" />
             <geometry>
                 <cylinder length="0.026" radius="${cyl_radius}" />
             </geometry>
@@ -96,7 +103,7 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E5 = D-G!!! -->
     <link name="e5">
         <visual>
-            <origin rpy="0 0 0" xyz="${orientation*(0.00675)} 0 0.04775" />
+            <origin rpy="0 0 0" xyz="${side*(0.00675)} 0 0.04775" />
             <geometry>
                 <cylinder length="0.0355" radius="${cyl_radius}" />
             </geometry>
@@ -295,23 +302,23 @@
         <child link="a" />
         <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
         <origin xyz="0 0 0.04596" rpy="0 0 0" />
-        <axis xyz="${orientation*(1)} 0 0" />
+        <axis xyz="${side*(1)} 0 0" />
     </joint>
 
 
     <!-- BASE_LINE JOINTS -->
     <joint name="Thumb_Opposition" type="revolute">
-        <parent link="base_link" />
+        <parent link="${name}_base_link" />
         <child link="z" />
         <limit effort="1000.0" lower="0.0" upper="0.9879" velocity="1" />
-        <origin xyz="${orientation*(-0.01690)} 0.02626 0" rpy="0 0.2618 1.571" />
-        <axis xyz="0 0 ${orientation*(-1)}" />
+        <origin xyz="${side*(-0.01690)} 0.02626 0" rpy="0 0.2618 1.571" />
+        <axis xyz="0 0 ${side*(-1)}" />
     </joint>
 
     <!-- JOINT NOT FOR BASE_LINE. BUT WRITTEN DOWN HERE FOR BETTER UX -->
 
     <joint name="f1" type="fixed">
-        <parent link="base_link" />
+        <parent link="${name}_base_link" />
         <child link="d" />
         <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
@@ -326,7 +333,7 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
     <joint name="f4" type="fixed">
-        <parent link="base_link" />
+        <parent link="${name}_base_link" />
         <child link="e1" />
         <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
@@ -334,8 +341,8 @@
         <parent link="e1" />
         <child link="e2" />
         <limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1" />
-        <origin xyz="${orientation*(0.01840)} 0 0.0375" rpy="0 0 0" />
-        <axis xyz="0 0 ${orientation*(1)}" />
+        <origin xyz="${side*(0.01840)} 0 0.0375" rpy="0 0 0" />
+        <axis xyz="0 0 ${side*(1)}" />
         <mimic joint="Thumb_Opposition" multiplier="1" offset="0" />
     </joint>
     <joint name="f5" type="fixed">
@@ -366,7 +373,7 @@
         <child link="b" />
         <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1" />
         <origin xyz="0 0 0.0485" rpy="0 0 0" />
-        <axis xyz="${orientation*(1)} 0 0" />
+        <axis xyz="${side*(1)} 0 0" />
         <mimic joint="Thumb_Flexion" multiplier="1.01511" offset="0" />
     </joint>
     <joint name="j4" type="revolute">
@@ -374,7 +381,7 @@
         <child link="c" />
         <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1" />
         <origin xyz="0 0 0.030" rpy="0 0 0" />
-        <axis xyz="${orientation*(1)} 0 0" />
+        <axis xyz="${side*(1)} 0 0" />
         <mimic joint="Thumb_Flexion" multiplier="1.44889" offset="0" />
     </joint>
 
@@ -391,7 +398,7 @@
         <parent link="d2" />
         <child link="virtual_l" />
         <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
-        <origin xyz="${orientation*(-0.025)} 0 0.110" rpy="0 0 0" />
+        <origin xyz="${side*(-0.025)} 0 0.110" rpy="0 0 0" />
         <axis xyz="-1 0 0" />
     </joint>
     <!-- JOINT Finger_Spread in BASE_LINE section for better UX -->
@@ -485,23 +492,25 @@
         <child link="l" />
         <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
         <origin xyz="0 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${orientation*(-1)} 0" />
+        <axis xyz="0 ${side*(-1)} 0" />
         <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
     <joint name="j8b" type="revolute">
         <parent link="virtual_j" />
         <child link="j" />
         <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="${orientation*(0.00675)} 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${orientation*(1)} 0" />
+        <origin xyz="${side*(0.00675)} 0 0" rpy="0 0 0" />
+        <axis xyz="0 ${side*(1)} 0" />
         <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
     <joint name="Finger_Spread" type="revolute">
         <parent link="virtual_i" />
         <child link="i" />
         <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
-        <origin xyz="${orientation*(0.02825)} 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${orientation*(1)} 0" />
+        <origin xyz="${side*(0.02825)} 0 0" rpy="0 0 0" />
+        <axis xyz="0 ${side*(1)} 0" />
      </joint>
     
+</xacro:macro>
 </robot>
+

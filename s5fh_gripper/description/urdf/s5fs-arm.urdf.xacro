@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot name="s5fs-arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+   <material name="Schunk/Blue">
+    <color rgba="0.6 0.6 0.6 1"/>
+  </material>     
+  <material name="Schunk/LightGrey">
+    <color rgba="0 0 .8 1"/>
+  </material>     
+ 
+ <xacro:include filename="$(find s5fh_gripper)/description/urdf/s5fs.urdf.xacro" />
+ <xacro:include filename="$(find schunk_description)/urdf/lwa4p/lwa4p.urdf.xacro" />
+
+ <link name="base_link" />
+ 
+ 
+ 
+  <xacro:schunk_lwa4p parent="base_link" name="arm">
+      <origin xyz="0 0 0"  rpy= "0 0 0" />
+      <xacro:property name="arm_1_ref" value="2.1" />
+      <xacro:property name="arm_2_ref" value="2.1" />
+      <xacro:property name="arm_3_ref" value="2.1" />
+      <xacro:property name="arm_4_ref" value="2.1" />
+      <xacro:property name="arm_5_ref" value="2.1" />
+      <xacro:property name="arm_6_ref" value="2.1" />
+  </xacro:schunk_lwa4p>
+  
+ <xacro:s5fh parent="arm_6_link" name="left_hand" side="-1">
+    <origin xyz="0 0 0.1"  rpy= "0 0 0" />
+  </xacro:s5fh>
+
+</robot>
