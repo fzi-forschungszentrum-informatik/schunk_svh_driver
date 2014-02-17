@@ -146,16 +146,16 @@ int main(int argc, char **argv)
   {
     if (fm->isConnected())
     {
-      // TODO: Publish joint angle topic.
-      for (size_t channel = 0; channel < eS5FH_DIMENSION; ++channel)
-      {
-        double cur_pos = 0.0;
-        if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
-        {
-          std::cout << "channel: " << (int)channel << " pos = " << cur_pos << " | ";
-        }
-      }
-      std::cout << std::endl;
+//      // TODO: Publish joint angle topic.
+//      for (size_t channel = 0; channel < eS5FH_DIMENSION; ++channel)
+//      {
+//        double cur_pos = 0.0;
+//        if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
+//        {
+//          std::cout << "channel: " << (int)channel << " pos = " << cur_pos << " | ";
+//        }
+//      }
+//      std::cout << std::endl;
     }
 
     ros::spinOnce();
