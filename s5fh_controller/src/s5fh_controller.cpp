@@ -4,12 +4,15 @@
 // Messages
 #include <std_msgs/Int8.h>
 #include <std_msgs/Empty.h>
+#include <sensor_msgs/JointState.h>
 
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
 #include <s5fh_controller/s5fhConfig.h>
 
 #include <driver_s5fh/S5FHFingerManager.h>
+
+#include <icl_core/EnumHelper.h>
 
 using namespace driver_s5fh;
 
@@ -109,6 +112,45 @@ void enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
   fm->enableChannel(static_cast<driver_s5fh::S5FHCHANNEL>(channel->data));
 }
 
+// Callback function for setting channel target positions to SCHUNK five finger hand
+void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
+{
+  std::vector<std::string>::const_iterator joint_name;
+  for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name)
+  {
+    int32_t channel = 0;
+    if (icl_core::string2Enum((*joint_name), channel, S5FHController::m_channel_description))
+    {
+      if (input->position.size() > channel)
+      {
+        double new_pos = input->position[channel];
+
+        double cur_pos = 0.0;
+        if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
+        {
+          if (new_pos != cur_pos)
+          {
+            //ROS_INFO("channel %i: current pos = %f, new pos = %f", channel, cur_pos, positions[channel]);
+            fm->setTargetPosition(static_cast<S5FHCHANNEL>(channel), new_pos, 0.0);
+          }
+        }
+        else
+        {
+          ROS_WARN("Could not get actual position from finger manager!");
+        }
+      }
+      else
+      {
+        ROS_WARN("Vector of input joint state is too small!");
+      }
+    }
+    else
+    {
+      ROS_WARN("Could not map joint name to channel!");
+    }
+  }
+}
+
 /*--------------------------------------------------------------------
  * main()
  * Main function to set up ROS node.
@@ -137,6 +179,9 @@ int main(int argc, char **argv)
 
   // Subscribe enable channel topic (Int8)
   ros::Subscriber enable_sub = nh.subscribe("enable_channel", 1, enableChannelCallback);
+
+  // Subscribe joint state topic
+  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, jointStateCallback);
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
   ros::Rate rate(100);
