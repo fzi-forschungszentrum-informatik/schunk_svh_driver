@@ -61,19 +61,6 @@ void setTargetPositions(const std::vector<double>& positions)
 void dynamic_reconfigure_callback(s5fh_controller::s5fhConfig &config, uint32_t level)
 {
   serial_device_name = config.serial_device;
-
-  std::vector<double> positions(eS5FH_DIMENSION);
-  positions[0] = config.channel0;
-  positions[1] = config.channel1;
-  positions[2] = config.channel2;
-  positions[3] = config.channel3;
-  positions[4] = config.channel4;
-  positions[5] = config.channel5;
-  positions[6] = config.channel6;
-  positions[7] = config.channel7;
-  positions[8] = config.channel8;
-
-  setTargetPositions(positions);
 }
 
 // Callback function for connecting to SCHUNK five finger hand
