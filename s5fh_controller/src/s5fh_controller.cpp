@@ -118,13 +118,14 @@ void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
         {
           if (new_pos != cur_pos)
           {
-            //ROS_INFO("channel %i: current pos = %f, new pos = %f", channel, cur_pos, positions[channel]);
+            //ROS_INFO("channel %i: current pos = %f, new pos = %f", channel, cur_pos,new_pos);
             fm->setTargetPosition(static_cast<S5FHCHANNEL>(channel), new_pos, 0.0);
           }
         }
         else
         {
-          ROS_WARN("Could not get actual position from finger manager!");
+          // Disabled for anti spamming
+          //ROS_WARN("Could not get actual position from finger manager!");
         }
       }
       else
