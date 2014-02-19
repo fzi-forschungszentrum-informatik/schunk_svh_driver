@@ -184,6 +184,18 @@ int main(int argc, char **argv)
   // Subscribe joint state topic
   ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, jointStateCallback);
 
+  // Publish current channel positions
+  ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_feedbacks", 1);
+
+  // joint state message template
+  sensor_msgs::JointState channel_pos;
+  channel_pos.name.resize(eS5FH_DIMENSION);
+  channel_pos.position.resize(eS5FH_DIMENSION, 0.0);
+  for (size_t channel = 0; channel < eS5FH_DIMENSION; ++channel)
+  {
+    channel_pos.name[channel] = S5FHController::m_channel_description[channel];
+  }
+
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
   ros::Rate rate(100);
 
@@ -192,16 +204,16 @@ int main(int argc, char **argv)
   {
     if (fm->isConnected())
     {
-      // TODO: Publish joint angle topic.
+      // Publish channel positions in RAD.
       for (size_t channel = 0; channel < eS5FH_DIMENSION; ++channel)
       {
         double cur_pos = 0.0;
-        if (fm->isEnabled(static_cast<S5FHCHANNEL>(channel)) && fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
-        {
-         // std::cout << "channel: " << (int)channel << " pos = " << cur_pos << " | ";
-        }
+        fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos);
+
+        channel_pos.position[channel] = cur_pos;
       }
-      //std::cout << std::endl;
+
+      channel_pos_pub.publish(channel_pos);
     }
 
     ros::spinOnce();
