@@ -134,7 +134,7 @@ void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
     }
     else
     {
-      ROS_WARN("Could not map joint name to channel!");
+      //ROS_WARN("Could not map joint name %s to channel!", (*joint_name).c_str());
     }
   }
 }
