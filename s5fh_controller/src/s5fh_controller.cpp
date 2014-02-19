@@ -172,20 +172,36 @@ int main(int argc, char **argv)
   server.setCallback(f);
 
   // Subscribe connect topic (Empty)
-  ros::Subscriber connect_sub = nh.subscribe("connect", 1, connectCallback);
+  ros::Subscriber connect_sub = nh.subscribe("s5fh_controller/connect", 1, connectCallback);
 
   // Subscribe reset channel topic (Int8)
-  ros::Subscriber reset_sub = nh.subscribe("reset_channel", 1, resetChannelCallback);
+  ros::Subscriber reset_sub = nh.subscribe("s5fh_controller/reset_channel", 1, resetChannelCallback);
 
   // Subscribe enable channel topic (Int8)
-  ros::Subscriber enable_sub = nh.subscribe("enable_channel", 1, enableChannelCallback);
+  ros::Subscriber enable_sub = nh.subscribe("s5fh_controller/enable_channel", 1, enableChannelCallback);
 
   // Subscribe joint state topic
-  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, jointStateCallback);
+  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("s5fh_controller/channel_targets", 1, jointStateCallback);
+
+  // Publish Joint States
+  ros::Publisher joint_pub;
+  joint_pub = nh.advertise<sensor_msgs::JointState>("s5fh_controller/finger_position", 1);
+  sensor_msgs::JointState joint_state_msg;
+  joint_state_msg.name.push_back("Thumb_Flexion");
+  joint_state_msg.name.push_back("Thumb_Opposition");
+  joint_state_msg.name.push_back("Index_Finger_Distal");
+  joint_state_msg.name.push_back("Index_Finger_Proximal");
+  joint_state_msg.name.push_back("Middle_Finger_Distal");
+  joint_state_msg.name.push_back("Middle_Finger_Proximal");
+  joint_state_msg.name.push_back("Ring_Finger");
+  joint_state_msg.name.push_back("Pinky");
+  joint_state_msg.name.push_back("Finger_Spread");
+
+  joint_state_msg.position.resize(eS5FH_DIMENSION);
+
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
   ros::Rate rate(100);
-
   // Main loop.
   while (nh.ok())
   {
@@ -197,12 +213,11 @@ int main(int argc, char **argv)
         double cur_pos = 0.0;
         if (fm->isEnabled(static_cast<S5FHCHANNEL>(channel)) && fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
         {
-         // std::cout << "channel: " << (int)channel << " pos = " << cur_pos << " | ";
+          joint_state_msg.position[channel] = cur_pos;
         }
       }
-      //std::cout << std::endl;
+      joint_pub.publish(joint_state_msg);
     }
-
     ros::spinOnce();
     rate.sleep();
   }
