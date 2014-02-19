@@ -115,15 +115,16 @@ void enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
 // Callback function for setting channel target positions to SCHUNK five finger hand
 void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
 {
+  int32_t index = 0;
   std::vector<std::string>::const_iterator joint_name;
-  for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name)
+  for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name,++index)
   {
     int32_t channel = 0;
     if (icl_core::string2Enum((*joint_name), channel, S5FHController::m_channel_description))
     {
-      if (input->position.size() > channel)
+      if (input->position.size() > index)
       {
-        double new_pos = input->position[channel];
+        double new_pos = input->position[index];
 
         double cur_pos = 0.0;
         if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
@@ -141,7 +142,7 @@ void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
       }
       else
       {
-        ROS_WARN("Vector of input joint state is too small!");
+        ROS_WARN("Vector of input joint state is too small! Cannot acces elemnt nr %i",index);
       }
     }
     else
