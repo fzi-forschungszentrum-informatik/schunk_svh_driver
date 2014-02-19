@@ -1,8 +1,0 @@
-<launch>
-    <arg name="output" default="screen" /> <!-- use "log" or "screen"-->
-    <include file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch" />
-        <remap from="/channel_targets" to="/path_execution/joint_splitter_splitted_output_1" />
-        <node name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="$(arg output)">
-        </node>
-    <include file="$(find pathloader)/launch/trajectoryExecution.launch" />
-</launch>
