@@ -49,9 +49,9 @@ class S5FHResetGui(Plugin):
         self._widget.finger_select_box.addItem("Pinky Finger",7)
         self._widget.finger_select_box.addItem("Finger Spread",8)
         
-        self.reset_pub = rospy.Publisher('reset_channel',  Int8)
-        self.enable_pub = rospy.Publisher('enable_channel', Int8)
-        self.connect_pub = rospy.Publisher('connect',  Empty)
+        self.reset_pub = rospy.Publisher('s5fh_controller/reset_channel',  Int8)
+        self.enable_pub = rospy.Publisher('s5fh_controller/enable_channel', Int8)
+        self.connect_pub = rospy.Publisher('s5fh_controller/connect',  Empty)
         
         
     def ConnectButton(self):

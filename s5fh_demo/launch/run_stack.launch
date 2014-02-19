@@ -11,7 +11,6 @@
     <group ns="$(arg ns)">
       <include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch" />
       <remap from="s5fh_controller/channel_targets"  to="joint_splitter_splitted_output_1" />
-      <remap from="s5fh_controller/channel_feedback" to="joint_splitter_splitted_input_1" />
       <node unless="$(arg simulation)" name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="$(arg output)">
 
       </node>
