@@ -185,7 +185,7 @@ int main(int argc, char **argv)
   ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, jointStateCallback);
 
   // Publish current channel positions
-  ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_feedbacks", 1);
+  ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_feedback", 1);
 
   // joint state message template
   sensor_msgs::JointState channel_pos;
@@ -198,7 +198,6 @@ int main(int argc, char **argv)
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
   ros::Rate rate(100);
-
   // Main loop.
   while (nh.ok())
   {
@@ -215,7 +214,6 @@ int main(int argc, char **argv)
 
       channel_pos_pub.publish(channel_pos);
     }
-
     ros::spinOnce();
     rate.sleep();
   }
