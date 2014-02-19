@@ -1,0 +1,25 @@
+<launch>
+   
+  <arg name="gui" default="True" />
+  
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_gripper)/description/urdf/s5fh-standalone.urdf.xacro" />
+  <param name="use_gui" value="$(arg gui)"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <rosparam param="source_list">["s5fh_controller/channel_feedback"] </rosparam>
+  </node>
+
+  <node name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="screen">
+    <remap from="s5fh_controller/channel_targets" to="joint_states"/>
+  </node>
+
+  <group ns="s5fh_controller">
+    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
+  </group>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+    <remap from="joint_states" to="s5fh_controller/channel_feedback"/>
+  </node>
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find s5fh_gripper)/urdf.rviz" required="true" />
+
+</launch>

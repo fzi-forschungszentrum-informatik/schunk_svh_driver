@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot name="s5fh" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+ <xacro:include filename="$(find s5fh_gripper)/description/urdf/s5fs.urdf.xacro" />
+
+ <link name="base_link" />
+ 
+ <xacro:s5fh parent="base_link" name="left_hand" side="-1">
+    <origin xyz="0 0 0"  rpy= "0 0 0" />
+  </xacro:s5fh>
+
+</robot>
