@@ -12,9 +12,7 @@
     <remap from="s5fh_controller/channel_targets" to="joint_states"/>
   </node>
 
-  <group ns="s5fh_controller">
-    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
-  </group>
+  <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
     <remap from="joint_states" to="s5fh_controller/channel_feedback"/>
