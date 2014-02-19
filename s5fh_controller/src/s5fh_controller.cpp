@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 {
   // Set up ROS.
   ros::init(argc, argv, "s5fh_controller");
-  ros::NodeHandle nh;
+  ros::NodeHandle nh("~");
 
   icl_core::logging::initialize();
 
