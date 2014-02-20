@@ -6,7 +6,7 @@
 	<param name="use_gui" value="$(arg gui)"/>
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
             <rosparam unless="$(arg simulation)" param="source_list">["canopen_joint_sensor_values", "s5fh_controller/channel_feedback"] </rosparam>
-            <rosparam     if="$(arg simulation)" param="source_list">["arm_joint_control_output", "hand_joint_control_output"] </rosparam>
+            <rosparam     if="$(arg simulation)" param="source_list">["arm_joint_control_output"] </rosparam>
         </node>
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find s5fh_gripper)/urdf.rviz" required="true" />
