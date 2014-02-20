@@ -71,6 +71,13 @@ void enableChannelCallback(const std_msgs::Int8ConstPtr& channel)
 // Callback function for setting channel target positions to SCHUNK five finger hand
 void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
 {
+  // vector to read target positions from joint states
+  std::vector<double> target_positions(eS5FH_DIMENSION, 0.0);
+  // bool vector storing true, if new target position read
+  std::vector<bool> pos_read(eS5FH_DIMENSION, false);
+  // target positions read counter
+  u_int8_t pos_read_counter = 0;
+
   int32_t index = 0;
   std::vector<std::string>::const_iterator joint_name;
   for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name,++index)
@@ -80,31 +87,38 @@ void jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
     {
       if (input->position.size() > index)
       {
-        double new_pos = input->position[index];
-
-        double cur_pos = 0.0;
-        if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
-        {
-          if (new_pos != cur_pos)
-          {
-            //ROS_INFO("channel %i: current pos = %f, new pos = %f", channel, cur_pos,new_pos);
-            fm->setTargetPosition(static_cast<S5FHCHANNEL>(channel), new_pos, 0.0);
-          }
-        }
-        else
-        {
-          // Disabled for anti spamming
-          //ROS_WARN("Could not get actual position from finger manager!");
-        }
+        target_positions[channel] = input->position[index];
+        pos_read[channel] = true;
+        pos_read_counter++;
       }
       else
       {
-        ROS_WARN("Vector of input joint state is too small! Cannot acces elemnt nr %i",index);
+        ROS_WARN("Vector of input joint state is too small! Cannot acces elemnt nr %i", index);
       }
     }
     else
     {
       //ROS_WARN("Could not map joint name %s to channel!", (*joint_name).c_str());
+    }
+  }
+
+  // send target values at once
+  if (pos_read_counter == eS5FH_DIMENSION)
+  {
+    if (!fm->setAllTargetPositions(target_positions))
+    {
+      ROS_WARN("Set target position command rejected!");
+    }
+  }
+  // not all positions has been set: send only the available positions
+  else
+  {
+    for (size_t i = 0; i < eS5FH_DIMENSION; ++i)
+    {
+      if (pos_read[i])
+      {
+        fm->setTargetPosition(static_cast<S5FHCHANNEL>(i), target_positions[i], 0.0);
+      }
     }
   }
 }
