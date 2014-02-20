@@ -4,8 +4,7 @@
   
   <param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_gripper)/description/urdf/s5fh-standalone.urdf.xacro" />
   <param name="use_gui" value="$(arg gui)"/>
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-  </node>
+  <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"-->
 
   <node name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="screen">
     <param name="serial_device" value="/dev/ttyUSB1"/>
@@ -18,6 +17,4 @@
     <remap from="joint_states" to="s5fh_controller/channel_feedback"/>
   </node>
   
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find s5fh_gripper)/urdf.rviz" required="true" />
-
 </launch>
