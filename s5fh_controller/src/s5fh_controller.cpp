@@ -23,37 +23,6 @@ S5FHFingerManager *fm = new S5FHFingerManager;
 std::string serial_device_name = "";
 
 /*--------------------------------------------------------------------
- * General functions
- *------------------------------------------------------------------*/
-
-void setTargetPositions(const std::vector<double>& positions)
-{
-  if (fm->isConnected())
-  {
-    for (size_t channel = 0; channel < eS5FH_DIMENSION; ++channel)
-    {
-      double cur_pos = 0.0;
-      if (fm->getPosition(static_cast<S5FHCHANNEL>(channel), cur_pos))
-      {
-        if (positions[channel] != cur_pos)
-        {
-          //ROS_INFO("channel %i: current pos = %f, new pos = %f", channel, cur_pos, positions[channel]);
-          fm->setTargetPosition(static_cast<S5FHCHANNEL>(channel), positions[channel], 0.0);
-        }
-      }
-      else
-      {
-        ROS_WARN("Could not get actual position from finger manager!");
-      }
-    }
-  }
-  else
-  {
-    ROS_WARN("SCHUNK five finger hand is not connected!");
-  }
-}
-
-/*--------------------------------------------------------------------
  * Callback functions
  *------------------------------------------------------------------*/
 
