@@ -5,7 +5,6 @@
   <param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_gripper)/description/urdf/s5fh-standalone.urdf.xacro" />
   <param name="use_gui" value="$(arg gui)"/>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <rosparam param="source_list">["s5fh_controller/channel_feedback"] </rosparam>
   </node>
 
   <node name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="screen">
