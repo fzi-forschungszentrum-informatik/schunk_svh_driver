@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
     rqt_gui_py
 )
 
+find_package(xacro REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 find_package(icl_comm)
 find_package(icl_core)
@@ -41,6 +43,23 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+
+# mesh file generations
+# iterate through all the stl files to:
+#  1. convert to *.iv files
+#  2. generate convex decomposed .stl
+
+
+foreach(dir meshes urdf)
+   install(DIRECTORY ${dir}/ 
+      DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+endforeach(dir)
+
+install(DIRECTORY launch
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/
+)
+
+
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations

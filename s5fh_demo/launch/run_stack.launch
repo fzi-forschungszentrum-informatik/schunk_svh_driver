@@ -1,18 +1,35 @@
 <launch>
     <arg name="output" default="screen" /> <!-- use "log" or "screen"-->
     <arg name="simulation" default="True" />
-   <arg name="ns" default="s5fh"/>
-    
-    <include file="$(find pathloader)/launch/trajectoryExecution.launch">
-       <arg name="simulation" value="$(arg simulation)" />
-       <arg name="ns"  value="$(arg ns)" />
-    </include>
+    <arg name="gui" default="True" />
+    <arg name="ns" default="s5fh"/>
+   
+	<!-- load high level -->
+	
+		<include file="$(find pathloader)/launch/trajectoryExecution.launch">
+        <arg name="simulation" value="$(arg simulation)" />
+	       <arg name="ns"  value="$(arg ns)" />
+	    </include>
+   
     
     <group ns="$(arg ns)">
-      <include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch" />
-      <remap from="s5fh_controller/channel_targets"  to="hand_joint_control_output" />
-      <node unless="$(arg simulation)" name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="$(arg output)">
+      	<!-- load robot model -->
+      		<param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_controller)/description/urdf/s5fs-arm.urdf.xacro" />
+	  		<param name="use_gui" value="$(arg gui)"/>
+	  
+	  		<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+            	<rosparam unless="$(arg simulation)" param="source_list">["canopen_joint_sensor_values", "s5fh_controller/channel_feedback"] </rosparam>
+            	<rosparam     if="$(arg simulation)" param="source_list">["arm_joint_control_output"] </rosparam>
+        	</node>
+			<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
 
-      </node>
+    
+    	<!-- load hardware driver -->
+        	<remap from="s5fh_controller/channel_targets"  to="hand_joint_control_output" />
+	    	<include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch" />
+	      	<node unless="$(arg simulation)" name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="$(arg output)"/>
+
+		<!-- start rviz -->
+	    	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find s5fh_controller)/urdf.rviz" required="true" />
     </group>
 </launch>
