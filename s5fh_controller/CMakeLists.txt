@@ -81,6 +81,10 @@ add_executable(s5fh_controller
   src/s5fh_controller.cpp
 )
 
+add_executable(s5fh_testomat
+  src/s5fh_testomat.cpp
+)
+
 # Add cmake target dependencies of the executable/library
 # as an example, message headers may need to be generated before nodes
 add_dependencies(s5fh_controller
@@ -96,6 +100,19 @@ target_link_libraries(s5fh_controller
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
   ${driver_s5fh_LIBRARIES}
+)
+
+
+add_dependencies(s5fh_testomat
+  icl_comm
+  icl_core
+)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(s5fh_testomat
+  ${catkin_LIBRARIES}
+  ${icl_comm_LIBRARIES}
+  ${icl_core_LIBRARIES}
 )
 
 #############
