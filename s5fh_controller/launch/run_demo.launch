@@ -3,12 +3,14 @@
     <arg name="simulation" default="True" />
     <arg name="gui" default="True" />
     <arg name="ns" default="s5fh"/>
+    <arg name="frequency" default="60"/>
    
 	<!-- load high level -->
 	
 		<include file="$(find pathloader)/launch/trajectoryExecution.launch">
         <arg name="simulation" value="$(arg simulation)" />
 	       <arg name="ns"  value="$(arg ns)" />
+                <arg name="frequency" value="$(arg frequency)"/>
 	    </include>
    
     
@@ -25,8 +27,10 @@
 
     
     	<!-- load hardware driver -->
-        	<remap from="s5fh_controller/channel_targets"  to="hand_joint_control_output" />
-	    	<include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch" />
+                <remap from="s5fh_controller/channel_targets"  to="interpolator/joint_commands" />
+                <include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch">
+                    <arg name="frequency" value="$(arg frequency)" />
+                </include>
 	      	<node unless="$(arg simulation)" name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="$(arg output)"/>
 
 		<!-- start rviz -->
