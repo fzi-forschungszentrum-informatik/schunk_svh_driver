@@ -2,7 +2,7 @@
    
   <arg name="gui" default="True" />
   
-  <param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_gripper)/description/urdf/s5fh-standalone.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_controller)/description/urdf/s5fh-standalone.urdf.xacro" />
   <param name="use_gui" value="$(arg gui)"/>
   <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"-->
 
