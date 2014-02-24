@@ -3,7 +3,7 @@
     <arg name="simulation" default="True" />
     <arg name="gui" default="True" />
     <arg name="ns" default="s5fh"/>
-    <arg name="frequency" default="60"/>
+    <arg name="frequency" default="50"/>
    
 	<!-- load high level -->
 	
