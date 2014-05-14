@@ -302,7 +302,7 @@
         <parent link="z" />
         <child link="a" />
         <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
-        <origin xyz="0 0 0.04596" rpy="1.5707 0 1.5707" />
+        <origin xyz="0 0 0.04596" rpy="0 -1.5707 3.1415" />
         <axis xyz="0 0 ${side*(1)}" />
     </joint>
 
@@ -373,7 +373,7 @@
         <parent link="a" />
         <child link="b" />
         <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1" />
-        <origin xyz="0 0.0485 0" rpy="0 0 0" />
+        <origin xyz="0.0485 0 0" rpy="0 0 0" />
         <axis xyz="0 0 ${side*(1)}" />
         <mimic joint="Thumb_Flexion" multiplier="1.01511" offset="0" />
     </joint>
@@ -381,34 +381,34 @@
         <parent link="b" />
         <child link="c" />
         <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1" />
-        <origin xyz="0 0.030 0" rpy="0 0 0" />
+        <origin xyz="0.030 0 0" rpy="0 0 0" />
         <axis xyz="0 0 ${side*(1)}" />
         <mimic joint="Thumb_Flexion" multiplier="1.44889" offset="0" />
     </joint>
 
 
-    <!-- FOREFINGER JOINTS -->
+    <!-- INDEX FINGER JOINTS -->
     <joint name="Index_Finger_Distal" type="revolute">
         <parent link="l" />
         <child link="p" />
         <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 0 0.04804" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0.04804 0 0" rpy="1.5707 0 0" />
+        <axis xyz="0 0 1" />
     </joint>
     <joint name="Index_Finger_Proximal" type="revolute">
         <parent link="d2" />
         <child link="virtual_l" />
         <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
-        <origin xyz="${side*(-0.025)} 0 0.110" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="${side*(-0.025)} 0 0.110" rpy="0 -1.5707 0" />
+        <axis xyz="0 0 1" />
     </joint>
     <!-- JOINT Finger_Spread in BASE_LINE section for better UX -->
      <joint name="j14" type="revolute">
         <parent link="p" />
         <child link="t" />
         <limit effort="1000.0" lower="0" upper="1.394" velocity="1" />
-        <origin xyz="0 0 0.026" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0.026 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
         <mimic joint="Index_Finger_Distal" multiplier="1.0450" offset="0" />
     </joint>
 
@@ -492,8 +492,8 @@
         <parent link="virtual_l" />
         <child link="l" />
         <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${side*(-1)} 0" />
+        <origin xyz="0 0 0" rpy="-1.5707 0 0" />
+        <axis xyz="0 0 ${side*(-1)}" />
         <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
     <joint name="j8b" type="revolute">
