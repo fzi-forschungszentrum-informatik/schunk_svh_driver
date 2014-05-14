@@ -414,26 +414,26 @@
 
 
     <!-- MIDDLE FINGER JOINTS -->
-    <joint name="Middle_Finger_Distal" type="revolute">
-        <parent link="k" />
-        <child link="o" />
-        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 0 0.05004" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
-    </joint>
     <joint name="Middle_Finger_Proximal" type="revolute">
         <parent link="d" />
         <child link="k" />
         <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
-        <origin xyz="0 0 0.110" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0 0 0.110" rpy="0 -1.5707 0" />
+        <axis xyz="0 0 1" />
+    </joint>
+    <joint name="Middle_Finger_Distal" type="revolute">
+        <parent link="k" />
+        <child link="o" />
+        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
+        <origin xyz="0.05004 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
     </joint>
      <joint name="j15" type="revolute">
         <parent link="o" />
         <child link="s" />
         <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 0 0.032" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0.032 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
         <mimic joint="Middle_Finger_Distal" multiplier="1.000" offset="0" />
     </joint>
 
