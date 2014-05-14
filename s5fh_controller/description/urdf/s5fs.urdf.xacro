@@ -443,23 +443,23 @@
         <parent link="e5" />
         <child link="virtual_j" />
         <limit effort="1000.0" lower="0.0" upper="0.98175" velocity="1" />
-        <origin xyz="0 0 0.0655" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0 0 0.0655" rpy="0 -1.5707 0" />
+        <axis xyz="0 0 1" />
     </joint>
     <joint name="j12" type="revolute">
         <parent link="j" />
         <child link="n" />
         <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 0 0.05004" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0 -0.05004 0" rpy="1.5705 0 -1.5707" />
+        <axis xyz="0 0 1" />
         <mimic joint="Ring_Finger" multiplier="1.3588" offset="0" />
     </joint>
     <joint name="j16" type="revolute">
         <parent link="n" />
         <child link="r" />
         <limit effort="1000.0" lower="0" upper="1.395" velocity="1" />
-        <origin xyz="0 0 0.032" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0.032 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
         <mimic joint="Ring_Finger" multiplier="1.42093" offset="0" />
     </joint>
 
@@ -500,8 +500,8 @@
         <parent link="virtual_j" />
         <child link="j" />
         <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="${side*(0.00675)} 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${side*(1)} 0" />
+        <origin xyz="0 0 ${side*(-0.00675)}" rpy="${side*(-1.5707)} ${side*(1.5707)} 0" />
+        <axis xyz="0 0 1" />
         <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
     <joint name="Finger_Spread" type="revolute">
