@@ -17,8 +17,9 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0.01313 0" />
             <geometry>
-                <box size="0.0353 0.02626 0.010" />
-            </geometry>
+	      <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/h10.dae" />
+	      
+	    </geometry>
             <material name="green">
                 <color rgba="0 1 0 1" />
             </material>
@@ -301,8 +302,8 @@
         <parent link="z" />
         <child link="a" />
         <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
-        <origin xyz="0 0 0.04596" rpy="0 0 0" />
-        <axis xyz="${side*(1)} 0 0" />
+        <origin xyz="0 0 0.04596" rpy="1.5707 0 1.5707" />
+        <axis xyz="0 0 ${side*(1)}" />
     </joint>
 
 
@@ -372,16 +373,16 @@
         <parent link="a" />
         <child link="b" />
         <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1" />
-        <origin xyz="0 0 0.0485" rpy="0 0 0" />
-        <axis xyz="${side*(1)} 0 0" />
+        <origin xyz="0 0.0485 0" rpy="0 0 0" />
+        <axis xyz="0 0 ${side*(1)}" />
         <mimic joint="Thumb_Flexion" multiplier="1.01511" offset="0" />
     </joint>
     <joint name="j4" type="revolute">
         <parent link="b" />
         <child link="c" />
         <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1" />
-        <origin xyz="0 0 0.030" rpy="0 0 0" />
-        <axis xyz="${side*(1)} 0 0" />
+        <origin xyz="0 0.030 0" rpy="0 0 0" />
+        <axis xyz="0 0 ${side*(1)}" />
         <mimic joint="Thumb_Flexion" multiplier="1.44889" offset="0" />
     </joint>
 
