@@ -469,23 +469,23 @@
         <parent link="e4" />
         <child link="virtual_i" />
         <limit effort="1000.0" lower="0.0" upper="0.98175" velocity="1" />
-        <origin xyz="0 0 0.056" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0 0 0.056" rpy="0 -1.5707 0" />
+        <axis xyz="0 0 1" />
     </joint>
     <joint name="j13" type="revolute">
         <parent link="i" />
         <child link="m" />
         <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 0 0.04454" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0 -0.04454 0" rpy="1.5705 0 -1.5707" />
+        <axis xyz="0 0 1" />
         <mimic joint="Pinky" multiplier="1.35880" offset="0" />
     </joint>
     <joint name="j17" type="revolute">
         <parent link="m" />
         <child link="q" />
         <limit effort="1000.0" lower="0" upper="1.3971" velocity="1" />
-        <origin xyz="0 0 0.022" rpy="0 0 0" />
-        <axis xyz="-1 0 0" />
+        <origin xyz="0.022 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
         <mimic joint="Pinky" multiplier="1.42307" offset="0" />
     </joint>
         <joint name="j6b" type="revolute">
@@ -508,8 +508,8 @@
         <parent link="virtual_i" />
         <child link="i" />
         <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
-        <origin xyz="${side*(0.02825)} 0 0" rpy="0 0 0" />
-        <axis xyz="0 ${side*(1)} 0" />
+        <origin xyz="0 0 ${side*(-0.02825)}" rpy="${side*(-1.5707)} ${side *(1.5707)} 0" />
+        <axis xyz="0 0 1" />
      </joint>
     
 </xacro:macro>
