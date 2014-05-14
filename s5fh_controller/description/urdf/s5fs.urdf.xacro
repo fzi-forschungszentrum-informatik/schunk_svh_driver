@@ -18,7 +18,6 @@
             <origin rpy="0 0 0" xyz="0 0.01313 0" />
             <geometry>
 	      <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/h10.dae" />
-	      
 	    </geometry>
             <material name="green">
                 <color rgba="0 1 0 1" />
@@ -500,16 +499,16 @@
         <parent link="virtual_j" />
         <child link="j" />
         <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="0 0 ${side*(-0.00675)}" rpy="${side*(-1.5707)} ${side*(1.5707)} 0" />
-        <axis xyz="0 0 1" />
+        <origin xyz="0 0 ${side*(-0.00675)}" rpy="-1.5707 1.5707 0" />
+        <axis xyz="0 0 ${side*(1)}" />
         <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
     <joint name="Finger_Spread" type="revolute">
         <parent link="virtual_i" />
         <child link="i" />
         <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
-        <origin xyz="0 0 ${side*(-0.02825)}" rpy="${side*(-1.5707)} ${side *(1.5707)} 0" />
-        <axis xyz="0 0 1" />
+        <origin xyz="0 0 ${side*(-0.02825)}" rpy="-1.5707 1.5707 0" />
+        <axis xyz="0 0 ${side*(1)}" />
      </joint>
     
 </xacro:macro>
