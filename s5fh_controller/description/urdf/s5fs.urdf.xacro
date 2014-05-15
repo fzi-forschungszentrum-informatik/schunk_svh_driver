@@ -1,516 +1,552 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:property name="cyl_radius" value="0.001" />
-<xacro:macro name="s5fh" params="parent name side *origin">
-   <!-- RIGHT HAND = 1, LEFT HAND = -1 -->
+  <xacro:property name="cyl_radius" value="0.001" />
+  <xacro:macro name="s5fh" params="parent name side *origin">
+    <!-- RIGHT HAND = 1, LEFT HAND = -1 -->
     <!-- BASE_LINE LINKS -->
     
-   <joint name="${name}_base_joint" type="fixed" >
+    <joint name="${name}_base_joint" type="fixed" >
       <insert_block name="origin" />
       <parent link="${parent}" />
       <child link="${name}_base_link" />
     </joint>
     
     <link name="${name}_base_link">
-        <xacro:insert_block name="origin" />
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0.01313 0" />
-            <geometry>
-	      <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/h10.dae" />
-	    </geometry>
-            <material name="green">
-                <color rgba="0 1 0 1" />
-            </material>
-        </visual>
+      <xacro:insert_block name="origin" />
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0.01313 0" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/h10.dae" />
+	</geometry>
+	<material name="green">
+	  <color rgba="0 1 0 1" />
+	</material>
+      </visual>
     </link>
+
     <link name="d">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.055" />
-            <geometry>
-                <cylinder length="0.110" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.055" />
+	<geometry>
+	  <cylinder length="0.110" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="h">
-        <visual>
-            <origin rpy="0 1.571 0" xyz="${side*(-0.0125)} 0 0.0825" />
-            <geometry>
-                <cylinder length="0.025" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 1.571 0" xyz="${side*(-0.0125)} 0 0.0825" />
+	<geometry>
+	  <cylinder length="0.025" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="d2">
-        <visual>
-            <origin rpy="0 0 0" xyz="${side*(-0.025)} 0 0.09625" />
-            <geometry>
-                <cylinder length="0.0275" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="${side*(-0.025)} 0 0.09625" />
+	<geometry>
+	  <cylinder length="0.0275" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e1">
-        <visual>
-            <origin rpy="0 0 0" xyz="${side*(0.01840)} 0 0.01875" />
-            <geometry>
-                <cylinder length="0.0375" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="${side*(0.01840)} 0 0.01875" />
+	<geometry>
+	  <cylinder length="0.0375" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e2">
-        <visual>
-            <origin rpy="0 1.571 0" xyz="${side*(0.00875)} 0 0" />
-            <geometry>
-                <cylinder length="0.0175" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 1.571 0" xyz="${side*(0.00875)} 0 0" />
+	<geometry>
+	  <cylinder length="0.0175" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e3">
-        <visual>
-            <origin rpy="0 0 0" xyz="${side*(0.0175)} 0 0.015" />
-            <geometry>
-                <cylinder length="0.03" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="${side*(0.0175)} 0 0.015" />
+	<geometry>
+	  <cylinder length="0.03" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="e">
-        <visual>
-            <origin rpy="0 1.571 0" xyz="${side*(0.0175)} 0 0.03" />
-            <geometry>
-                <cylinder length="0.0215" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 1.571 0" xyz="${side*(0.0175)} 0 0.03" />
+	<geometry>
+	  <cylinder length="0.0215" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E4 = D-G-F!!! -->
     <link name="e4">
-        <visual>
-            <origin rpy="0 0 0" xyz="${side*(0.02825)} 0 0.043" />
-            <geometry>
-                <cylinder length="0.026" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="${side*(0.02825)} 0 0.043" />
+	<geometry>
+	  <cylinder length="0.026" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E5 = D-G!!! -->
     <link name="e5">
-        <visual>
-            <origin rpy="0 0 0" xyz="${side*(0.00675)} 0 0.04775" />
-            <geometry>
-                <cylinder length="0.0355" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="${side*(0.00675)} 0 0.04775" />
+	<geometry>
+	  <cylinder length="0.0355" radius="${cyl_radius}" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
 
 
     <!-- THUMB LINKS -->
     <link name="z">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.02298" />
-            <geometry>
-                <cylinder length="0.04596" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.02298" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d10.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="a">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.02425" />
-            <geometry>
-                <cylinder length="0.0485" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.02425" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d11.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="b">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.015" />
-            <geometry>
-                <cylinder length="0.030" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.015" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d12.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="c">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.010" />
-            <geometry>
-                <cylinder length="0.020" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.010" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d13.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
 
 
-    <!-- FOREFINGER LINKS -->
+    <!-- INDEX FINGER LINKS -->
     <link name="virtual_l">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0" />
-            <geometry>
-                <cylinder length="0" radius="0" />
-            </geometry>
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f10.dae" />
+	</geometry>
+      </visual>
     </link>
+
     <link name="l">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.02402" />
-            <geometry>
-                <cylinder length="0.04804" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.02402" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f11.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="p">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.013" />
-            <geometry>
-                <cylinder length="0.026" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.013" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f12.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="t">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.0075" />
-            <geometry>
-                <cylinder length="0.015" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.0075" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f13.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
 
 
     <!-- MIDDLE FINGER LINKS -->
+    <!-- TODO(nberg): Add link for finger mount point (f20.dae) -->
     <link name="k">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.02502" />
-            <geometry>
-                <cylinder length="0.05004" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.02502" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f21.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="o">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.016" />
-            <geometry>
-                <cylinder length="0.032" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.016" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f22.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="s">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.0075" />
-            <geometry>
-                <cylinder length="0.015" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.0075" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f23.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
 
 
     <!-- RING FINGER LINKS -->
     <link name="virtual_j">
-        <visual>
-            <origin rpy="0 0 0" xyz="0.006625 0 0" />
-            <geometry>
-                <cylinder length="0" radius="0" />
-            </geometry>
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0.006625 0 0" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f30.dae" />
+	</geometry>
+      </visual>
     </link>
+
     <link name="j">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.02502" />
-            <geometry>
-                <cylinder length="0.05004" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.02502" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f31.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="n">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.01525" />
-            <geometry>
-                <cylinder length="0.032" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.01525" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f32.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="r">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.00675" />
-            <geometry>
-                <cylinder length="0.015" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.00675" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f33.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
 
 
     <!-- LITTLE FINGER LINKS -->
     <link name="virtual_i">
-        <visual>
-            <origin rpy="0 0 0" xyz="0.02825 0 0" />
-            <geometry>
-                <cylinder length="0" radius="0" />
-            </geometry>
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0.02825 0 0" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f40.dae" />
+	</geometry>
+      </visual>
     </link>
+
     <link name="i">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.02227" />
-            <geometry>
-                <cylinder length="0.04454" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.02227" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f41.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="m">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.011" />
-            <geometry>
-                <cylinder length="0.022" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.011" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f42.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
+
     <link name="q">
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0.0075" />
-            <geometry>
-                <cylinder length="0.015" radius="${cyl_radius}" />
-            </geometry>
-            <material name="green" />
-        </visual>
+      <visual>
+	<origin rpy="0 0 0" xyz="0 0 0.0075" />
+	<geometry>
+	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f43.dae" />
+	</geometry>
+	<material name="green" />
+      </visual>
     </link>
 
 
-
-
-   <joint name="Thumb_Flexion" type="revolute">
-        <parent link="z" />
-        <child link="a" />
-        <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
-        <origin xyz="0 0 0.04596" rpy="0 -1.5707 3.1415" />
-        <axis xyz="0 0 ${side*(1)}" />
+    <joint name="Thumb_Flexion" type="revolute">
+      <parent link="z" />
+      <child link="a" />
+      <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
+      <origin xyz="0 0 0.04596" rpy="0 -1.5707 3.1415" />
+      <axis xyz="0 0 ${side*(1)}" />
     </joint>
 
 
     <!-- BASE_LINE JOINTS -->
     <joint name="Thumb_Opposition" type="revolute">
-        <parent link="${name}_base_link" />
-        <child link="z" />
-        <limit effort="1000.0" lower="0.0" upper="0.9879" velocity="1" />
-        <origin xyz="${side*(-0.01690)} 0.02626 0" rpy="0 0.2618 1.571" />
-        <axis xyz="0 0 ${side*(-1)}" />
+      <parent link="${name}_base_link" />
+      <child link="z" />
+      <limit effort="1000.0" lower="0.0" upper="0.9879" velocity="1" />
+      <origin xyz="${side*(-0.01690)} 0.02626 0" rpy="0 0.2618 1.571" />
+      <axis xyz="0 0 ${side*(-1)}" />
     </joint>
 
     <!-- JOINT NOT FOR BASE_LINE. BUT WRITTEN DOWN HERE FOR BETTER UX -->
 
     <joint name="f1" type="fixed">
-        <parent link="${name}_base_link" />
-        <child link="d" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="f2" type="fixed">
-        <parent link="d" />
-        <child link="h" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="f3" type="fixed">
-        <parent link="h" />
-        <child link="d2" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="f4" type="fixed">
-        <parent link="${name}_base_link" />
-        <child link="e1" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="j5" type="revolute">
-        <parent link="e1" />
-        <child link="e2" />
-        <limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1" />
-        <origin xyz="${side*(0.01840)} 0 0.0375" rpy="0 0 0" />
-        <axis xyz="0 0 ${side*(1)}" />
-        <mimic joint="Thumb_Opposition" multiplier="1" offset="0" />
-    </joint>
-    <joint name="f5" type="fixed">
-        <parent link="e2" />
-        <child link="e3" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="f6" type="fixed">
-        <parent link="e3" />
-        <child link="e" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="f7" type="fixed">
-        <parent link="e" />
-        <child link="e4" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-    <joint name="f8" type="fixed">
-        <parent link="e" />
-        <child link="e5" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${name}_base_link" />
+      <child link="d" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
 
+    <joint name="f2" type="fixed">
+      <parent link="d" />
+      <child link="h" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="f3" type="fixed">
+      <parent link="h" />
+      <child link="d2" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="f4" type="fixed">
+      <parent link="${name}_base_link" />
+      <child link="e1" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="j5" type="revolute">
+      <parent link="e1" />
+      <child link="e2" />
+      <limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1" />
+      <origin xyz="${side*(0.01840)} 0 0.0375" rpy="0 0 0" />
+      <axis xyz="0 0 ${side*(1)}" />
+      <mimic joint="Thumb_Opposition" multiplier="1" offset="0" />
+    </joint>
+
+    <joint name="f5" type="fixed">
+      <parent link="e2" />
+      <child link="e3" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="f6" type="fixed">
+      <parent link="e3" />
+      <child link="e" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="f7" type="fixed">
+      <parent link="e" />
+      <child link="e4" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="f8" type="fixed">
+      <parent link="e" />
+      <child link="e5" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
 
     <!-- THUMB JOINTS -->
     <joint name="j3" type="revolute">
-        <parent link="a" />
-        <child link="b" />
-        <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1" />
-        <origin xyz="0.0485 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 ${side*(1)}" />
-        <mimic joint="Thumb_Flexion" multiplier="1.01511" offset="0" />
-    </joint>
-    <joint name="j4" type="revolute">
-        <parent link="b" />
-        <child link="c" />
-        <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1" />
-        <origin xyz="0.030 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 ${side*(1)}" />
-        <mimic joint="Thumb_Flexion" multiplier="1.44889" offset="0" />
+      <parent link="a" />
+      <child link="b" />
+      <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1" />
+      <origin xyz="0.0485 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 ${side*(1)}" />
+      <mimic joint="Thumb_Flexion" multiplier="1.01511" offset="0" />
     </joint>
 
+    <joint name="j4" type="revolute">
+      <parent link="b" />
+      <child link="c" />
+      <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1" />
+      <origin xyz="0.030 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 ${side*(1)}" />
+      <mimic joint="Thumb_Flexion" multiplier="1.44889" offset="0" />
+    </joint>
 
     <!-- INDEX FINGER JOINTS -->
     <joint name="Index_Finger_Distal" type="revolute">
-        <parent link="l" />
-        <child link="p" />
-        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0.04804 0 0" rpy="1.5707 0 0" />
-        <axis xyz="0 0 1" />
-    </joint>
-    <joint name="Index_Finger_Proximal" type="revolute">
-        <parent link="d2" />
-        <child link="virtual_l" />
-        <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
-        <origin xyz="${side*(-0.025)} 0 0.110" rpy="0 -1.5707 0" />
-        <axis xyz="0 0 1" />
-    </joint>
-    <!-- JOINT Finger_Spread in BASE_LINE section for better UX -->
-     <joint name="j14" type="revolute">
-        <parent link="p" />
-        <child link="t" />
-        <limit effort="1000.0" lower="0" upper="1.394" velocity="1" />
-        <origin xyz="0.026 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 1" />
-        <mimic joint="Index_Finger_Distal" multiplier="1.0450" offset="0" />
+      <parent link="l" />
+      <child link="p" />
+      <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
+      <origin xyz="0.04804 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
     </joint>
 
+    <joint name="Index_Finger_Proximal" type="revolute">
+      <parent link="virtual_l" />
+      <child link="l" />
+      <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
+      <origin xyz="0 0 0" rpy="-1.5707 0 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <!-- JOINT Finger_Spread in BASE_LINE section for better UX -->
+    <joint name="j14" type="revolute">
+      <parent link="p" />
+      <child link="t" />
+      <limit effort="1000.0" lower="0" upper="1.394" velocity="1" />
+      <origin xyz="0.026 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <mimic joint="Index_Finger_Distal" multiplier="1.0450" offset="0" />
+    </joint>
 
     <!-- MIDDLE FINGER JOINTS -->
     <joint name="Middle_Finger_Proximal" type="revolute">
-        <parent link="d" />
-        <child link="k" />
-        <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
-        <origin xyz="0 0 0.110" rpy="0 -1.5707 0" />
-        <axis xyz="0 0 1" />
-    </joint>
-    <joint name="Middle_Finger_Distal" type="revolute">
-        <parent link="k" />
-        <child link="o" />
-        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0.05004 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 1" />
-    </joint>
-     <joint name="j15" type="revolute">
-        <parent link="o" />
-        <child link="s" />
-        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0.032 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 1" />
-        <mimic joint="Middle_Finger_Distal" multiplier="1.000" offset="0" />
+      <parent link="d" />
+      <child link="k" />
+      <limit effort="1000.0" lower="0.0" upper="0.79849" velocity="1" />
+      <origin xyz="0 0 0.110" rpy="0 -1.5707 0" />
+      <axis xyz="0 0 1" />
     </joint>
 
+    <joint name="Middle_Finger_Distal" type="revolute">
+      <parent link="k" />
+      <child link="o" />
+      <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
+      <origin xyz="0.05004 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <joint name="j15" type="revolute">
+      <parent link="o" />
+      <child link="s" />
+      <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
+      <origin xyz="0.032 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <mimic joint="Middle_Finger_Distal" multiplier="1.000" offset="0" />
+    </joint>
 
     <!-- RING FINGER JOINTS -->
     <joint name="Ring_Finger" type="revolute">
-        <parent link="e5" />
-        <child link="virtual_j" />
-        <limit effort="1000.0" lower="0.0" upper="0.98175" velocity="1" />
-        <origin xyz="0 0 0.0655" rpy="0 -1.5707 0" />
-        <axis xyz="0 0 1" />
+      <parent link="virtual_j" />
+      <child link="j" />
+      <limit effort="1000.0" lower="0.0" upper="0.98175" velocity="1" />
+      <origin xyz="0 0 0" rpy="1.5707 0 0" />
+      <axis xyz="0 0 1" />
     </joint>
-    <joint name="j12" type="revolute">
-        <parent link="j" />
-        <child link="n" />
-        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 -0.05004 0" rpy="1.5705 0 -1.5707" />
-        <axis xyz="0 0 1" />
-        <mimic joint="Ring_Finger" multiplier="1.3588" offset="0" />
-    </joint>
-    <joint name="j16" type="revolute">
-        <parent link="n" />
-        <child link="r" />
-        <limit effort="1000.0" lower="0" upper="1.395" velocity="1" />
-        <origin xyz="0.032 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 1" />
-        <mimic joint="Ring_Finger" multiplier="1.42093" offset="0" />
-    </joint>
-
-
-    <!-- LITTLE FINGER JOINTS -->
-    <joint name="Pinky" type="revolute">
-        <parent link="e4" />
-        <child link="virtual_i" />
-        <limit effort="1000.0" lower="0.0" upper="0.98175" velocity="1" />
-        <origin xyz="0 0 0.056" rpy="0 -1.5707 0" />
-        <axis xyz="0 0 1" />
-    </joint>
-    <joint name="j13" type="revolute">
-        <parent link="i" />
-        <child link="m" />
-        <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
-        <origin xyz="0 -0.04454 0" rpy="1.5705 0 -1.5707" />
-        <axis xyz="0 0 1" />
-        <mimic joint="Pinky" multiplier="1.35880" offset="0" />
-    </joint>
-    <joint name="j17" type="revolute">
-        <parent link="m" />
-        <child link="q" />
-        <limit effort="1000.0" lower="0" upper="1.3971" velocity="1" />
-        <origin xyz="0.022 0 0" rpy="0 0 0" />
-        <axis xyz="0 0 1" />
-        <mimic joint="Pinky" multiplier="1.42307" offset="0" />
-    </joint>
-        <joint name="j6b" type="revolute">
-        <parent link="virtual_l" />
-        <child link="l" />
-        <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="0 0 0" rpy="-1.5707 0 0" />
-        <axis xyz="0 0 ${side*(-1)}" />
-        <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
-    </joint>
-    <joint name="j8b" type="revolute">
-        <parent link="virtual_j" />
-        <child link="j" />
-        <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-        <origin xyz="0 0 ${side*(-0.00675)}" rpy="-1.5707 1.5707 0" />
-        <axis xyz="0 0 ${side*(1)}" />
-        <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
-    </joint>
-    <joint name="Finger_Spread" type="revolute">
-        <parent link="virtual_i" />
-        <child link="i" />
-        <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
-        <origin xyz="0 0 ${side*(-0.02825)}" rpy="-1.5707 1.5707 0" />
-        <axis xyz="0 0 ${side*(1)}" />
-     </joint>
     
+    <joint name="j12" type="revolute">
+      <parent link="j" />
+      <child link="n" />
+      <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
+      <origin xyz="0.05004 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <mimic joint="Ring_Finger" multiplier="1.3588" offset="0" />
+    </joint>
+
+    <joint name="j16" type="revolute">
+      <parent link="n" />
+      <child link="r" />
+      <limit effort="1000.0" lower="0" upper="1.395" velocity="1" />
+      <origin xyz="0.032 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <mimic joint="Ring_Finger" multiplier="1.42093" offset="0" />
+    </joint>
+
+    <!-- PINKY JOINTS -->
+    <joint name="Pinky" type="revolute">
+      <parent link="virtual_i" />
+      <child link="i" />
+      <limit effort="1000.0" lower="0.0" upper="0.98175" velocity="1" />
+      <origin xyz="0 0 0" rpy="1.5707 0 0" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <joint name="j13" type="revolute">
+      <parent link="i" />
+      <child link="m" />
+      <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
+      <origin xyz="0.04454 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <mimic joint="Pinky" multiplier="1.35880" offset="0" />
+    </joint>
+
+    <joint name="j17" type="revolute">
+      <parent link="m" />
+      <child link="q" />
+      <limit effort="1000.0" lower="0" upper="1.3971" velocity="1" />
+      <origin xyz="0.022 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <mimic joint="Pinky" multiplier="1.42307" offset="0" />
+    </joint>
+
+    <joint name="index_spread" type="revolute">
+      <parent link="d2" />
+      <child link="virtual_l" />
+      <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
+      <origin xyz="${side*(-0.025)} 0 0.110" rpy="0 -1.5707 1.5707" />
+      <axis xyz="0 0 ${side*(1)}" />
+      <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
+    </joint>
+
+    <joint name="ring_spread" type="revolute">
+      <parent link="e5" />
+      <child link="virtual_j" />
+      <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
+      <origin xyz="${side*(0.00675)} 0 0.0655" rpy="-1.5707 -1.5707 0" />
+      <axis xyz="0 0 ${side*(1)}" />
+      <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
+    </joint>
+
+    <joint name="Finger_Spread" type="revolute">
+      <parent link="e4" />
+      <child link="virtual_i" />
+      <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
+      <origin xyz="${side*(0.02825)} 0 0.056" rpy="-1.5707 -1.5707 0" />
+      <axis xyz="0 0 ${side*(1)}" />
+    </joint>    
 </xacro:macro>
 </robot>
 
