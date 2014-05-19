@@ -6,8 +6,7 @@
     <arg name="frequency" default="50"/>
     <arg name="serial_device" default="/dev/ttyUSB0"/>
    
-	<!-- load high level -->
-	
+	<!-- load high level -->	
 	<include file="$(find pathloader)/launch/trajectoryExecution.launch">
 	        <arg name="simulation" value="$(arg simulation)" />
 	       	<arg name="ns"  value="$(arg ns)" />
@@ -24,7 +23,8 @@
 	 
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
         	<rosparam unless="$(arg simulation)" param="source_list">["canopen_joint_sensor_values", "s5fh_controller/channel_feedback"] </rosparam>
-              	<rosparam     if="$(arg simulation)" param="source_list">["interpolator/joint_commands"] </rosparam>
+                <rosparam     if="$(arg simulation)" param="source_list">["interpolator/joint_commands"] </rosparam>
+                <param name="use_gui" value="False"/>
         </node>
       	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
         	<param name="use_gui" value="False"/>
