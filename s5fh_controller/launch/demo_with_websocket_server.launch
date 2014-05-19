@@ -1,0 +1,18 @@
+<launch>
+  <arg name="simulation" default="True" />
+  <arg name="websocket_port" />
+  <include file="$(find s5fh_controller)/launch/run_demo.launch">
+    <arg name="ns" value="s5fh_left" />
+    <arg name="output" value="log" /> <!-- use "log" or "screen"-->
+    <arg name="simulation" value="$(arg simulation)" />
+    <arg name="gui" value="False" />
+    <arg name="frequency" value="50"/>
+    <arg name="serial_device" value="/dev/ttyUSB0"/>
+  </include>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    <arg name="port" value="$(arg websocket_port)" />
+  </include>
+  
+  <node name="tf2_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" />
+</launch>
