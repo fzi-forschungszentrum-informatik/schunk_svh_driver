@@ -3,10 +3,10 @@
   <asset>
     <contributor>
       <author>Blender User</author>
-      <authoring_tool>Blender 2.69.0 r60995</authoring_tool>
+      <authoring_tool>Blender 2.69.0 r60991</authoring_tool>
     </contributor>
-    <created>2014-05-19T12:50:05</created>
-    <modified>2014-05-19T12:50:05</modified>
+    <created>2014-05-21T14:09:00</created>
+    <modified>2014-05-21T14:09:00</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -148,7 +148,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="f31" name="f31" type="NODE">
-        <matrix sid="transform">-9.99501e-4 3.1224e-5 4.71458e-12 0 3.12237e-5 9.99511e-4 1.50918e-10 0 0 1.50996e-10 -9.99975e-4 0 0 0 0 1</matrix>
+        <matrix sid="transform">9.99988e-4 0 0 0 0 9.99999e-4 0 0 0 0 9.99975e-4 0 0 0 0 1</matrix>
         <instance_geometry url="#Circle_006-mesh">
           <bind_material>
             <technique_common>
