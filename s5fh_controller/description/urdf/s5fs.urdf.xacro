@@ -17,7 +17,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0.01313 0" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/h10.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/h10.dae" />
 	</geometry>
 	<material name="green">
 	  <color rgba="0 1 0 1" />
@@ -126,7 +126,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.02298" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d10.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/d10.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -136,7 +136,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.02425" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d11.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/d11.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -146,7 +146,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.015" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d12.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/d12.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -156,7 +156,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.010" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/d13.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/d13.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -168,7 +168,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f10.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f10.dae" />
 	</geometry>
       </visual>
     </link>
@@ -177,7 +177,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.02402" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f11.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f11.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -187,7 +187,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.013" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f12.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f12.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -197,7 +197,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.0075" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f13.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f13.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -208,7 +208,7 @@
     <link name="virtual_k">
       <visual>
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f20.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f20.dae" />
 	</geometry>
       </visual>
     </link>
@@ -217,7 +217,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.02502" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f21.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f21.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -227,7 +227,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.016" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f22.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f22.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -237,7 +237,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.0075" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f23.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f23.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -249,7 +249,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0.006625 0 0" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f30.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f30.dae" />
 	</geometry>
       </visual>
     </link>
@@ -258,7 +258,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.02502" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f31.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f31.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -268,7 +268,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.01525" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f32.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f32.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -278,7 +278,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.00675" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f33.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f33.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -290,7 +290,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0.02825 0 0" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f40.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f40.dae" />
 	</geometry>
       </visual>
     </link>
@@ -299,7 +299,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.02227" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f41.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f41.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -309,7 +309,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.011" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f42.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f42.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
@@ -319,7 +319,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0 0.0075" />
 	<geometry>
-	  <mesh scale="0.001 0.001 0.001" filename="package://s5fh_controller/description/meshes/f43.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/f43.dae" />
 	</geometry>
 	<material name="green" />
       </visual>
