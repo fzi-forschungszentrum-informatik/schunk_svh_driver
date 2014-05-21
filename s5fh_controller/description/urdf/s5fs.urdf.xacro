@@ -15,9 +15,9 @@
     <link name="${name}_base_link">
       <xacro:insert_block name="origin" />
       <visual>
-	<origin rpy="0 0 0" xyz="0 0.01313 0" />
+	<origin xyz="0 0 -0.032" rpy="0 0 0" />
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/h10.dae" />
+	  <mesh filename="package://s5fh_controller/description/meshes/base10.dae" />
 	</geometry>
 	<material name="green">
 	  <color rgba="0 1 0 1" />
@@ -27,7 +27,7 @@
 
     <link name="d">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.055" />
+	
 	<geometry>
 	  <cylinder length="0.110" radius="${cyl_radius}" />
 	</geometry>
@@ -58,22 +58,20 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e1">
       <visual>
-	<origin rpy="0 0 0" xyz="${side*(0.01840)} 0 0.01875" />
+	<origin rpy="0 0 0" xyz="0 0.01313 0" />
 	<geometry>
-	  <cylinder length="0.0375" radius="${cyl_radius}" />
+	  <mesh filename="package://s5fh_controller/description/meshes/h10.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e2">
       <visual>
-	<origin rpy="0 1.571 0" xyz="${side*(0.00875)} 0 0" />
+	<origin xyz="-0.0007 0 -0.01002" />
 	<geometry>
-	  <cylinder length="0.0175" radius="${cyl_radius}" />
+	  <mesh filename="package://s5fh_controller/description/meshes/h11.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -89,13 +87,6 @@
     </link>
 
     <link name="e">
-      <visual>
-	<origin rpy="0 1.571 0" xyz="${side*(0.0175)} 0 0.03" />
-	<geometry>
-	  <cylinder length="0.0215" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E4 = D-G-F!!! -->
@@ -124,7 +115,7 @@
     <!-- THUMB LINKS -->
     <link name="z">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.02298" />
+	<origin xyz="0 0 0.02442" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/d10.dae" />
 	</geometry>
@@ -132,9 +123,9 @@
       </visual>
     </link>
 
+    <link name="virtual_a" />
     <link name="a">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.02425" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/d11.dae" />
 	</geometry>
@@ -144,7 +135,6 @@
 
     <link name="b">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.015" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/d12.dae" />
 	</geometry>
@@ -154,7 +144,6 @@
 
     <link name="c">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.010" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/d13.dae" />
 	</geometry>
@@ -166,7 +155,7 @@
     <!-- INDEX FINGER LINKS -->
     <link name="virtual_l">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0" />
+	<origin xyz="0 0 0.01321" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f10.dae" />
 	</geometry>
@@ -175,7 +164,6 @@
 
     <link name="l">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.02402" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f11.dae" />
 	</geometry>
@@ -185,7 +173,6 @@
 
     <link name="p">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.013" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f12.dae" />
 	</geometry>
@@ -195,7 +182,6 @@
 
     <link name="t">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.0075" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f13.dae" />
 	</geometry>
@@ -207,6 +193,7 @@
     <!-- MIDDLE FINGER LINKS -->
     <link name="virtual_k">
       <visual>
+	<origin xyz="0 0 0.01321" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f20.dae" />
 	</geometry>
@@ -215,7 +202,6 @@
 
     <link name="k">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.02502" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f21.dae" />
 	</geometry>
@@ -225,7 +211,6 @@
 
     <link name="o">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.016" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f22.dae" />
 	</geometry>
@@ -235,7 +220,6 @@
 
     <link name="s">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.0075" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f23.dae" />
 	</geometry>
@@ -247,7 +231,7 @@
     <!-- RING FINGER LINKS -->
     <link name="virtual_j">
       <visual>
-	<origin rpy="0 0 0" xyz="0.006625 0 0" />
+	<origin xyz="0 0 -0.01321" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f30.dae" />
 	</geometry>
@@ -256,7 +240,6 @@
 
     <link name="j">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.02502" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f31.dae" />
 	</geometry>
@@ -266,7 +249,6 @@
 
     <link name="n">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.01525" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f32.dae" />
 	</geometry>
@@ -276,7 +258,6 @@
 
     <link name="r">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.00675" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f33.dae" />
 	</geometry>
@@ -288,7 +269,7 @@
     <!-- LITTLE FINGER LINKS -->
     <link name="virtual_i">
       <visual>
-	<origin rpy="0 0 0" xyz="0.02825 0 0" />
+	<origin xyz="0 0 -0.01321" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f40.dae" />
 	</geometry>
@@ -297,7 +278,6 @@
 
     <link name="i">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.02227" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f41.dae" />
 	</geometry>
@@ -307,7 +287,6 @@
 
     <link name="m">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.011" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f42.dae" />
 	</geometry>
@@ -317,7 +296,6 @@
 
     <link name="q">
       <visual>
-	<origin rpy="0 0 0" xyz="0 0 0.0075" />
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f43.dae" />
 	</geometry>
@@ -327,17 +305,23 @@
 
 
     <joint name="Thumb_Flexion" type="revolute">
-      <parent link="z" />
+      <parent link="virtual_a" />
       <child link="a" />
       <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
-      <origin xyz="0 0 0.04596" rpy="0 -1.5707 3.1415" />
+      <origin xyz="0 0 0" rpy="0 0 -0.9704" />
       <axis xyz="0 0 ${side*(1)}" />
+    </joint>
+    
+    <joint name="Thumb_Helper" type="fixed">
+      <parent link="z" />
+      <child link="virtual_a" />
+      <origin xyz="0 0 0.04596" rpy="0 -1.5707 3.1416" />
     </joint>
 
 
     <!-- BASE_LINE JOINTS -->
     <joint name="Thumb_Opposition" type="revolute">
-      <parent link="${name}_base_link" />
+      <parent link="e1" />
       <child link="z" />
       <limit effort="1000.0" lower="0.0" upper="0.9879" velocity="1" />
       <origin xyz="${side*(-0.01690)} 0.02626 0" rpy="0 0.2618 1.571" />
@@ -347,7 +331,7 @@
     <!-- JOINT NOT FOR BASE_LINE. BUT WRITTEN DOWN HERE FOR BETTER UX -->
 
     <joint name="f1" type="fixed">
-      <parent link="${name}_base_link" />
+      <parent link="e1" />
       <child link="d" />
       <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
@@ -367,14 +351,14 @@
     <joint name="f4" type="fixed">
       <parent link="${name}_base_link" />
       <child link="e1" />
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 -0.01313 0" rpy="0 0 0" />
     </joint>
 
     <joint name="j5" type="revolute">
       <parent link="e1" />
       <child link="e2" />
       <limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1" />
-      <origin xyz="${side*(0.01840)} 0 0.0375" rpy="0 0 0" />
+      <origin xyz="${side*(0.01840)} 0.006 0.0375" rpy="0 0 0" />
       <axis xyz="0 0 ${side*(1)}" />
       <mimic joint="Thumb_Opposition" multiplier="1" offset="0" />
     </joint>
@@ -382,7 +366,7 @@
     <joint name="f5" type="fixed">
       <parent link="e2" />
       <child link="e3" />
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 -0.0060 0" rpy="0 0 0" />
     </joint>
 
     <joint name="f6" type="fixed">
@@ -549,7 +533,7 @@
       <parent link="e5" />
       <child link="virtual_j" />
       <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
-      <origin xyz="${side*(0.00675)} 0 0.0655" rpy="-1.5707 -1.5707 0" />
+      <origin xyz="${side*(0.003855)} 0 0.0655" rpy="-1.5707 -1.5707 0" />
       <axis xyz="0 0 ${side*(1)}" />
       <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
@@ -558,7 +542,7 @@
       <parent link="e4" />
       <child link="virtual_i" />
       <limit effort="1000.0" lower="0.0" upper="0.5829" velocity="1" />
-      <origin xyz="${side*(0.02825)} 0 0.056" rpy="-1.5707 -1.5707 0" />
+      <origin xyz="${side*(0.025355)} 0 0.056" rpy="-1.5707 -1.5707 0" />
       <axis xyz="0 0 ${side*(1)}" />
     </joint>    
 </xacro:macro>
