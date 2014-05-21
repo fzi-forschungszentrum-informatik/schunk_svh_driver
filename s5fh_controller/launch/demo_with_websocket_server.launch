@@ -1,8 +1,9 @@
 <launch>
   <arg name="simulation" default="True" />
+  <arg name="ns" />
   <arg name="websocket_port" />
   <include file="$(find s5fh_controller)/launch/run_demo.launch">
-    <arg name="ns" value="s5fh_schunk1" />
+    <arg name="ns" value="$(arg ns)" />
     <arg name="output" value="log" /> <!-- use "log" or "screen"-->
     <arg name="simulation" value="$(arg simulation)" />
     <arg name="gui" value="False" />
@@ -14,5 +15,5 @@
     <arg name="port" value="$(arg websocket_port)" />
   </include>
   
-  <node name="tf2_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" />
+  <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" />
 </launch>
