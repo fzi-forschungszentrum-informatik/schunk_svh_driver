@@ -1,12 +1,13 @@
 <launch>
   <arg name="simulation" default="True" />
   <arg name="ns" />
+  <arg name="gui" default="False" />
   <arg name="websocket_port" />
   <include file="$(find s5fh_controller)/launch/run_demo.launch">
     <arg name="ns" value="$(arg ns)" />
     <arg name="output" value="log" /> <!-- use "log" or "screen"-->
     <arg name="simulation" value="$(arg simulation)" />
-    <arg name="gui" value="False" />
+    <arg name="gui" value="$(arg gui)" />
     <arg name="frequency" value="50"/>
     <arg name="serial_device" value="/dev/ttyUSB0"/>
   </include>
