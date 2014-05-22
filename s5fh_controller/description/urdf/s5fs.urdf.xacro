@@ -19,40 +19,36 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/base10.dae" />
 	</geometry>
-	<material name="green">
-	  <color rgba="0 1 0 1" />
-	</material>
       </visual>
     </link>
 
     <link name="d">
-      <visual>
-	
-	<geometry>
-	  <cylinder length="0.110" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
+      <!-- <visual> -->
+      <!-- 	<geometry> -->
+      <!-- 	  <cylinder length="0.110" radius="${cyl_radius}" /> -->
+      <!-- 	</geometry> -->
+      <!-- 	<material name="green" /> -->
+      <!-- </visual> -->
     </link>
 
     <link name="h">
-      <visual>
-	<origin rpy="0 1.571 0" xyz="${side*(-0.0125)} 0 0.0825" />
-	<geometry>
-	  <cylinder length="0.025" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
+      <!-- <visual> -->
+      <!-- 	<origin rpy="0 1.571 0" xyz="${side*(-0.0125)} 0 0.0825" /> -->
+      <!-- 	<geometry> -->
+      <!-- 	  <cylinder length="0.025" radius="${cyl_radius}" /> -->
+      <!-- 	</geometry> -->
+      <!-- 	<material name="green" /> -->
+      <!-- </visual> -->
     </link>
 
     <link name="d2">
-      <visual>
-	<origin rpy="0 0 0" xyz="${side*(-0.025)} 0 0.09625" />
-	<geometry>
-	  <cylinder length="0.0275" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
+      <!-- <visual> -->
+      <!-- 	<origin rpy="0 0 0" xyz="${side*(-0.025)} 0 0.09625" /> -->
+      <!-- 	<geometry> -->
+      <!-- 	  <cylinder length="0.0275" radius="${cyl_radius}" /> -->
+      <!-- 	</geometry> -->
+      <!-- 	<material name="green" /> -->
+      <!-- </visual> -->
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
@@ -60,7 +56,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0.01313 0" />
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/h10.dae" />
+	  <mesh scale="${side*(1)} 1 1" filename="package://s5fh_controller/description/meshes/h10.dae" />
 	</geometry>
       </visual>
     </link>
@@ -68,22 +64,22 @@
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e2">
       <visual>
-	<origin xyz="-0.0007 0 -0.01002" />
+	<origin xyz="${side*(-0.0007)} 0 -0.01002" />
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/h11.dae" />
+	  <mesh scale="${side*(1)} 1 1" filename="package://s5fh_controller/description/meshes/h11.dae" />
 	</geometry>
       </visual>
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
     <link name="e3">
-      <visual>
-	<origin rpy="0 0 0" xyz="${side*(0.0175)} 0 0.015" />
-	<geometry>
-	  <cylinder length="0.03" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
+      <!-- <visual> -->
+      <!-- 	<origin rpy="0 0 0" xyz="${side*(0.0175)} 0 0.015" /> -->
+      <!-- 	<geometry> -->
+      <!-- 	  <cylinder length="0.03" radius="${cyl_radius}" /> -->
+      <!-- 	</geometry> -->
+      <!-- 	<material name="green" /> -->
+      <!-- </visual> -->
     </link>
 
     <link name="e">
@@ -91,24 +87,24 @@
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E4 = D-G-F!!! -->
     <link name="e4">
-      <visual>
-	<origin rpy="0 0 0" xyz="${side*(0.02825)} 0 0.043" />
-	<geometry>
-	  <cylinder length="0.026" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
+      <!-- <visual> -->
+      <!-- 	<origin rpy="0 0 0" xyz="${side*(0.02825)} 0 0.043" /> -->
+      <!-- 	<geometry> -->
+      <!-- 	  <cylinder length="0.026" radius="${cyl_radius}" /> -->
+      <!-- 	</geometry> -->
+      <!-- 	<material name="green" /> -->
+      <!-- </visual> -->
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED, BUT POSITION CALCULATED: E5 = D-G!!! -->
     <link name="e5">
-      <visual>
-	<origin rpy="0 0 0" xyz="${side*(0.00675)} 0 0.04775" />
-	<geometry>
-	  <cylinder length="0.0355" radius="${cyl_radius}" />
-	</geometry>
-	<material name="green" />
-      </visual>
+      <!-- <visual> -->
+      <!-- 	<origin rpy="0 0 0" xyz="${side*(0.00675)} 0 0.04775" /> -->
+      <!-- 	<geometry> -->
+      <!-- 	  <cylinder length="0.0355" radius="${cyl_radius}" /> -->
+      <!-- 	</geometry> -->
+      <!-- 	<material name="green" /> -->
+      <!-- </visual> -->
     </link>
 
 
@@ -117,9 +113,8 @@
       <visual>
 	<origin xyz="0 0 0.02442" />
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/d10.dae" />
+	  <mesh scale="1 ${side*(1)} 1" filename="package://s5fh_controller/description/meshes/d10.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -127,27 +122,24 @@
     <link name="a">
       <visual>
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/d11.dae" />
+	  <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://s5fh_controller/description/meshes/d11.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
     <link name="b">
       <visual>
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/d12.dae" />
+	  <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://s5fh_controller/description/meshes/d12.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
     <link name="c">
       <visual>
 	<geometry>
-	  <mesh filename="package://s5fh_controller/description/meshes/d13.dae" />
+	  <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://s5fh_controller/description/meshes/d13.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -167,7 +159,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f11.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -176,7 +167,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f12.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -185,7 +175,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f13.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -205,7 +194,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f21.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -214,7 +202,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f22.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -223,7 +210,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f23.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -243,7 +229,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f31.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -252,7 +237,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f32.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -261,7 +245,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f33.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -281,7 +264,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f41.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -290,7 +272,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f42.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -299,7 +280,6 @@
 	<geometry>
 	  <mesh filename="package://s5fh_controller/description/meshes/f43.dae" />
 	</geometry>
-	<material name="green" />
       </visual>
     </link>
 
@@ -308,7 +288,7 @@
       <parent link="virtual_a" />
       <child link="a" />
       <limit effort="1000.0" lower="0.0" upper="0.9704" velocity="1" />
-      <origin xyz="0 0 0" rpy="0 0 -0.9704" />
+      <origin xyz="0 0 0" rpy="0 0 ${side*(-0.9704)}" />
       <axis xyz="0 0 ${side*(1)}" />
     </joint>
     
