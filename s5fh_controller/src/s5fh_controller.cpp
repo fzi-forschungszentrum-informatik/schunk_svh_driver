@@ -11,13 +11,14 @@
 #include <s5fh_controller/s5fhConfig.h>
 
 #include <driver_s5fh/S5FHFingerManager.h>
+#include <boost/shared_ptr.hpp>
 
 #include <icl_core/EnumHelper.h>
 
 using namespace driver_s5fh;
 
 // Create pointer to S5FH finger manager object.
-S5FHFingerManager *fm = new S5FHFingerManager;
+boost::shared_ptr<S5FHFingerManager> fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(true));
 
 // Set default serial device name
 std::string serial_device_name = "";
