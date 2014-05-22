@@ -14,7 +14,7 @@
 	    <color sid="diffuse">0.45 0.45 0.45 1</color>
 	  </diffuse>
 	  <specular>
-	    <color sid="specular">0.6 0.6 0.6 1</color>
+	    <color sid="specular">0.65 0.65 0.65 1</color>
 	  </specular>
 	  <shininess>
 	    <float sid="shininess">70</float>
@@ -44,7 +44,7 @@
 	    <color sid="ambient">0 0 0 1</color>
 	  </ambient>
 	  <diffuse>
-	    <color sid="diffuse">0.38 0.38 0.38 1</color>
+	    <color sid="diffuse">0.5 0.5 0.5 1</color>
 	  </diffuse>
 	  <index_of_refraction>
 	    <float sid="index_of_refraction">1</float>
@@ -71,10 +71,10 @@
 	    <color sid="ambient">0 0 0 1</color>
 	  </ambient>
 	  <diffuse>
-	    <color sid="diffuse">0.08 0.08 0.08 1</color>
+	    <color sid="diffuse">0.1 0.1 0.1 1</color>
 	  </diffuse>
 	  <specular>
-	    <color sid="specular">0.2 0.2 0.2 1</color>
+	    <color sid="specular">0.05 0.05 0.05 1</color>
 	  </specular>
 	  <shininess>
 	    <float sid="shininess">50</float>
@@ -137,7 +137,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.23 0.23 0.23 1</color>
+              <color sid="diffuse">0.35 0.35 0.35 1</color>
             </diffuse>
             <specular>
               <color sid="specular">0.2 0.2 0.2 1</color>
@@ -170,8 +170,11 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.09 0.09 0.09 1</color>
+              <color sid="diffuse">0.2 0.2 0.2 1</color>
             </diffuse>
+	    <specular>
+              <color sid="specular">0 0 0 1</color>
+	    </specular>
             <index_of_refraction>
               <float sid="index_of_refraction">1</float>
             </index_of_refraction>
@@ -197,10 +200,10 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.08 0.08 0.08 1</color>
+              <color sid="diffuse">0.07 0.07 0.07 1</color>
             </diffuse>
             <specular>
-              <color sid="specular">0.2 0.2 0.2 1</color>
+              <color sid="specular">0.05 0.05 0.05 1</color>
             </specular>
             <shininess>
               <float sid="shininess">50</float>
