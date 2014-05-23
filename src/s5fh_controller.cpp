@@ -18,7 +18,7 @@
 using namespace driver_s5fh;
 
 // Create pointer to S5FH finger manager object.
-boost::shared_ptr<S5FHFingerManager> fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(true));
+boost::shared_ptr<S5FHFingerManager> fm;
 
 // Set default serial device name
 std::string serial_device_name = "";
@@ -143,6 +143,20 @@ int main(int argc, char **argv)
 
   f = boost::bind(&dynamic_reconfigure_callback, _1, _2);
   server.setCallback(f);
+
+  bool autostart;
+
+  try
+  {
+    nh.param<bool>("autostart",autostart,false);
+  }
+  catch (ros::InvalidNameException e)
+  {
+    ROS_ERROR("Parameter Error! ");
+  }
+
+  fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(autostart));
+
 
   // Subscribe connect topic (Empty)
   ros::Subscriber connect_sub = nh.subscribe("connect", 1, connectCallback);
