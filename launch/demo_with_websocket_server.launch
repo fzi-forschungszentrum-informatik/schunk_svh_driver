@@ -1,5 +1,5 @@
 <launch>
-  <arg name="simulation" default="True" />
+  <arg name="simulation" default="False" />
   <arg name="ns" />
   <arg name="gui" default="False" />
   <arg name="websocket_port" />
