@@ -44,15 +44,15 @@
 		<param name="serial_device" value="$(arg serial_device)"/>
                 <param name="autostart" value="$(arg autostart)" />
                 
-                <param name="enable_chan0" value="true" /> <!-- THUMB_FLEXION -->
-                <param name="enable_chan1" value="true" /> <!-- THUMB_OPPOSITION // wrist -->
-                <param name="enable_chan2" value="true" /> <!-- INDEX_FINGER_DISTAL -->
-                <param name="enable_chan3" value="true" /> <!-- INDEX_FINGER_PROXIMAL -->
-                <param name="enable_chan4" value="true" /> <!-- MIDDLE_FINGER_DISTAL -->
-                <param name="enable_chan5" value="true" /> <!-- MIDDLE_FINGER_PROXIMAL -->
-                <param name="enable_chan6" value="true" /> <!-- RING_FINGER -->
-                <param name="enable_chan7" value="true" /> <!-- PINKY -->
-                <param name="enable_chan8" value="true" /> <!-- FINGER_SPREAD -->
+                <param name="disable_flags0" value="false" /> <!-- THUMB_FLEXION -->
+                <param name="disable_flags1" value="false" /> <!-- THUMB_OPPOSITION // wrist -->
+                <param name="disable_flags2" value="false" /> <!-- INDEX_FINGER_DISTAL -->
+                <param name="disable_flags3" value="false" /> <!-- INDEX_FINGER_PROXIMAL -->
+                <param name="disable_flags4" value="false" /> <!-- MIDDLE_FINGER_DISTAL -->
+                <param name="disable_flags5" value="false" /> <!-- MIDDLE_FINGER_PROXIMAL -->
+                <param name="disable_flags6" value="false" /> <!-- RING_FINGER -->
+                <param name="disable_flags7" value="false" /> <!-- PINKY -->
+                <param name="disable_flags8" value="false" /> <!-- FINGER_SPREAD -->
                 
 	</node>
 

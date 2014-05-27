@@ -145,22 +145,23 @@ int main(int argc, char **argv)
   server.setCallback(f);
 
   bool autostart;
-  bool enable_flags[9];
-  uint32_t disable_mask = 0;
+  // ugly workaround, but ros param can not deal with the std::vector type ):
+  bool disable_flags[9];
+  std::vector<bool> disable_flags_vec(9, false);
 
   try
   {
     nh.param<bool>("autostart",autostart,false);
 
-    nh.param<bool>("enable_chan0",enable_flags[0],true);
-    nh.param<bool>("enable_chan1",enable_flags[0],true);
-    nh.param<bool>("enable_chan2",enable_flags[1],true);
-    nh.param<bool>("enable_chan3",enable_flags[2],true);
-    nh.param<bool>("enable_chan4",enable_flags[3],true);
-    nh.param<bool>("enable_chan5",enable_flags[4],true);
-    nh.param<bool>("enable_chan6",enable_flags[5],true);
-    nh.param<bool>("enable_chan7",enable_flags[6],true);
-    nh.param<bool>("enable_chan8",enable_flags[7],true);
+    nh.param<bool>("disable_flags0",disable_flags[0],false);
+    nh.param<bool>("disable_flags1",disable_flags[1],false);
+    nh.param<bool>("disable_flags2",disable_flags[2],false);
+    nh.param<bool>("disable_flags3",disable_flags[3],false);
+    nh.param<bool>("disable_flags4",disable_flags[4],false);
+    nh.param<bool>("disable_flags5",disable_flags[5],false);
+    nh.param<bool>("disable_flags6",disable_flags[6],false);
+    nh.param<bool>("disable_flags7",disable_flags[7],false);
+    nh.param<bool>("disable_flags8",disable_flags[8],false);
 
   }
   catch (ros::InvalidNameException e)
@@ -170,14 +171,15 @@ int main(int argc, char **argv)
 
   for (size_t i = 0; i < 9; ++i)
   {
-    if(!enable_flags[i])
+    // ugly workaround, but ros param can not deal with the std::vector type ):
+    disable_flags_vec[i] = disable_flags[i];
+    if(disable_flags[i])
     {
-      disable_mask = disable_mask || (1<<i);
       ROS_WARN("s5fh_controller disabling channel nr %i", i);
     }
   }
 
-  fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(autostart, disable_mask));
+  fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(autostart, disable_flags_vec));
 
 
   // Subscribe connect topic (Empty)
