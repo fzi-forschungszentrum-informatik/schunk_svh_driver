@@ -172,7 +172,8 @@ int main(int argc, char **argv)
   {
     if(!enable_flags[i])
     {
-      disable_mask == disable_mask || (1<<i);
+      disable_mask = disable_mask || (1<<i);
+      ROS_WARN("s5fh_controller disabling channel nr %i", i);
     }
   }
 

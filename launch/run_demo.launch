@@ -43,6 +43,17 @@
 	<node unless="$(arg simulation)" name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="$(arg output)">
 		<param name="serial_device" value="$(arg serial_device)"/>
                 <param name="autostart" value="$(arg autostart)" />
+                
+                <param name="enable_chan0" value="true" /> <!-- THUMB_FLEXION -->
+                <param name="enable_chan1" value="true" /> <!-- THUMB_OPPOSITION // wrist -->
+                <param name="enable_chan2" value="true" /> <!-- INDEX_FINGER_DISTAL -->
+                <param name="enable_chan3" value="true" /> <!-- INDEX_FINGER_PROXIMAL -->
+                <param name="enable_chan4" value="true" /> <!-- MIDDLE_FINGER_DISTAL -->
+                <param name="enable_chan5" value="true" /> <!-- MIDDLE_FINGER_PROXIMAL -->
+                <param name="enable_chan6" value="true" /> <!-- RING_FINGER -->
+                <param name="enable_chan7" value="true" /> <!-- PINKY -->
+                <param name="enable_chan8" value="true" /> <!-- FINGER_SPREAD -->
+                
 	</node>
 
 	<!-- start rviz -->
