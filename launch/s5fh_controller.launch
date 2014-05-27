@@ -13,6 +13,17 @@
   <node name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
+    
+    <param name="enable_chan0" value="true" />
+    <param name="enable_chan1" value="true" />
+    <param name="enable_chan2" value="true" />
+    <param name="enable_chan3" value="true" />
+    <param name="enable_chan4" value="true" />
+    <param name="enable_chan5" value="true" />
+    <param name="enable_chan6" value="true" />
+    <param name="enable_chan7" value="true" />
+    <param name="enable_chan8" value="true" />
+    
     <remap from="s5fh_controller/channel_targets" to="joint_states"/>
   </node>
 

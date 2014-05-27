@@ -145,17 +145,38 @@ int main(int argc, char **argv)
   server.setCallback(f);
 
   bool autostart;
+  bool enable_flags[9];
+  uint32_t disable_mask = 0;
 
   try
   {
     nh.param<bool>("autostart",autostart,false);
+
+    nh.param<bool>("enable_chan0",enable_flags[0],true);
+    nh.param<bool>("enable_chan1",enable_flags[0],true);
+    nh.param<bool>("enable_chan2",enable_flags[1],true);
+    nh.param<bool>("enable_chan3",enable_flags[2],true);
+    nh.param<bool>("enable_chan4",enable_flags[3],true);
+    nh.param<bool>("enable_chan5",enable_flags[4],true);
+    nh.param<bool>("enable_chan6",enable_flags[5],true);
+    nh.param<bool>("enable_chan7",enable_flags[6],true);
+    nh.param<bool>("enable_chan8",enable_flags[7],true);
+
   }
   catch (ros::InvalidNameException e)
   {
     ROS_ERROR("Parameter Error! ");
   }
 
-  fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(autostart));
+  for (size_t i = 0; i < 9; ++i)
+  {
+    if(!enable_flags[i])
+    {
+      disable_mask == disable_mask || (1<<i);
+    }
+  }
+
+  fm = boost::shared_ptr<S5FHFingerManager>(new S5FHFingerManager(autostart, disable_mask));
 
 
   // Subscribe connect topic (Empty)
