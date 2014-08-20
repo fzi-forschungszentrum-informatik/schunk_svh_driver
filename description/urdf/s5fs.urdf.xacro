@@ -436,7 +436,7 @@
       <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
       <origin xyz="0.032 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Middle_Finger_Distal" multiplier="1.000" offset="0" />
+      <mimic joint="Middle_Finger_Distal" multiplier="1.0454" offset="0" />
     </joint>
 
     <!-- RING FINGER JOINTS -->
