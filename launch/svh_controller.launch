@@ -6,11 +6,11 @@
 
  
  
-  <param name="robot_description" command="$(find xacro)/xacro.py $(find s5fh_controller)/description/urdf/s5fh-standalone.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
   <param name="use_gui" value="$(arg gui)"/>
   <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"-->
 
-  <node name="s5fh_controller" pkg="s5fh_controller" type="s5fh_controller" output="screen">
+  <node name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
         
@@ -24,13 +24,13 @@
     <param name="disable_flags7" value="false" /> <!-- PINKY -->
     <param name="disable_flags8" value="false" /> <!-- FINGER_SPREAD -->
     
-    <remap from="s5fh_controller/channel_targets" to="joint_states"/>
+    <remap from="svh_controller/channel_targets" to="joint_states"/>
   </node>
 
   <node if="$(arg gui)" name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
-    <remap from="joint_states" to="s5fh_controller/channel_feedback"/>
+    <remap from="joint_states" to="svh_controller/channel_feedback"/>
   </node>
   
 </launch>

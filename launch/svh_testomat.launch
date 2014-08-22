@@ -1,0 +1,7 @@
+<launch>
+   
+  <node name="svh_testomat" pkg="svh_controller" type="svh_testomat" output="screen">
+    <remap from="~channel_targets" to="/svh/interpolator/joint_commands"/>
+  </node>
+  
+</launch>
