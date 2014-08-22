@@ -1,4 +1,4 @@
-<robot name="s5fs">
+<robot name="svh">
     <!-- BASE_LINE LINKS -->
     <link name="base_link">
         <visual>
