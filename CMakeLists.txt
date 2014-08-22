@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(s5fh_controller)
+project(svh_controller)
 
 find_package(catkin REQUIRED COMPONENTS
     roscpp
@@ -15,13 +15,13 @@ find_package(xacro REQUIRED)
 ## System dependencies are found with CMake's conventions
 find_package(icl_comm)
 find_package(icl_core)
-find_package(driver_s5fh)
+find_package(driver_svh)
 
 catkin_python_setup()
 
 #dynamic reconfigure files
 generate_dynamic_reconfigure_options(
-  cfg/s5fh.cfg
+  cfg/svh.cfg
 )
 
 
@@ -36,7 +36,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   LIBRARIES
   CATKIN_DEPENDS
-  DEPENDS roscpp icl_core icl_comm driver_s5fh
+  DEPENDS roscpp icl_core icl_comm driver_svh
 )
 
 
@@ -67,7 +67,7 @@ include_directories(include
   ${catkin_INCLUDE_DIRS}
   ${icl_comm_INCLUDE_DIRS}
   ${icl_core_INCLUDE_DIRS}
-  ${driver_s5fh_INCLUDE_DIRS}
+  ${driver_svh_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
@@ -77,39 +77,39 @@ add_definitions(
 )
 
 # Declare a cpp executable
-add_executable(s5fh_controller
-  src/s5fh_controller.cpp
+add_executable(svh_controller
+  src/svh_controller.cpp
 )
 
-add_executable(s5fh_testomat
-  src/s5fh_testomat.cpp
+add_executable(svh_testomat
+  src/svh_testomat.cpp
 )
 
 # Add cmake target dependencies of the executable/library
 # as an example, message headers may need to be generated before nodes
-add_dependencies(s5fh_controller
+add_dependencies(svh_controller
   icl_comm
   icl_core
-  driver_s5fh
+  driver_svh
   ${PROJECT_NAME}_gencfg
 )
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(s5fh_controller
+target_link_libraries(svh_controller
   ${catkin_LIBRARIES}
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
-  ${driver_s5fh_LIBRARIES}
+  ${driver_svh_LIBRARIES}
 )
 
 
-add_dependencies(s5fh_testomat
+add_dependencies(svh_testomat
   icl_comm
   icl_core
 )
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(s5fh_testomat
+target_link_libraries(svh_testomat
   ${catkin_LIBRARIES}
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}
@@ -119,7 +119,7 @@ target_link_libraries(s5fh_testomat
 ## Install ##
 #############
 install(PROGRAMS
-  scripts/rqt_s5fh_reset_gui
+  scripts/rqt_svh_reset_gui
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

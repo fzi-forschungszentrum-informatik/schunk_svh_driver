@@ -1,20 +1,12 @@
 <library path="src">
-  <class name="s5fh_reset_gui" type="rqt_s5fh_reset_gui.s5fh_reset_gui.S5FHResetGui" base_class_type="rqt_gui_py::Plugin">
+  <class name="svh_reset_gui" type="rqt_svh_reset_gui.svh_reset_gui.SVHResetGui" base_class_type="rqt_gui_py::Plugin">
     <description>
-      An example Python GUI plugin to create a great user interface.
+      Reset interface for the Schunk five finger hand
     </description>
     <qtgui>
-      <!-- optional grouping...
-      <group>
-        <label>Group</label>
-      </group>
-      <group>
-        <label>Subgroup</label>
-      </group>
-      -->
-      <label>S5fh Reset</label>
+      <label>SVH Reset</label>
       <icon type="theme">system-help</icon>
-      <statustip>Great user interface to provide real value.</statustip>
+      <statustip>SVH gui for convenient resetting</statustip>
     </qtgui>
   </class>
 </library>
