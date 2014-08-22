@@ -7,10 +7,10 @@ from python_qt_binding.QtGui import QWidget
 from python_qt_binding import QtGui
 from std_msgs.msg import Int8, Empty 
 
-class S5FHResetGui(Plugin):
+class SVHResetGui(Plugin):
 
     def __init__(self, context):
-        super(S5FHResetGui, self).__init__(context)
+        super(SVHResetGui, self).__init__(context)
         # Give QObjects reasonable names
         self.setObjectName('TrajectoryDesigner')
 
@@ -26,9 +26,9 @@ class S5FHResetGui(Plugin):
         # Create QWidget
         self._widget = QWidget()
         
-        ui_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'S5fhResetGui.ui')
+        ui_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'SVHResetGui.ui')
         loadUi(ui_file, self._widget)
-        self._widget.setObjectName('S5fhResetGuiUI')
+        self._widget.setObjectName('SVHResetGuiUI')
         if context.serial_number() > 1:
             self._widget.setWindowTitle(self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         # Add widget to the user interface
@@ -49,9 +49,9 @@ class S5FHResetGui(Plugin):
         self._widget.finger_select_box.addItem("Pinky Finger",7)
         self._widget.finger_select_box.addItem("Finger Spread",8)
         
-        self.reset_pub = rospy.Publisher('s5fh_controller/reset_channel',  Int8)
-        self.enable_pub = rospy.Publisher('s5fh_controller/enable_channel', Int8)
-        self.connect_pub = rospy.Publisher('s5fh_controller/connect',  Empty)
+        self.reset_pub = rospy.Publisher('svh_controller/reset_channel',  Int8)
+        self.enable_pub = rospy.Publisher('svh_controller/enable_channel', Int8)
+        self.connect_pub = rospy.Publisher('svh_controller/connect',  Empty)
         
         
     def ConnectButton(self):

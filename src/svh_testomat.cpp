@@ -45,7 +45,7 @@ void runCallback(const std_msgs::Empty&)
 int main(int argc, char **argv)
 {
   // Set up ROS.
-  ros::init(argc, argv, "s5fh_testomat");
+  ros::init(argc, argv, "svh_testomat");
   ros::NodeHandle nh("~");
 
   // Subscribe connect topic (Empty)
