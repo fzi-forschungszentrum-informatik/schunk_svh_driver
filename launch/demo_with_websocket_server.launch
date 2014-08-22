@@ -3,7 +3,7 @@
   <arg name="ns" />
   <arg name="gui" default="False" />
   <arg name="websocket_port" />
-  <include file="$(find s5fh_controller)/launch/run_demo.launch">
+  <include file="$(find svh_controller)/launch/run_demo.launch">
     <arg name="ns" value="$(arg ns)" />
     <arg name="output" value="log" /> <!-- use "log" or "screen"-->
     <arg name="simulation" value="$(arg simulation)" />
