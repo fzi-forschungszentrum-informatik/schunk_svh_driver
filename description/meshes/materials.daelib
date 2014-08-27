@@ -8,7 +8,7 @@
 	    <color sid="emission">0 0 0 1</color>
 	  </emission>
 	  <ambient>
-	    <color sid="ambient">0 0 0 1</color>
+	    <color sid="ambient">0.001 0.001 0.001 1</color>
 	  </ambient>
 	  <diffuse>
 	    <color sid="diffuse">0.45 0.45 0.45 1</color>
@@ -41,7 +41,7 @@
 	    <color sid="emission">0 0 0 1</color>
 	  </emission>
 	  <ambient>
-	    <color sid="ambient">0 0 0 1</color>
+	    <color sid="ambient">0.001 0.001 0.001 1</color>
 	  </ambient>
 	  <diffuse>
 	    <color sid="diffuse">0.5 0.5 0.5 1</color>
@@ -68,7 +68,7 @@
 	    <color sid="emission">0 0 0 1</color>
 	  </emission>
 	  <ambient>
-	    <color sid="ambient">0 0 0 1</color>
+	    <color sid="ambient">0.001 0.001 0.001 1</color>
 	  </ambient>
 	  <diffuse>
 	    <color sid="diffuse">0.1 0.1 0.1 1</color>
@@ -101,7 +101,7 @@
               <color sid="emission">0 0 0 1</color>
             </emission>
             <ambient>
-              <color sid="ambient">0 0 0 1</color>
+              <color sid="ambient">0.001 0.001 0.001 1</color>
             </ambient>
             <diffuse>
               <color sid="diffuse">0.831 0.686 0.216 1</color>
@@ -134,7 +134,7 @@
               <color sid="emission">0 0 0 1</color>
             </emission>
             <ambient>
-              <color sid="ambient">0 0 0 1</color>
+              <color sid="ambient">0.001 0.001 0.001 1</color>
             </ambient>
             <diffuse>
               <color sid="diffuse">0.35 0.35 0.35 1</color>
@@ -167,7 +167,7 @@
               <color sid="emission">0 0 0 1</color>
             </emission>
             <ambient>
-              <color sid="ambient">0 0 0 1</color>
+              <color sid="ambient">0.001 0.001 0.001 1</color>
             </ambient>
             <diffuse>
               <color sid="diffuse">0.2 0.2 0.2 1</color>
@@ -197,7 +197,7 @@
               <color sid="emission">0 0 0 1</color>
             </emission>
             <ambient>
-              <color sid="ambient">0 0 0 1</color>
+              <color sid="ambient">0.001 0.001 0.001 1</color>
             </ambient>
             <diffuse>
               <color sid="diffuse">0.07 0.07 0.07 1</color>
@@ -221,5 +221,4 @@
       </profile_COMMON>
       <extra><technique profile="MAX3D"><double_sided>1</double_sided></technique></extra>
     </effect>
-    Hahaaa!
 </library_effects>
