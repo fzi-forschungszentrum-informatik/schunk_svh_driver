@@ -63,7 +63,8 @@ install(DIRECTORY launch
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include
+include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
   ${icl_comm_INCLUDE_DIRS}
   ${icl_core_INCLUDE_DIRS}
@@ -78,7 +79,7 @@ add_definitions(
 
 # Declare a cpp executable
 add_executable(svh_controller
-  src/svh_controller.cpp
+  src/SVHNode.cpp
 )
 
 add_executable(svh_testomat
