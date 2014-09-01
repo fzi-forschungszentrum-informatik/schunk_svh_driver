@@ -18,7 +18,7 @@ SVHNode::SVHNode(const bool &autostart,const std::vector<bool> & disable_flags_v
 
   serial_device_name_ = "";
 
-  // preipare the channel position message for later sending
+  // prepare the channel position message for later sending
   channel_pos_.name.resize(driver_svh::eSVH_DIMENSION);
   channel_pos_.position.resize(driver_svh::eSVH_DIMENSION, 0.0);
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
@@ -26,9 +26,8 @@ SVHNode::SVHNode(const bool &autostart,const std::vector<bool> & disable_flags_v
     channel_pos_.name[channel] = driver_svh::SVHController::m_channel_description[channel];
   }
 
-  // Init the actual driver hook
-  fm_ = boost::shared_ptr<driver_svh::SVHFingerManager>(new driver_svh::SVHFingerManager(autostart, disable_flags_vec));
-
+  // Init the actual driver hook (after logging initialize)
+  fm_.reset(new driver_svh::SVHFingerManager(autostart, disable_flags_vec));
 }
 
 SVHNode::~SVHNode()
@@ -220,7 +219,7 @@ int main(int argc, char **argv)
   // Logic
   //==========
   // Node object holding all the relevant functions
-  SVHNode svh_node = SVHNode(autostart,disable_flags_vec);
+  SVHNode svh_node(autostart,disable_flags_vec);
 
   //==========
   // Dynamic Reconfigure
