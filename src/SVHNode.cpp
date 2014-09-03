@@ -151,6 +151,7 @@ sensor_msgs::JointState SVHNode::getCurrentPositions()
     }
   }
 
+  channel_pos_.header.stamp = ros::Time::now();
   return  channel_pos_;
 }
 
