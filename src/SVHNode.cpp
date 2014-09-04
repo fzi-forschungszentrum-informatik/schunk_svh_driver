@@ -179,26 +179,14 @@ int main(int argc, char **argv)
   //==========
 
   bool autostart;
-  // ugly workaround, but ros param can not deal with the std::vector type ):
-  bool disable_flags[9];
-  std::vector<bool> disable_flags_vec(9, false);
+  std::vector<bool> disable_flags(9, false);
 
   try
   {
     nh.param<bool>("autostart",autostart,false);
-
-    nh.param<bool>("disable_flags0",disable_flags[0],false);
-    nh.param<bool>("disable_flags1",disable_flags[1],false);
-    nh.param<bool>("disable_flags2",disable_flags[2],false);
-    nh.param<bool>("disable_flags3",disable_flags[3],false);
-    nh.param<bool>("disable_flags4",disable_flags[4],false);
-    nh.param<bool>("disable_flags5",disable_flags[5],false);
-    nh.param<bool>("disable_flags6",disable_flags[6],false);
-    nh.param<bool>("disable_flags7",disable_flags[7],false);
-    nh.param<bool>("disable_flags8",disable_flags[8],false);
-
-    // TODO: What About the Serial Device Name? Rad up on dynamic reconfigure first
-
+    // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
+    nh.getParam("disable_flags",disable_flags);
+    // Device and other params are used in dynamic reconfigure and need not to be handled individually
   }
   catch (ros::InvalidNameException e)
   {
@@ -207,8 +195,6 @@ int main(int argc, char **argv)
 
   for (size_t i = 0; i < 9; ++i)
   {
-    // ugly workaround, but ros param can not deal with the std::vector type ):
-    disable_flags_vec[i] = disable_flags[i];
     if(disable_flags[i])
     {
       ROS_WARN("svh_controller disabling channel nr %i", i);
@@ -220,7 +206,7 @@ int main(int argc, char **argv)
   // Logic
   //==========
   // Node object holding all the relevant functions
-  SVHNode svh_node(autostart,disable_flags_vec);
+  SVHNode svh_node(autostart,disable_flags);
 
   //==========
   // Dynamic Reconfigure

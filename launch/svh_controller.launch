@@ -7,25 +7,32 @@
 
  
  
+  <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
   <param name="use_gui" value="$(arg gui)"/>
+
+
 
 
   <!-- Launch actual driver node (if not in simulation)-->
   <node unless="$(arg simulation)" name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
-        
-    <param name="disable_flags0" value="false" /> <!-- THUMB_FLEXION -->
-    <param name="disable_flags1" value="false" /> <!-- THUMB_OPPOSITION // wrist -->
-    <param name="disable_flags2" value="false" /> <!-- INDEX_FINGER_DISTAL -->
-    <param name="disable_flags3" value="false" /> <!-- INDEX_FINGER_PROXIMAL -->
-    <param name="disable_flags4" value="false" /> <!-- MIDDLE_FINGER_DISTAL -->
-    <param name="disable_flags5" value="false" /> <!-- MIDDLE_FINGER_PROXIMAL -->
-    <param name="disable_flags6" value="false" /> <!-- RING_FINGER -->
-    <param name="disable_flags7" value="false" /> <!-- PINKY -->
-    <param name="disable_flags8" value="false" /> <!-- FINGER_SPREAD -->
-    
+
+    <!-- Disables individual finger in case there is a hardware fault -->
+    <rosparam param="disable_flags">
+    [
+     false, <!-- THUMB_FLEXION -->
+     false,  <!-- THUMB_OPPOSITION // wrist -->
+     false,  <!-- INDEX_FINGER_DISTAL -->
+     false, <!-- INDEX_FINGER_PROXIMAL -->
+     false, <!-- MIDDLE_FINGER_DISTAL -->
+     false, <!-- MIDDLE_FINGER_PROXIMAL -->
+     false, <!-- RING_FINGER -->
+     false, <!-- PINKY -->
+     false  <!-- FINGER_SPREAD -->
+    ]
+    </rosparam>
   </node>
 
   <!-- Start RQT by default if not specified otherwise -->
@@ -34,7 +41,8 @@
   <!-- Joint state publisher is needed in order to use the mimic tag within the URDF (needed for propper visualization) Hardware will work without it thoug -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
             <rosparam unless="$(arg simulation)" param="source_list">["svh_controller/channel_feedback"] </rosparam>
-            <param name="use_gui" value="$(arg gui)"/>
+            <!-- only show the gui if simulation was selected, otherwise this joint state publisher is just used for the tags -->
+            <param name="use_gui" value="$(arg simulation)"/>
     </node>
 
 
