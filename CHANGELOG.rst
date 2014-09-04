@@ -2,8 +2,8 @@
 Changelog for package schunk_svh
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.2 (2014-09-04)
+------------------
 * Minor change to not copy the Node object without any need.
   -> Also the memory failures are fixed (was a problem within the icl)
 * Merge branch 'master' of idsgit.fzi.de:ros/ros_s5fh into merging
