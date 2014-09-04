@@ -42,6 +42,11 @@ void SVHNode::dynamic_reconfigure_callback(svh_controller::svhConfig &config, ui
   serial_device_name_ = config.serial_device;
 }
 
+// Callback function for changing parameters dynamically
+void SVHNode::dynamic_reconfigure_callback_finger(svh_controller::svhFingerConfig &config, uint32_t level,const uint32_t & finger)
+{
+}
+
 // Callback function for connecting to SCHUNK five finger hand
 void SVHNode::connectCallback(const std_msgs::Empty&)
 {
@@ -168,8 +173,24 @@ int main(int argc, char **argv)
 
   // Set up ROS.
   ros::init(argc, argv, "svh_controller");
-  // Private NH for params
+  // Private NH for general params
   ros::NodeHandle nh("~");
+  // private NH for specific finger params
+  // This is required in order to easily differentiate between the parameter sets for the fingers AND
+  // use dynamic reconfigure at the same time. Just Rosparams would be able to find the params within
+  // sub namespaces, however this functionality is (to my knowledge) not yet implemented in Dynamic Reconfigure
+  // To still provide a way of easy parameter update during runtime this seems to be the best way
+  ros::NodeHandle nh_finger0("~/THUMB_FLEXION");
+  ros::NodeHandle nh_finger1("~/THUMB_OPPOSITION");
+  ros::NodeHandle nh_finger2("~/INDEX_FINGER_DISTAL");
+  ros::NodeHandle nh_finger3("~/INDEX_FINGER_PROXIMAL");
+  ros::NodeHandle nh_finger4("~/MIDDLE_FINGER_DISTAL");
+  ros::NodeHandle nh_finger5("~/MIDDLE_FINGER_PROXIMAL");
+  ros::NodeHandle nh_finger6("~/RING_FINGER");
+  ros::NodeHandle nh_finger7("~/PINKY");
+  ros::NodeHandle nh_finger8("~/FINGER_SPREAD");
+
+
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
   ros::Rate rate(100);
@@ -213,10 +234,46 @@ int main(int argc, char **argv)
   //==========
 
   dynamic_reconfigure::Server<svh_controller::svhConfig> server;
+  // Same reason as stated above to have multiple reconfigure server:
+  // If we would just use one, each parameter would need a unique name as the dynamic reconfigure
+  // can not handle namespaces (at least to my knowledge) so we would need to define very many unique variables
+  // By using this way we can listen to seperate namespaces. To provide the correct feedback within the node
+  // we rely on constants in the boost binding which enables us to find out which namespace the reconfigure call came from
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger0(nh_finger0);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger1(nh_finger1);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger2(nh_finger2);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger3(nh_finger3);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger4(nh_finger4);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger5(nh_finger5);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger6(nh_finger6);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger7(nh_finger7);
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig> server_finger8(nh_finger8);
+
   dynamic_reconfigure::Server<svh_controller::svhConfig>::CallbackType f;
+  dynamic_reconfigure::Server<svh_controller::svhFingerConfig>::CallbackType fi0,fi1,fi2,fi3,fi4,fi5,fi6,fi7,fi8;
 
   f = boost::bind(&SVHNode::dynamic_reconfigure_callback,&svh_node, _1, _2);
+  fi0 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 0);
+  fi1 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 1);
+  fi2 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 2);
+  fi3 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 3);
+  fi4 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 4);
+  fi5 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 5);
+  fi6 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 6);
+  fi7 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 7);
+  fi8 = boost::bind(&SVHNode::dynamic_reconfigure_callback_finger,&svh_node, _1, _2, 8);
+
   server.setCallback(f);
+  server_finger0.setCallback(fi0);
+  server_finger1.setCallback(fi1);
+  server_finger2.setCallback(fi2);
+  server_finger3.setCallback(fi3);
+  server_finger4.setCallback(fi4);
+  server_finger5.setCallback(fi5);
+  server_finger6.setCallback(fi6);
+  server_finger7.setCallback(fi7);
+  server_finger8.setCallback(fi8);
+
 
   //==========
   // Callbacks

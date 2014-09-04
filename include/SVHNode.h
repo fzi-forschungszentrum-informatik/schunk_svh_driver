@@ -24,6 +24,7 @@
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
 #include <svh_controller/svhConfig.h>
+#include <svh_controller/svhFingerConfig.h>
 
 #include <driver_svh/SVHFingerManager.h>
 
@@ -37,6 +38,8 @@ public:
   ~SVHNode();
 
   void dynamic_reconfigure_callback(svh_controller::svhConfig &config, uint32_t level);
+
+  void dynamic_reconfigure_callback_finger(svh_controller::svhFingerConfig &config, uint32_t level, const uint32_t &finger);
 
   // Callback function for connecting to SCHUNK five finger hand
   void connectCallback(const std_msgs::Empty&);

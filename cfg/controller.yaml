@@ -1,0 +1,210 @@
+THUMB_FLEXION: {
+position_controller_wmn : 0.5,  #Reference signal minimum value
+position_controller_wmx : 0.6,  #Reference signal maximum value
+position_controller_dwmx: 0.1,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.7,  #Measurement scaling
+position_controller_dt  : 0.1,  #Time base of controller
+position_controller_imn : 0.1,  #Integral windup minimum value
+position_controller_imx : 0.8,  #Integral windup maximum value
+position_controller_kp  : 0.1,  #Proportional gain
+position_controller_ki  : 2.1,  #Integral gain
+position_controller_kd  : 1.1,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+THUMB_OPPOSITION: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+INDEX_FINGER_DISTAL: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+INDEX_FINGER_PROXIMAL: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+MIDDLE_FINGER_DISTAL: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+MIDDLE_FINGER_PROXIMAL: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+RING_FINGER: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+PINKY: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+FINGER_SPREAD: {
+position_controller_wmn : 0.9,  #Reference signal minimum value
+position_controller_wmx : 0.9,  #Reference signal maximum value
+position_controller_dwmx: 0.9,  #Reference signal delta maximum threshold
+position_controller_ky  : 0.9,  #Measurement scaling
+position_controller_dt  : 0.9,  #Time base of controller
+position_controller_imn : 0.9,  #Integral windup minimum value
+position_controller_imx : 0.9,  #Integral windup maximum value
+position_controller_kp  : 0.9,  #Proportional gain
+position_controller_ki  : 2.9,  #Integral gain
+position_controller_kd  : 1.9,  #Differential gain
+
+current_controller_wmn: 0.1,   #Reference signal minimum value
+current_controller_wmx: 0.1,   #Reference signal maximum value
+current_controller_ky : 0.1,   #measurement scaling
+current_controller_dt : 0.1,   #time base of controller
+current_controller_imn: 0.1,   #Integral windup minimum value
+current_controller_imx: 0.1,   #Integral windup maximum value
+current_controller_kp : 0.1,   #proportional gain
+current_controller_ki : 0.1,   #Integral gain
+current_controller_umn: 0.1,   #Output limiter min
+current_controller_umx: 0.1   #Output limiter max
+}
+
+
+#Note to developers: Namespaces would have been preferred but are not supported well by the dynamic reconfigure

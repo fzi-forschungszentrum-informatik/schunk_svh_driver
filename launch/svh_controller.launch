@@ -5,7 +5,8 @@
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
 
- 
+  <!-- Load Yaml Configuration file-->
+  <rosparam file="$(find svh_controller)/cfg/controller.yaml" command="load" ns="svh_controller"/>
  
   <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
