@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TimeControl</class>
+ <widget class="QWidget" name="TimeControl">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>590</width>
+    <height>310</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TimeControl</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QPushButton" name="playpauseButton">
+     <property name="text">
+      <string>Play/Pause</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;h2&gt;Shortcuts:&lt;/h2&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;Space&lt;/td&gt;
+&lt;td&gt;Toggle between play and pause&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Wheel Up&lt;/td&gt;
+&lt;td&gt;Seek forward by 1 frame&lt;/td&gt;
+&lt;td&gt;Ctrl: 30 frames, Alt: 60 frames, Ctrl+Alt: 90 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Wheel Down&lt;/td&gt;
+&lt;td&gt;Seek backward by 1 frame&lt;/td&gt;
+&lt;td&gt;Ctrl: -30 frames, Alt: -60 frames, Ctrl+Alt: -90 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;Seek backward by 1 frame&lt;/td&gt;
+&lt;td&gt;Ctrl: -2 frames, Alt: -3 frames, Ctrl+Alt: -5 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;Seek forward by 1 frame&lt;/td&gt;
+&lt;td&gt;Ctrl: 2 frames, Alt: 3 frames, Ctrl+Alt: 5 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;Seek backward by 10 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: -20 frames, Alt: -30 frames, Ctrl+Alt: -50 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;Seek forward by 10 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: 20 frames, Alt: 30 frames, Ctrl+Alt: 50 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;Seek backward by 100 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: -200 frames, Alt: -300 frames, Ctrl+Alt: -500 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;Seek forward by 100 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: 200 frames, Alt: 300 frames, Ctrl+Alt: 500 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;Seek backward by 1000 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: -2000 frames, Alt: -3000 frames, Ctrl+Alt: -5000 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;Seek forward by 1000 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: 2000 frames, Alt: 3000 frames, Ctrl+Alt: 5000 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;Seek backward by 10000 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: -20000 frames, Alt: -30000 frames, Ctrl+Alt: -50000 frames&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;Seek forward by 10000 frames&lt;/td&gt;
+&lt;td&gt;Ctrl: 20000 frames, Alt: 30000 frames, Ctrl+Alt: 50000 frames&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

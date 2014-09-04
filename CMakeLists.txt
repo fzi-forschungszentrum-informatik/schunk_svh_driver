@@ -1,3 +1,11 @@
+SET(ICMAKER_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icmaker")
+INCLUDE(${ICMAKER_DIRECTORY}/CMakeLists.txt)
+
+ADD_SUBDIRECTORY (src/tinyxml)
+ADD_SUBDIRECTORY (src/icl_core)
+ADD_SUBDIRECTORY (src/icl_comm)
+ADD_SUBDIRECTORY (src/driver_s5fh)
+
 cmake_minimum_required(VERSION 2.8.3)
 project(svh_controller)
 
