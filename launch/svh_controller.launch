@@ -4,38 +4,23 @@
   <arg name="autostart" default="true"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
-  <arg name="finger_reset_speed" default="0.2"/>
 
+  <!-- load basic configuration -->
+  <rosparam file="$(find svh_controller)/cfg/svh.yaml" command="load" ns="svh_controller"/>
   <!-- Load Yaml Configuration file-->
-  <rosparam file="$(find svh_controller)/cfg/controller.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find svh_controller)/cfg/controller_default.yaml" command="load" ns="svh_controller"/>
+  <!-- Load the User Config file which will overwrite values from default -->
+  <rosparam file="$(find svh_controller)/cfg/controller_user.yaml" command="load" ns="svh_controller"/>
  
   <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
-  <param name="use_gui" value="$(arg gui)"/>
-
-
+  <!--param name="use_gui" value="$(arg gui)"-->
 
 
   <!-- Launch actual driver node (if not in simulation)-->
   <node unless="$(arg simulation)" name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
-    <param name="finger_reset_speed" value="$(arg finger_reset_speed)" />
-
-    <!-- Disables individual finger in case there is a hardware fault -->
-    <rosparam param="disable_flags">
-    [
-     false, <!-- THUMB_FLEXION -->
-     false,  <!-- THUMB_OPPOSITION // wrist -->
-     false,  <!-- INDEX_FINGER_DISTAL -->
-     false, <!-- INDEX_FINGER_PROXIMAL -->
-     false, <!-- MIDDLE_FINGER_DISTAL -->
-     false, <!-- MIDDLE_FINGER_PROXIMAL -->
-     false, <!-- RING_FINGER -->
-     false, <!-- PINKY -->
-     false  <!-- FINGER_SPREAD -->
-    ]
-    </rosparam>
   </node>
 
   <!-- Start RQT by default if not specified otherwise -->

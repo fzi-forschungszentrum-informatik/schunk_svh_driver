@@ -22,6 +22,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   //==========
 
   bool autostart;
+  int reset_timeout;
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
   try
   {
@@ -29,6 +30,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.param<std::string>("serial_device",serial_device_name_,"/dev/ttyUSB0");
     // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
     nh.getParam("disable_flags",disable_flags);
+    nh.getParam("reset_timeout",reset_timeout);
   }
   catch (ros::InvalidNameException e)
   {
@@ -44,7 +46,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   }
 
   // Init the actual driver hook (after logging initialize)
-  fm_.reset(new driver_svh::SVHFingerManager(disable_flags));
+  fm_.reset(new driver_svh::SVHFingerManager(disable_flags,serial_device_name_,reset_timeout));
 
   std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);
   std::vector< std::vector<float> > current_settings(driver_svh::eSVH_DIMENSION);
@@ -116,6 +118,7 @@ void SVHNode::dynamic_reconfigure_callback(svh_controller::svhConfig &config, ui
 {
   serial_device_name_ = config.serial_device;
   setFingerResetSpeed(config.finger_reset_speed);
+  fm_->setResetTimeout(config.reset_timeout);
 }
 
 // Callback function for connecting to SCHUNK five finger hand
