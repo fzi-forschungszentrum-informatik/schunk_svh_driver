@@ -22,7 +22,6 @@ catkin_python_setup()
 #dynamic reconfigure files
 generate_dynamic_reconfigure_options(
   cfg/svh.cfg
-  cfg/finger.cfg
 )
 
 

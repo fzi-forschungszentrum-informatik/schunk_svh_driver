@@ -35,7 +35,7 @@
 class SVHNode{
 
 public:
-  SVHNode(const bool &autostart = false,const std::vector<bool> & disable_flags_vec = std::vector<bool>(false,driver_svh::eSVH_DIMENSION));
+  SVHNode(const ros::NodeHandle &nh);
   ~SVHNode();
 
   //! Dynamic reconfigure callback to update changing parameters
