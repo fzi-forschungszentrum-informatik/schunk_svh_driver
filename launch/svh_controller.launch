@@ -4,6 +4,7 @@
   <arg name="autostart" default="true"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
+  <arg name="finger_reset_speed" default="0.2"/>
 
   <!-- Load Yaml Configuration file-->
   <rosparam file="$(find svh_controller)/cfg/controller.yaml" command="load" ns="svh_controller"/>
@@ -19,6 +20,7 @@
   <node unless="$(arg simulation)" name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
+    <param name="finger_reset_speed" value="$(arg finger_reset_speed)" />
 
     <!-- Disables individual finger in case there is a hardware fault -->
     <rosparam param="disable_flags">
@@ -40,7 +42,7 @@
   <node if="$(arg gui)" name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
 
   <!-- Joint state publisher is needed in order to use the mimic tag within the URDF (needed for propper visualization) Hardware will work without it thoug -->
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <node name="output_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
             <rosparam unless="$(arg simulation)" param="source_list">["svh_controller/channel_feedback"] </rosparam>
             <!-- only show the gui if simulation was selected, otherwise this joint state publisher is just used for the tags -->
             <param name="use_gui" value="$(arg simulation)"/>
@@ -49,6 +51,11 @@
 
   <!-- Robot state publisher for the TFs -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+  </node>
+
+  <!-- Joint state publisher to provide easy control of the real hardware. Enable this node if you want to have fast input with sliders -->
+  <node name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <remap from="joint_states" to="svh_controller/channel_targets" />
   </node>
   
 </launch>

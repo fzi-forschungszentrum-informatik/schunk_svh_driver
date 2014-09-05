@@ -24,10 +24,11 @@
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
 #include <svh_controller/svhConfig.h>
-#include <svh_controller/svhFingerConfig.h>
 
+// Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
-
+#include <driver_svh/SVHPositionSettings.h>
+#include <driver_svh/SVHCurrentSettings.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -37,20 +38,19 @@ public:
   SVHNode(const bool &autostart = false,const std::vector<bool> & disable_flags_vec = std::vector<bool>(false,driver_svh::eSVH_DIMENSION));
   ~SVHNode();
 
+  //! Dynamic reconfigure callback to update changing parameters
   void dynamic_reconfigure_callback(svh_controller::svhConfig &config, uint32_t level);
 
-  void dynamic_reconfigure_callback_finger(svh_controller::svhFingerConfig &config, uint32_t level, const uint32_t &finger);
-
-  // Callback function for connecting to SCHUNK five finger hand
+  //! Callback function for connecting to SCHUNK five finger hand
   void connectCallback(const std_msgs::Empty&);
 
-  // Callback function to reset/home channels of SCHUNK five finger hand
+  //! Callback function to reset/home channels of SCHUNK five finger hand
   void resetChannelCallback(const std_msgs::Int8ConstPtr& channel);
 
-  // Callback function to enable channels of SCHUNK five finger hand
+  //! Callback function to enable channels of SCHUNK five finger hand
   void enableChannelCallback(const std_msgs::Int8ConstPtr& channel);
 
-  // Callback function for setting channel target positions to SCHUNK five finger hand
+  //! Callback function for setting channel target positions to SCHUNK five finger hand
   void jointStateCallback(const sensor_msgs::JointStateConstPtr& input);
 
   //!
@@ -58,6 +58,28 @@ public:
   //! \returns The current positions of all channels in rad
   //!
   sensor_msgs::JointState getCurrentPositions();
+
+  //!
+  //! \brief overwrite current parameters
+  //! \param channel
+  //! \param current_settings
+  //! \return
+  //!
+  bool setCurrentControllerParams(const driver_svh::SVHChannel &channel, const driver_svh::SVHCurrentSettings &current_settings);
+
+  //!
+  //! \brief overwrite position parameters
+  //! \param channel
+  //! \param position_settings
+  //! \return
+  //!
+  bool setPositionControllerParams(const driver_svh::SVHChannel &channel, const driver_svh::SVHPositionSettings &position_settings);
+
+  //!
+  //! \brief setFingerResetSpeed Set the reset speed as percentage of the normal finger speed
+  //! \param resetSpeed percentage of the reset Speed only values from 0.0 to 1.0 are allowed
+  //!
+  void setFingerResetSpeed(const float & resetSpeed);
 
 
 private:
@@ -69,6 +91,11 @@ private:
 
   //! joint state message template
   sensor_msgs::JointState channel_pos_;
+
+//  //! The current controller settings as given in the parameters
+//  std::vector<driver_svh::SVHCurrentSettings> current_settings_;
+//  //! The postion controller settings as given in the paramters
+//  std::vector<driver_svh::SVHPositionSettings> position_settings_;
 
 
 };
