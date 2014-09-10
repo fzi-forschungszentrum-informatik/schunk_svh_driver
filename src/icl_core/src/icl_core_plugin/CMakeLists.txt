@@ -6,10 +6,6 @@ ICMAKER_ADD_SOURCES(
     Logging.cpp
 )
 
-IF(WIN32)
-  ICMAKER_ADD_SOURCES(dlfcnx.cpp)
-ENDIF()
-
 ICMAKER_ADD_HEADERS(
     icl_core_plugin.h
     ImportExport.h
@@ -17,8 +13,7 @@ ICMAKER_ADD_HEADERS(
     PluginManagerBase.h
     Logging.h
     Plugin.h
-    dlfcnx.h
-)
+    )
 
 IF(ICMAKER_DEPRECATED_STYLE)
 ICMAKER_ADD_HEADERS(
@@ -33,6 +28,7 @@ ICMAKER_INCLUDE_DIRECTORIES(${ICL_CORE_INCLUDE_DIRS})
 
 ICMAKER_EXTERNAL_DEPENDENCIES(EXPORT
   Boost_FILESYSTEM
+  Ltdl
   )
 
 ICMAKER_INTERNAL_DEPENDENCIES(EXPORT

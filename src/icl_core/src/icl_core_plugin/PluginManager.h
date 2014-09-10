@@ -1,6 +1,16 @@
 // this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
 // -- END LICENSE BLOCK ------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -24,7 +34,6 @@
 #include "icl_core_plugin/PluginManagerBase.h"
 
 #include <boost/filesystem.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 
 #include <cassert>
 #include <string>
@@ -33,7 +42,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "dlfcnx.h"
+#include <ltdl.h>
 
 #ifdef _IC_BUILDER_DEPRECATED_STYLE_
 # include "icl_core/Deprecate.h"
@@ -42,8 +51,6 @@
 namespace icl_core {
 //! Plugin framework.
 namespace plugin {
-
-typedef void* PluginHandle;
 
 /*! Singleton responsible for loading tControlWidget plugins.
  */
@@ -58,6 +65,7 @@ public:
       closePluginHandle(m_loaded_plugins.begin()->first);
     }
 
+    lt_dlexit();
     static PluginManager<T, plugin_dir>* m_instance;
     m_instance = 0;
     (void) m_instance;
@@ -132,7 +140,7 @@ public:
     }
 
     std::list<std::string> result;
-    typename std::map<std::string, PluginHandle>::const_iterator iter;
+    typename std::map<std::string, lt_dlhandle>::const_iterator iter;
     for (iter = m_plugin_handles.begin(); iter != m_plugin_handles.end(); ++iter)
     {
       result.push_back(iter->first);
@@ -215,7 +223,7 @@ public:
       loadPlugins();
     }
 
-    PluginHandle plugin_handle = m_plugin_handles[identifier];
+    lt_dlhandle plugin_handle = m_plugin_handles[identifier];
     return loadPluginInstance(plugin_handle, identifier);
   }
 
@@ -339,7 +347,7 @@ protected:
       m_initialized(false),
       m_lazy_loading(false)
   {
-    // nothing to do
+    lt_dlinit();
   }
 
   /*! Search all files in the specified directories and add plugins
@@ -417,23 +425,17 @@ protected:
    */
   void loadHandle(std::string plugin)
   {
-#ifdef _WIN32
-    if (boost::algorithm::ends_with(plugin, ".lib")) {
-        LOGGING_DEBUG(Plugin, "Ignoring .lib file in plugin directory: " << plugin << icl_core::logging::endl);
-        return;
-    }
-#endif
+    lt_dlhandle plugin_handle = lt_dlopen(plugin.c_str());
 
-    PluginHandle plugin_handle = dlopen(plugin.c_str(), RTLD_LAZY);
-
-    dlerror(); // Clear any previous errors.
+    // Clear errors.
+    lt_dlerror();
     typename T::identifier* get_identifier
-      = (typename T::identifier*) dlsym(plugin_handle, "identifier");
+      = (typename T::identifier*) lt_dlsym(plugin_handle, "identifier");
 
     typename T::basetype* get_basetype
-      = (typename T::basetype*) dlsym(plugin_handle, "basetype");
+      = (typename T::basetype*) lt_dlsym(plugin_handle, "basetype");
 
-    const char* dlsym_error = dlerror();
+    const char* dlsym_error = lt_dlerror();
     if (dlsym_error)
     {
 #ifdef _WIN32
@@ -493,7 +495,7 @@ protected:
   {
     m_lazy_loading = false;
 
-    typename std::map<std::string, PluginHandle>::const_iterator iter;
+    typename std::map<std::string, lt_dlhandle>::const_iterator iter;
     for (iter = m_plugin_handles.begin(); iter != m_plugin_handles.end(); ++iter)
     {
       if (m_loaded_plugins.find(iter->first) == m_loaded_plugins.end())
@@ -517,7 +519,7 @@ protected:
    */
   void closePluginHandle(const std::string &identifier)
   {
-    PluginHandle plugin_handle = m_plugin_handles[identifier];
+    lt_dlhandle plugin_handle = m_plugin_handles[identifier];
     if (plugin_handle)
     {
       LOGGING_DEBUG(Plugin, "Close plugin " << identifier << icl_core::logging::endl);
@@ -529,24 +531,24 @@ protected:
         m_loaded_plugins.erase(identifier);
       }
 
-      dlclose(plugin_handle);
+      lt_dlclose(plugin_handle);
     }
     m_plugin_handles.erase(identifier);
   }
 
   /*! Creates a new plugin instance.
    */
-  T* loadPluginInstance(PluginHandle plugin_handle, const std::string &identifier)
+  T* loadPluginInstance(lt_dlhandle plugin_handle, const std::string &identifier)
   {
     if (plugin_handle)
     {
       // clear errors
-      dlerror();
+      lt_dlerror();
 
       typename T::load_plugin* create_instance
-        = (typename T::load_plugin*) dlsym(plugin_handle,
+        = (typename T::load_plugin*) lt_dlsym(plugin_handle,
                                               "load_plugin");
-      const char* dlsym_error = dlerror();
+      const char* dlsym_error = lt_dlerror();
       if (dlsym_error)
       {
 #ifdef _WIN32
@@ -637,7 +639,7 @@ protected:
   /*! Creates a new plugin instance.
    *  \deprecated Obsolete coding style.
    */
-  ICL_CORE_VC_DEPRECATE_STYLE T* LoadPluginInstance(PluginHandle plugin_handle, const std::string &identifier)
+  ICL_CORE_VC_DEPRECATE_STYLE T* LoadPluginInstance(lt_dlhandle plugin_handle, const std::string &identifier)
     ICL_CORE_GCC_DEPRECATE_STYLE
   { return loadPluginInstance(plugin_handle, identifier); }
 
@@ -648,7 +650,7 @@ protected:
   std::map<std::string, T*> m_loaded_plugins;
 
   //! Loadable plugin handles.
-  std::map<std::string, PluginHandle> m_plugin_handles;
+  std::map<std::string, lt_dlhandle> m_plugin_handles;
 
   //! Plugins available from an already loaded lib, added manually.
   std::map<std::string, T*> m_static_plugins;
