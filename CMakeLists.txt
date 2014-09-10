@@ -1,3 +1,8 @@
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+# -- END LICENSE BLOCK ------------------------------------------------
+
 SET(ICMAKER_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icmaker")
 INCLUDE(${ICMAKER_DIRECTORY}/CMakeLists.txt)
 

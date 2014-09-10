@@ -1,4 +1,9 @@
 # this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+# -- END LICENSE BLOCK ------------------------------------------------
+
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 ICMAKER_SET("icl_comm_rosbridge" IDE_FOLDER ${ICL_COMM_IDE_FOLDER})
 
 find_package(JSONCPP)
