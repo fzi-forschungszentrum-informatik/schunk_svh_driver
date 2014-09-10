@@ -1,43 +1,45 @@
-# - Try to find DXFLib
-# Once done, this will define
-#
-#  DXFLib_FOUND - system has DXFLib
-#  DXFLib_INCLUDE_DIRS - the DXFLib include directories
-#  DXFLib_LIBRARIES - link these to use DXFLib
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF (DXFLib_FOUND)
-  # in cache already
-  SET(DXFLib_FIND_QUIETLY TRUE)
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find DXFLib.  Once done, this will define:
+#  DXFLib_FOUND:          System has DXFLib
+#  DXFLib_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  DXFLib_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  DXFLib_DEFINITIONS:    Preprocessor definitions.
+#  DXFLib_LIBRARIES:      only the libraries (w/o the '-l')
+#  DXFLib_LDFLAGS:        all required linker flags
+#  DXFLib_LDFLAGS_OTHER:  all other linker flags
+#  DXFLib_CFLAGS:         all required cflags
+#  DXFLib_CFLAGS_OTHER:   the other compiler flags
+#  DXFLib_VERSION:        version of the module
+#  DXFLib_PREFIX:         prefix-directory of the module
+#  DXFLib_INCLUDEDIR:     include-dir of the module
+#  DXFLib_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(DXFLib_PKGCONF dxflib)
-
-# Include dir
-find_path(DXFLib_INCLUDE_DIR
-  NAMES dl_dxf.h
-  PATHS ${DXFLib_PKGCONF_INCLUDE_DIRS}
+libfind_lib_with_pkg_config(DXFLib dxflib
+  HEADERS dl_dxf.h
+  LIBRARIES dxflib
   )
-
-# Finally the library itself
-find_library(DXFLib_LIBRARY
-  NAMES dxflib
-  PATHS ${DXFLib_PKGCONF_LIBRARY_DIRS}
-  )
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(DXFLib_PROCESS_INCLUDES DXFLib_INCLUDE_DIR)
-set(DXFLib_PROCESS_LIBS DXFLib_LIBRARY)
-libfind_process(DXFLib)
-
-PRINT_LIBRARY_STATUS(DXFLib
-  DETAILS "[${DXFLib_LIBRARIES}][${DXFLib_INCLUDE_DIRS}]"
-  )
-
-if(DXFLib_FOUND)
-  SET(DXFLib_DEFINITIONS "-D_IC_BUILDER_DXFLib_")
-ENDIF()

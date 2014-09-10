@@ -1,39 +1,45 @@
-# - Try to find Ltdl
-# Once done, this will define
-#
-#  Ltdl_FOUND - system has Ltdl
-#  Ltdl_INCLUDE_DIR - the Ltdl include directories
-#  Ltdl_LIBRARY - link these to use Ltdl
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-if ( Ltdl_FOUND )
-   # in cache already
-   SET( Ltdl_FIND_QUIETLY TRUE )
-endif ()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Ltdl.  Once done, this will define:
+#  Ltdl_FOUND:          System has Ltdl
+#  Ltdl_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Ltdl_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Ltdl_DEFINITIONS:    Preprocessor definitions.
+#  Ltdl_LIBRARIES:      only the libraries (w/o the '-l')
+#  Ltdl_LDFLAGS:        all required linker flags
+#  Ltdl_LDFLAGS_OTHER:  all other linker flags
+#  Ltdl_CFLAGS:         all required cflags
+#  Ltdl_CFLAGS_OTHER:   the other compiler flags
+#  Ltdl_VERSION:        version of the module
+#  Ltdl_PREFIX:         prefix-directory of the module
+#  Ltdl_INCLUDEDIR:     include-dir of the module
+#  Ltdl_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-# libfind_pkg_check_modules(Ltdl_PKGCONF ltdl)
-
-# Include dir
-find_path(Ltdl_INCLUDE_DIR
-  NAMES ltdl.h
-  PATHS ${Ltdl_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Ltdl_LIBRARY
-  NAMES ltdl
-  PATHS ${Ltdl_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Ltdl_PROCESS_INCLUDES Ltdl_INCLUDE_DIR)
-set(Ltdl_PROCESS_LIBS Ltdl_LIBRARY)
-libfind_process(Ltdl)
-
-PRINT_LIBRARY_STATUS(Ltdl
-  DETAILS "[${Ltdl_LIBRARIES}][${Ltdl_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Ltdl ltdl
+  HEADERS ltdl.h
+  LIBRARIES ltdl
+  )

@@ -1,39 +1,45 @@
-# - Try to find NetSNMP
-# Once done, this will define
-#
-#  NetSNMP_FOUND - system has NetSNMP
-#  NetSNMP_INCLUDE_DIR - the NetSNMP include directories
-#  NetSNMP_LIBRARY - link these to use NetSNMP
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-if ( NetSNMP_FOUND )
-   # in cache already
-   SET( NetSNMP_FIND_QUIETLY TRUE )
-endif ()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find NetSNMP.  Once done, this will define:
+#  NetSNMP_FOUND:          System has NetSNMP
+#  NetSNMP_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  NetSNMP_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  NetSNMP_DEFINITIONS:    Preprocessor definitions.
+#  NetSNMP_LIBRARIES:      only the libraries (w/o the '-l')
+#  NetSNMP_LDFLAGS:        all required linker flags
+#  NetSNMP_LDFLAGS_OTHER:  all other linker flags
+#  NetSNMP_CFLAGS:         all required cflags
+#  NetSNMP_CFLAGS_OTHER:   the other compiler flags
+#  NetSNMP_VERSION:        version of the module
+#  NetSNMP_PREFIX:         prefix-directory of the module
+#  NetSNMP_INCLUDEDIR:     include-dir of the module
+#  NetSNMP_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-# libfind_pkg_check_modules(NetSNMP_PKGCONF netsnmp)
-
-# Include dir
-find_path(NetSNMP_INCLUDE_DIR
-  NAMES net-snmp/net-snmp-config.h
-  PATHS ${NetSNMP_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(NetSNMP_LIBRARY
-  NAMES netsnmp
-  PATHS ${NetSNMP_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(NetSNMP_PROCESS_INCLUDES NetSNMP_INCLUDE_DIR)
-set(NetSNMP_PROCESS_LIBS NetSNMP_LIBRARY)
-libfind_process(NetSNMP)
-
-PRINT_LIBRARY_STATUS(NetSNMP
-  DETAILS "[${NetSNMP_LIBRARIES}][${NetSNMP_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(NetSNMP netsnmp
+  HEADERS net-snmp/net-snmp-config.h
+  LIBRARIES netsnmp
+  )

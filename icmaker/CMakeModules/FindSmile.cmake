@@ -1,50 +1,49 @@
-# - Try to find Smile
-# Once done, this will define
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
 #
-#  Smile_FOUND - system has Smile
-#  Smile_INCLUDE_DIR - the Smile include directories
-#  Smile_LIBRARY - link these to use Smile
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Smile.  Once done, this will define:
+#  Smile_FOUND:          System has Smile
+#  Smile_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Smile_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Smile_DEFINITIONS:    Preprocessor definitions.
+#  Smile_LIBRARIES:      only the libraries (w/o the '-l')
+#  Smile_LDFLAGS:        all required linker flags
+#  Smile_LDFLAGS_OTHER:  all other linker flags
+#  Smile_CFLAGS:         all required cflags
+#  Smile_CFLAGS_OTHER:   the other compiler flags
+#  Smile_VERSION:        version of the module
+#  Smile_PREFIX:         prefix-directory of the module
+#  Smile_INCLUDEDIR:     include-dir of the module
+#  Smile_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-#if ( Smile_FOUND )
-#   # in cache already
-#   SET( Smile_FIND_QUIETLY TRUE )
-#endif ()
-
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Smile_PKGCONF libsmile)
-
-IF (NOT Smile_FOUND)
-  SET (Smile_PKGCONF_INCLUDE_DIRS "/opt/tools/smile")
-  SET (Smile_PKGCONF_LIBRARY_DIRS "/opt/tools/smile")
-ENDIF ()
-
-
-# Include dir
-find_path(Smile_INCLUDE_DIR
-  NAMES smile.h
-  PATHS ${Smile_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Smile_LIBRARY
-  NAMES smile
-  PATHS ${Smile_PKGCONF_LIBRARY_DIRS}
-)
-
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Smile_PROCESS_INCLUDES Smile_INCLUDE_DIR)
-set(Smile_PROCESS_LIBS Smile_LIBRARY)
-libfind_process(Smile)
-
-PRINT_LIBRARY_STATUS(Smile
-  DETAILS "[${Smile_LIBRARIES}][${Smile_INCLUDE_DIRS}]"
-)
-
-if(Smile_FOUND)
-  set(Smile_DEFINITIONS "-D_IC_BUILDER_SMILE_")
-endif()
+libfind_lib_with_pkg_config(Smile libsmile
+  HEADERS smile.h
+  LIBRARIES smile
+  HINTS /opt/tools/smile
+  HEADER_PATHS /opt/tools/smile
+  LIBRARY_PATHS /opt/tools/smile
+  DEFINE _IC_BUILDER_SMILE_
+  )

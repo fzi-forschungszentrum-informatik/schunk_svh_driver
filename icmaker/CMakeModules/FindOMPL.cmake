@@ -1,40 +1,46 @@
-# - Try to find OMPL
-# Once done, this will define
-#
-#  OMPL_FOUND - system has OMPL
-#  OMPL_INCLUDE_DIRS - the OMPL include directories
-#  OMPL_LIBRARIES - link these to use OMPL
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( OMPL_FOUND )
-   # in cache already
-   SET( OMPL_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find OMPL.  Once done, this will define:
+#  OMPL_FOUND:          System has OMPL
+#  OMPL_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  OMPL_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  OMPL_DEFINITIONS:    Preprocessor definitions.
+#  OMPL_LIBRARIES:      only the libraries (w/o the '-l')
+#  OMPL_LDFLAGS:        all required linker flags
+#  OMPL_LDFLAGS_OTHER:  all other linker flags
+#  OMPL_CFLAGS:         all required cflags
+#  OMPL_CFLAGS_OTHER:   the other compiler flags
+#  OMPL_VERSION:        version of the module
+#  OMPL_PREFIX:         prefix-directory of the module
+#  OMPL_INCLUDEDIR:     include-dir of the module
+#  OMPL_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(OMPL_PKGCONF ompl)
-
-# Include dir
-find_path(OMPL_INCLUDE_DIR
-  NAMES ompl/base/StateSampler.h
-  PATHS ${OMPL_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(OMPL_LIBRARY
-  NAMES ompl
-  PATHS ${OMPL_PKGCONF_LIBRARY_DIRS} "/opt/local/lib"
-  NO_DEFAULT_PATH
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this lib depends on.
-set(OMPL_PROCESS_INCLUDES OMPL_INCLUDE_DIR)
-set(OMPL_PROCESS_LIBS OMPL_LIBRARY)
-libfind_process(OMPL)
-
-PRINT_LIBRARY_STATUS(OMPL
-  DETAILS "[${OMPL_LIBRARIES}][${OMPL_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(OMPL ompl
+  HEADERS ompl/base/StateSampler.h
+  LIBRARIES ompl
+  HINTS /opt/local
+  )

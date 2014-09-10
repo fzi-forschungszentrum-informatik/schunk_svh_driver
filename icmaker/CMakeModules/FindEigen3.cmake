@@ -1,38 +1,47 @@
-# - Try to find Eigen3
-# Once done, this will define
-#
-#  Eigen3_FOUND - system has Eigen3
-#  Eigen3_INCLUDE_DIRS - the Eigen3 include directories
-#  Eigen3_LIBRARIES - link these to use Eigen3
-# --
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( Eigen3_FOUND )
-   # in cache already
-   SET( Eigen3_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Eigen3.  Once done, this will define:
+#  Eigen3_FOUND:          System has Eigen3
+#  Eigen3_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Eigen3_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Eigen3_DEFINITIONS:    Preprocessor definitions.
+#  Eigen3_LIBRARIES:      only the libraries (w/o the '-l')
+#  Eigen3_LDFLAGS:        all required linker flags
+#  Eigen3_LDFLAGS_OTHER:  all other linker flags
+#  Eigen3_CFLAGS:         all required cflags
+#  Eigen3_CFLAGS_OTHER:   the other compiler flags
+#  Eigen3_VERSION:        version of the module
+#  Eigen3_PREFIX:         prefix-directory of the module
+#  Eigen3_INCLUDEDIR:     include-dir of the module
+#  Eigen3_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Eigen3_PKGCONF eigen3)
-
-# Include dir
-find_path(Eigen3_INCLUDE_DIR
-  NAMES Eigen/Core
-  PATHS ${Eigen3_PKGCONF_INCLUDE_DIRS} "/usr/include/eigen3" "${CMAKE_INSTALL_PREFIX}/include/eigen3"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Eigen3_PROCESS_INCLUDES Eigen3_INCLUDE_DIR)
-libfind_process(Eigen3)
-
-IF(Eigen3_INCLUDE_DIR)
-  SET(Eigen3_DEFINITIONS -D_IC_BUILDER_EIGEN_)
-ENDIF()
-
-PRINT_LIBRARY_STATUS(Eigen3
-  DETAILS "[${Eigen3_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Eigen3 eigen3
+  HEADERS Eigen/Core
+  HEADER_PATHS "/usr/include/eigen3" "${CMAKE_INSTALL_PREFIX}/include/eigen3"
+  DEFINE _IC_BUILDER_EIGEN_
+  )
 

@@ -1,56 +1,45 @@
-# - Try to find CSM
-# Once done, this will define
-#
-#  CSM_FOUND - system has CSM
-#  CSM_INCLUDE_DIRS - the CSM include directories
-#  CSM_LIBRARY_DIRS - the CSM library directories
-#  CSM_LIBRARIES - link these to use CSM
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(CSM_FOUND)
-  # In cache already
-  SET(CSM_FIND_QUIETLY TRUE)
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find CSM.  Once done, this will define:
+#  CSM_FOUND:          System has CSM
+#  CSM_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  CSM_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  CSM_DEFINITIONS:    Preprocessor definitions.
+#  CSM_LIBRARIES:      only the libraries (w/o the '-l')
+#  CSM_LDFLAGS:        all required linker flags
+#  CSM_LDFLAGS_OTHER:  all other linker flags
+#  CSM_CFLAGS:         all required cflags
+#  CSM_CFLAGS_OTHER:   the other compiler flags
+#  CSM_VERSION:        version of the module
+#  CSM_PREFIX:         prefix-directory of the module
+#  CSM_INCLUDEDIR:     include-dir of the module
+#  CSM_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-IF ((NOT DEFINED CSM_ROOT OR CSM_ROOT STREQUAL "") AND ("$ENV{CSM_ROOT}" STREQUAL ""))
-  # Use pkg-config to get hints about paths
-  libfind_pkg_check_modules(CSM_PKGCONF csm)
-ELSE ()
-  IF (CSM_ROOT STREQUAL "")
-    SET(CSM_ROOT $ENV{CSM_ROOT})
-  ENDIF (CSM_ROOT STREQUAL "")
-  SET(CSM_PKGCONF_INCLUDE_DIRS ${CSM_ROOT}/include)
-  SET(CSM_PKGCONF_LIBRARY_DIRS ${CSM_ROOT}/lib)
-ENDIF ()
-
-# Include dir
-find_path(CSM_INCLUDE_DIR
-  NAMES csm/csm.h
-  PATHS ${CSM_PKGCONF_INCLUDE_DIRS} "/opt/local/include"
-)
-
-# Finally the library itself
-find_library(CSM_LIBRARY
-  NAMES csm
-  PATHS ${CSM_PKGCONF_LIBRARY_DIRS} "/opt/local/lib"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(CSM_PROCESS_INCLUDES CSM_INCLUDE_DIR)
-set(CSM_PROCESS_LIBS CSM_LIBRARY)
-libfind_process(CSM)
-
-If (CSM_FOUND)
-  SET(CSM_LIBRARY_DIRS ${CSM_PKGCONF_LIBRARY_DIRS} CACHE INTERNAL "")
-  SET(CSM_LDFLAGS ${CSM_PKGCONF_LDFLAGS} CACHE INTERNAL "")
-  SET(CSM_LDFLAGS_OTHER ${CSM_PKGCONF_LDFLAGS_OTHER} CACHE INTERNAL "")
-  SET(CSM_CFLAGS ${CSM_PKGCONF_CFLAGS} CACHE INTERNAL "")
-  SET(CSM_CFLAGS_OTHER ${CSM_PKGCONF_CFLAGS_OTHER} CACHE INTERNAL "")
-ENDIF (CSM_FOUND)
-
-PRINT_LIBRARY_STATUS(CSM
-  DETAILS "[${CSM_LIBRARY_DIRS}][${CSM_LIBRARIES}][${CSM_INCLUDE_DIRS}]"
+libfind_lib_with_pkg_config(CSM csm
+  HEADERS csm/csm.h
+  LIBRARIES csm
   )

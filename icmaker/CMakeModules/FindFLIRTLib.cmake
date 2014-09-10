@@ -1,67 +1,46 @@
-# - Try to find FLIRTLib
-# Once done, this will define
-#
-#  FLIRTLib_FOUND - system has FLIRTLib
-#  FLIRTLib_INCLUDE_DIRS - the FLIRTLib include directories
-#  FLIRTLib_LIBRARY_DIRS - the FLIRTLib library directories
-#  FLIRTLib_LIBRARIES - link these to use FLIRTLib
-#  FLIRTLib_LDFLAGS
-#  FLIRTLib_LDFLAGS_OTHER
-#  FLIRTLib_CFLAGS
-#  FLIRTLib_CFLAGS_OTHER
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF (FLIRTLib_FOUND)
-  # In cache already
-  SET(FLIRTLib_FIND_QUIETLY TRUE)
-ENDIF ()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find FLIRTLib.  Once done, this will define:
+#  FLIRTLib_FOUND:          System has FLIRTLib
+#  FLIRTLib_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  FLIRTLib_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  FLIRTLib_DEFINITIONS:    Preprocessor definitions.
+#  FLIRTLib_LIBRARIES:      only the libraries (w/o the '-l')
+#  FLIRTLib_LDFLAGS:        all required linker flags
+#  FLIRTLib_LDFLAGS_OTHER:  all other linker flags
+#  FLIRTLib_CFLAGS:         all required cflags
+#  FLIRTLib_CFLAGS_OTHER:   the other compiler flags
+#  FLIRTLib_VERSION:        version of the module
+#  FLIRTLib_PREFIX:         prefix-directory of the module
+#  FLIRTLib_INCLUDEDIR:     include-dir of the module
+#  FLIRTLib_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(FLIRTLib_PKGCONF flirtlib)
-
-# Include dir
-find_path(FLIRTLib_INCLUDE_DIR
-  NAMES flirtlib/feature/InterestPoint.h
-  PATHS ${FLIRTLib_PKGCONF_INCLUDE_DIRS} "/opt/local/include"
-)
-
-# Finally the libraries themselves
-set(_FLIRTLib_REQUIRED_LIBS
-  flirt_sensors
-  flirt_sensorstream
-  flirt_geometry
-  flirt_feature
-  flirt_utils
-  )
-foreach (i ${_FLIRTLib_REQUIRED_LIBS})
-  find_library(_FLIRTLib_LIBRARY
-    NAMES ${i}
-    PATHS ${FLIRTLib_PKGCONF_LIBRARY_DIRS} "/opt/local/lib"
-    )
-  SET(_FLIRTLib_LIBRARIES ${_FLIRTLib_LIBRARIES} ${_FLIRTLib_LIBRARY})
-  UNSET(_FLIRTLib_LIBRARY)
-  UNSET(_FLIRTLib_LIBRARY CACHE)
-endforeach (i)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-
-set(FLIRTLib_PROCESS_INCLUDES FLIRTLib_INCLUDE_DIR)
-set(FLIRTLib_PROCESS_LIBS _FLIRTLib_LIBRARIES)
-libfind_process(FLIRTLib)
-UNSET(_FLIRTLib_LIBRARIES)
-UNSET(_FLIRTLib_LIBRARIES CACHE)
-
-If (FLIRTLib_FOUND)
-  SET(FLIRTLib_LIBRARY_DIRS ${FLIRTLib_PKGCONF_LIBRARY_DIRS} CACHE INTERNAL "")
-  SET(FLIRTLib_LDFLAGS ${FLIRTLib_PKGCONF_LDFLAGS} CACHE INTERNAL "")
-  SET(FLIRTLib_LDFLAGS_OTHER ${FLIRTLib_PKGCONF_LDFLAGS_OTHER} CACHE INTERNAL "")
-  SET(FLIRTLib_CFLAGS ${FLIRTLib_PKGCONF_CFLAGS} CACHE INTERNAL "")
-  SET(FLIRTLib_CFLAGS_OTHER ${FLIRTLib_PKGCONF_CFLAGS_OTHER} CACHE INTERNAL "")
-ENDIF (FLIRTLib_FOUND)
-
-PRINT_LIBRARY_STATUS(FLIRTLib
-  DETAILS "[${FLIRTLib_LIBRARY_DIRS}][${FLIRTLib_LIBRARIES}][${FLIRTLib_INCLUDE_DIRS}]"
+libfind_lib_with_pkg_config(FLIRTLib flirtlib
+  HEADERS flirtlib/feature/InterestPoint.h
+  LIBRARIES flirt_sensors flirt_sensorstream flirt_geometry flirt_feature flirt_utils
+  HINTS /opt/local
   )

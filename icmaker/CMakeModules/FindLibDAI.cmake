@@ -1,49 +1,45 @@
-# - Try to find LibDAI
-# Once done, this will define
-#
-#  LibDAI_FOUND - system has LibDAI
-#  LibDAI_INCLUDE_DIRS - the LibDAI include directories
-#  LibDAI_LIBRARIES - link these to use LibDAI
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( LibDAI_FOUND )
-   # in cache already
-   SET( LibDAI_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find LibDAI.  Once done, this will define:
+#  LibDAI_FOUND:          System has LibDAI
+#  LibDAI_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  LibDAI_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  LibDAI_DEFINITIONS:    Preprocessor definitions.
+#  LibDAI_LIBRARIES:      only the libraries (w/o the '-l')
+#  LibDAI_LDFLAGS:        all required linker flags
+#  LibDAI_LDFLAGS_OTHER:  all other linker flags
+#  LibDAI_CFLAGS:         all required cflags
+#  LibDAI_CFLAGS_OTHER:   the other compiler flags
+#  LibDAI_VERSION:        version of the module
+#  LibDAI_PREFIX:         prefix-directory of the module
+#  LibDAI_INCLUDEDIR:     include-dir of the module
+#  LibDAI_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(LibDAI_PKGCONF libdai)
-
-# Include dir
-find_path(LibDAI_INCLUDE_DIR
-  NAMES dai/factorgraph.h dai/var.h
-  PATHS ${LibDAI_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(LibDAI_LIBRARY
-  NAMES dai
-  PATHS ${LibDAI_PKGCONF_LIBRARY_DIRS}
-)
-
-find_library(gmpxx_LIBRARY
-  NAMES gmpxx
-  PATHS ${LibDAI_PKGCONF_LIBRARY_DIRS}
-)
-
-find_library(gmp_LIBRARY
-  NAMES gmp
-  PATHS ${LibDAI_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(LibDAI_PROCESS_INCLUDES LibDAI_INCLUDE_DIR)
-set(LibDAI_PROCESS_LIBS LibDAI_LIBRARY gmpxx_LIBRARY gmp_LIBRARY)
-libfind_process(LibDAI)
-
-PRINT_LIBRARY_STATUS(LibDAI
-  DETAILS "[${LibDAI_LIBRARIES}][${LibDAI_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(LibDAI libdai
+  HEADERS dai/factorgraph.h dai/var.h
+  LIBRARIES dai gmpxx gmp
+  )

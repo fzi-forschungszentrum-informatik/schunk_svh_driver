@@ -1,62 +1,46 @@
-# - Try to find GFLIP
-# Once done, this will define
-#
-#  GFLIP_FOUND - system has GFLIP
-#  GFLIP_INCLUDE_DIRS - the GFLIP include directories
-#  GFLIP_LIBRARY_DIRS - the GFLIP library directories
-#  GFLIP_LIBRARIES - link these to use GFLIP
-#  GFLIP_LDFLAGS
-#  GFLIP_LDFLAGS_OTHER
-#  GFLIP_CFLAGS
-#  GFLIP_CFLAGS_OTHER
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF (GFLIP_FOUND)
-  # In cache already
-  SET(GFLIP_FIND_QUIETLY TRUE)
-ENDIF ()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find GFLIP.  Once done, this will define:
+#  GFLIP_FOUND:          System has GFLIP
+#  GFLIP_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  GFLIP_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  GFLIP_DEFINITIONS:    Preprocessor definitions.
+#  GFLIP_LIBRARIES:      only the libraries (w/o the '-l')
+#  GFLIP_LDFLAGS:        all required linker flags
+#  GFLIP_LDFLAGS_OTHER:  all other linker flags
+#  GFLIP_CFLAGS:         all required cflags
+#  GFLIP_CFLAGS_OTHER:   the other compiler flags
+#  GFLIP_VERSION:        version of the module
+#  GFLIP_PREFIX:         prefix-directory of the module
+#  GFLIP_INCLUDEDIR:     include-dir of the module
+#  GFLIP_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(GFLIP_PKGCONF gflip)
-
-# Include dir
-find_path(GFLIP_INCLUDE_DIR
-  NAMES gflip/gflip_engine.hpp
-  PATHS ${GFLIP_PKGCONF_INCLUDE_DIRS} "/opt/local/include"
-)
-
-# Finally the libraries themselves
-set(_GFLIP_REQUIRED_LIBS
-  gflip
-  gflip_vocabulary
-  )
-foreach (i ${_GFLIP_REQUIRED_LIBS})
-  find_library(_GFLIP_LIBRARY
-    NAMES ${i}
-    PATHS ${GFLIP_PKGCONF_LIBRARY_DIRS} "/opt/local/lib"
-    )
-  SET(_GFLIP_LIBRARIES ${_GFLIP_LIBRARIES} ${_GFLIP_LIBRARY})
-  UNSET(_GFLIP_LIBRARY)
-  UNSET(_GFLIP_LIBRARY CACHE)
-endforeach (i)
-
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(GFLIP_PROCESS_INCLUDES GFLIP_INCLUDE_DIR)
-set(GFLIP_PROCESS_LIBS _GFLIP_LIBRARIES)
-libfind_process(GFLIP)
-
-If (GFLIP_FOUND)
-  SET(GFLIP_LIBRARY_DIRS ${GFLIP_PKGCONF_LIBRARY_DIRS} CACHE INTERNAL "")
-  SET(GFLIP_LDFLAGS ${GFLIP_PKGCONF_LDFLAGS} CACHE INTERNAL "")
-  SET(GFLIP_LDFLAGS_OTHER ${GFLIP_PKGCONF_LDFLAGS_OTHER} CACHE INTERNAL "")
-  SET(GFLIP_CFLAGS ${GFLIP_PKGCONF_CFLAGS} CACHE INTERNAL "")
-  SET(GFLIP_CFLAGS_OTHER ${GFLIP_PKGCONF_CFLAGS_OTHER} CACHE INTERNAL "")
-ENDIF (GFLIP_FOUND)
-
-PRINT_LIBRARY_STATUS(GFLIP
-  DETAILS "[${GFLIP_LIBRARY_DIRS}][${GFLIP_LIBRARIES}][${GFLIP_INCLUDE_DIRS}]"
+libfind_lib_with_pkg_config(GFLIP gflip
+  HEADERS gflip/gflip_engine.hpp
+  LIBRARIES gflip gflip_vocabulary
+  HINTS /opt/local
   )

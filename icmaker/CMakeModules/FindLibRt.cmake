@@ -1,31 +1,44 @@
-# - Try to find LibRt
-# Once done, this will define
-#
-#  LibRt_FOUND - system has LibRt
-#  LibRt_LIBRARIES - link these to use LibRt
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( LibRt_FOUND )
-   # in cache already
-   SET( LibRt_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find LibRt.  Once done, this will define:
+#  LibRt_FOUND:          System has LibRt
+#  LibRt_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  LibRt_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  LibRt_DEFINITIONS:    Preprocessor definitions.
+#  LibRt_LIBRARIES:      only the libraries (w/o the '-l')
+#  LibRt_LDFLAGS:        all required linker flags
+#  LibRt_LDFLAGS_OTHER:  all other linker flags
+#  LibRt_CFLAGS:         all required cflags
+#  LibRt_CFLAGS_OTHER:   the other compiler flags
+#  LibRt_VERSION:        version of the module
+#  LibRt_PREFIX:         prefix-directory of the module
+#  LibRt_INCLUDEDIR:     include-dir of the module
+#  LibRt_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(LibRt_PKGCONF LibRt)
-
-# Finally the library itself
-find_library(LibRt_LIBRARY
-  NAMES rt
-  PATHS ${LibRt_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(LibRt_PROCESS_LIBS LibRt_LIBRARY)
-libfind_process(LibRt)
-
-PRINT_LIBRARY_STATUS(LibRt
-  DETAILS "[${LibRt_LIBRARIES}]"
-)
+libfind_lib_with_pkg_config(LibRt LibRt
+  LIBRARIES rt
+  )

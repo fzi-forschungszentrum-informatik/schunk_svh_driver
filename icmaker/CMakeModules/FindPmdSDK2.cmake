@@ -1,44 +1,46 @@
-# - Try to find PmdSDK2
-# Once done, this will define
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
 #
-#  PmdSDK2_FOUND - system has PmdSDK2
-#  PmdSDK2_INCLUDE_DIR - the PmdSDK2 include directories
-#  PmdSDK2_LIBRARY - link these to use PmdSDK2
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find PmdSDK2.  Once done, this will define:
+#  PmdSDK2_FOUND:          System has PmdSDK2
+#  PmdSDK2_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  PmdSDK2_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  PmdSDK2_DEFINITIONS:    Preprocessor definitions.
+#  PmdSDK2_LIBRARIES:      only the libraries (w/o the '-l')
+#  PmdSDK2_LDFLAGS:        all required linker flags
+#  PmdSDK2_LDFLAGS_OTHER:  all other linker flags
+#  PmdSDK2_CFLAGS:         all required cflags
+#  PmdSDK2_CFLAGS_OTHER:   the other compiler flags
+#  PmdSDK2_VERSION:        version of the module
+#  PmdSDK2_PREFIX:         prefix-directory of the module
+#  PmdSDK2_INCLUDEDIR:     include-dir of the module
+#  PmdSDK2_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-if ( PmdSDK2_FOUND )
-   # in cache already
-   SET( PmdSDK2_FIND_QUIETLY TRUE )
-endif ()
-
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(PmdSDK2_PKGCONF libPmdSDK2)
-
-# Include dir
-find_path(PmdSDK2_INCLUDE_DIR
-  NAMES pmdsdk2.h
-  PATHS ${PmdSDK2_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(PmdSDK2_LIBRARY
-  NAMES pmdaccess2
-  PATHS ${PmdSDK2_PKGCONF_LIBRARY_DIRS}
-)
-
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(PmdSDK2_PROCESS_INCLUDES PmdSDK2_INCLUDE_DIR)
-set(PmdSDK2_PROCESS_LIBS PmdSDK2_LIBRARY)
-libfind_process(PmdSDK2)
-
-PRINT_LIBRARY_STATUS(PmdSDK2
-  DETAILS "[${PmdSDK2_LIBRARIES}][${PmdSDK2_INCLUDE_DIRS}]"
-)
-
-if(PmdSDK2_FOUND)
-  set(PmdSDK2_DEFINITIONS "-D_IC_BUILDER_PMDSDK2_")
-endif()
+libfind_lib_with_pkg_config(PmdSDK2 libPmdSDK2
+  HEADERS pmdsdk2.h
+  LIBRARIES pmdaccess2
+  DEFINE _IC_BUILDER_PMDSDK2_
+  )

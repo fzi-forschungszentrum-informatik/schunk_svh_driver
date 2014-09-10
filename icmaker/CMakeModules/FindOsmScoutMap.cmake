@@ -1,39 +1,45 @@
-# - Try to find OsmScoutMap
-# Once done, this will define
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
 #
-#  OsmScoutMap_FOUND - system has OsmScoutMap
-#  OsmScoutMap_INCLUDE_DIRS - the OsmScoutMap include directories
-#  OsmScoutMap_LIBRARIES - link these to use OsmScoutMap
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find OsmScoutMap.  Once done, this will define:
+#  OsmScoutMap_FOUND:          System has OsmScoutMap
+#  OsmScoutMap_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  OsmScoutMap_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  OsmScoutMap_DEFINITIONS:    Preprocessor definitions.
+#  OsmScoutMap_LIBRARIES:      only the libraries (w/o the '-l')
+#  OsmScoutMap_LDFLAGS:        all required linker flags
+#  OsmScoutMap_LDFLAGS_OTHER:  all other linker flags
+#  OsmScoutMap_CFLAGS:         all required cflags
+#  OsmScoutMap_CFLAGS_OTHER:   the other compiler flags
+#  OsmScoutMap_VERSION:        version of the module
+#  OsmScoutMap_PREFIX:         prefix-directory of the module
+#  OsmScoutMap_INCLUDEDIR:     include-dir of the module
+#  OsmScoutMap_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
-IF( OsmScoutMap_FOUND )
-   # in cache already
-   SET( OsmScoutMap_FIND_QUIETLY TRUE )
-ENDIF()
+include(PrintLibraryStatus)
+include(LibFindMacros)
 
-INCLUDE(LibFindMacros)
-
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(OsmScoutMap_PKGCONF libosmscout-map)
-
-# Include dir
-find_path(OsmScoutMap_INCLUDE_DIR
-  NAMES osmscout/MapPainter.h
-  PATHS ${OsmScoutMap_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(OsmScoutMap_LIBRARY
-  NAMES osmscoutmap
-  PATHS ${OsmScoutMap_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(OsmScoutMap_PROCESS_INCLUDES OsmScoutMap_INCLUDE_DIR)
-set(OsmScoutMap_PROCESS_LIBS OsmScoutMap_LIBRARY)
-libfind_process(OsmScoutMap)
-
-PRINT_LIBRARY_STATUS(OsmScoutMap
-  DETAILS "[${OsmScoutMap_LIBRARIES}][${OsmScoutMap_INCLUDE_DIRS}]"
-)
-
+libfind_lib_with_pkg_config(OsmScoutMap libosmscout-map
+  HEADERS osmscout/MapPainter.h
+  LIBRARIES osmscoutmap
+  )

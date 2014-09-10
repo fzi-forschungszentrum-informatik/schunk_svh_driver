@@ -1,33 +1,45 @@
-# - Try to find HbFoundationExtract
-# Once done, this will define
-#
-#  HbFoundationExtract_FOUND - system has HbFoundationExtract
-#  HbFoundationExtract_INCLUDE_DIRS - the HbFoundationExtract include directories
-#  HbFoundationExtract_LIBRARIES - link these to use HbFoundationExtract
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find HbFoundationExtract.  Once done, this will define:
+#  HbFoundationExtract_FOUND:          System has HbFoundationExtract
+#  HbFoundationExtract_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  HbFoundationExtract_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  HbFoundationExtract_DEFINITIONS:    Preprocessor definitions.
+#  HbFoundationExtract_LIBRARIES:      only the libraries (w/o the '-l')
+#  HbFoundationExtract_LDFLAGS:        all required linker flags
+#  HbFoundationExtract_LDFLAGS_OTHER:  all other linker flags
+#  HbFoundationExtract_CFLAGS:         all required cflags
+#  HbFoundationExtract_CFLAGS_OTHER:   the other compiler flags
+#  HbFoundationExtract_VERSION:        version of the module
+#  HbFoundationExtract_PREFIX:         prefix-directory of the module
+#  HbFoundationExtract_INCLUDEDIR:     include-dir of the module
+#  HbFoundationExtract_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
+
+include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(HbFoundationExtract_PKGCONF HbFoundationExtract)
-
-# Include dir
-find_path(HbFoundationExtract_INCLUDE_DIR
-  NAMES HBSTypes.hpp
-  PATHS ${HbFoundationExtract_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(HbFoundationExtract_LIBRARY
-  NAMES hb_foundation_extract
-  PATHS ${HbFoundationExtract_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(HbFoundationExtract_PROCESS_INCLUDES HbFoundationExtract_INCLUDE_DIR)
-set(HbFoundationExtract_PROCESS_LIBS HbFoundationExtract_LIBRARY)
-libfind_process(HbFoundationExtract)
-
-if(HbFoundationExtract_FOUND)
-
-endif()
+libfind_lib_with_pkg_config(HbFoundationExtract HbFoundationExtract
+  HEADERS HBSTypes.hpp
+  LIBRARIES hb_foundation_extract
+  )

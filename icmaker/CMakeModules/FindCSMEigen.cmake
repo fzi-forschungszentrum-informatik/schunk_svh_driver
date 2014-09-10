@@ -1,56 +1,46 @@
-# - Try to find CSMEigen
-# Once done, this will define
-#
-#  CSMEigen_FOUND - system has CSMEigen
-#  CSMEigen_INCLUDE_DIRS - the CSMEigen include directories
-#  CSMEigen_LIBRARY_DIRS - the CSMEigen library directories
-#  CSMEigen_LIBRARIES - link these to use CSMEigen
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(CSMEigen_FOUND)
-  # In cache already
-  SET(CSMEigen_FIND_QUIETLY TRUE)
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find CSMEigen.  Once done, this will define:
+#  CSMEigen_FOUND:          System has CSMEigen
+#  CSMEigen_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  CSMEigen_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  CSMEigen_DEFINITIONS:    Preprocessor definitions.
+#  CSMEigen_LIBRARIES:      only the libraries (w/o the '-l')
+#  CSMEigen_LDFLAGS:        all required linker flags
+#  CSMEigen_LDFLAGS_OTHER:  all other linker flags
+#  CSMEigen_CFLAGS:         all required cflags
+#  CSMEigen_CFLAGS_OTHER:   the other compiler flags
+#  CSMEigen_VERSION:        version of the module
+#  CSMEigen_PREFIX:         prefix-directory of the module
+#  CSMEigen_INCLUDEDIR:     include-dir of the module
+#  CSMEigen_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-IF ((NOT DEFINED CSMEigen_ROOT OR CSMEigen_ROOT STREQUAL "") AND ("$ENV{CSMEigen_ROOT}" STREQUAL ""))
-  # Use pkg-config to get hints about paths
-  libfind_pkg_check_modules(CSMEigen_PKGCONF csm)
-ELSE ()
-  IF (CSMEigen_ROOT STREQUAL "")
-    SET(CSMEigen_ROOT $ENV{CSMEigen_ROOT})
-  ENDIF (CSMEigen_ROOT STREQUAL "")
-  SET(CSMEigen_PKGCONF_INCLUDE_DIRS ${CSMEigen_ROOT}/include)
-  SET(CSMEigen_PKGCONF_LIBRARY_DIRS ${CSMEigen_ROOT}/lib)
-ENDIF ()
-
-# Include dir
-find_path(CSMEigen_INCLUDE_DIR
-  NAMES csm/csm.h gsl_eigen/gsl_eigen.h
-  PATHS ${CSMEigen_PKGCONF_INCLUDE_DIRS} "/opt/local/include"
-)
-
-# Finally the library itself
-find_library(CSMEigen_LIBRARY
-  NAMES csm_eigen
-  PATHS ${CSMEigen_PKGCONF_LIBRARY_DIRS} "/opt/local/lib"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(CSMEigen_PROCESS_INCLUDES CSMEigen_INCLUDE_DIR)
-set(CSMEigen_PROCESS_LIBS CSMEigen_LIBRARY)
-libfind_process(CSMEigen)
-
-If (CSMEigen_FOUND)
-  SET(CSMEigen_LIBRARY_DIRS ${CSMEigen_PKGCONF_LIBRARY_DIRS} CACHE INTERNAL "")
-  SET(CSMEigen_LDFLAGS ${CSMEigen_PKGCONF_LDFLAGS} CACHE INTERNAL "")
-  SET(CSMEigen_LDFLAGS_OTHER ${CSMEigen_PKGCONF_LDFLAGS_OTHER} CACHE INTERNAL "")
-  SET(CSMEigen_CFLAGS ${CSMEigen_PKGCONF_CFLAGS} CACHE INTERNAL "")
-  SET(CSMEigen_CFLAGS_OTHER ${CSMEigen_PKGCONF_CFLAGS_OTHER} CACHE INTERNAL "")
-ENDIF (CSMEigen_FOUND)
-
-PRINT_LIBRARY_STATUS(CSMEigen
-  DETAILS "[${CSMEigen_LIBRARY_DIRS}][${CSMEigen_LIBRARIES}][${CSMEigen_INCLUDE_DIRS}]"
+libfind_lib_with_pkg_config(CSMEigen csm
+  HEADERS csm/csm.h gsl_eigen/gsl_eigen.h
+  LIBRARIES csm_eigen
+  HINTS /opt/local
   )

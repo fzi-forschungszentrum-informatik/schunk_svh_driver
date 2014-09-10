@@ -1,39 +1,45 @@
-# - Try to find SAHand
-# Once done, this will define
-#
-#  Sahand_FOUND - system has Reflexx
-#  Sahand_INCLUDE_DIRS - the Reflexx include directories
-#  Sahand_LIBRARIES - link these to use Reflexx
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( Sahand_FOUND )
-   # in cache already
-   SET( Sahand_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Sahand.  Once done, this will define:
+#  Sahand_FOUND:          System has Sahand
+#  Sahand_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Sahand_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Sahand_DEFINITIONS:    Preprocessor definitions.
+#  Sahand_LIBRARIES:      only the libraries (w/o the '-l')
+#  Sahand_LDFLAGS:        all required linker flags
+#  Sahand_LDFLAGS_OTHER:  all other linker flags
+#  Sahand_CFLAGS:         all required cflags
+#  Sahand_CFLAGS_OTHER:   the other compiler flags
+#  Sahand_VERSION:        version of the module
+#  Sahand_PREFIX:         prefix-directory of the module
+#  Sahand_INCLUDEDIR:     include-dir of the module
+#  Sahand_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Sahand_PKGCONF sahand)
-
-# Include dir
-find_path(Sahand_INCLUDE_DIR
-  NAMES sahand/SAHandCtrlApi.h
-  PATHS ${Sahand_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Sahand_LIBRARY
-  NAMES libsahand-static.a
-  PATHS ${Sahand_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Sahand_PROCESS_INCLUDES Sahand_INCLUDE_DIR)
-set(Sahand_PROCESS_LIBS Sahand_LIBRARY)
-libfind_process(Sahand)
-
-PRINT_LIBRARY_STATUS(Sahand
-  DETAILS "[${Sahand_LIBRARIES}][${Sahand_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Sahand sahand
+  HEADERS sahand/SAHandCtrlApi.h
+  LIBRARIES libsahand-static.a
+  )

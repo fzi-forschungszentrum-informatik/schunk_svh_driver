@@ -1,42 +1,45 @@
-# - Try to find libarchive
-#   (http://people.freebsd.org/~kientzle/libarchive/)
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
 #
-# Once done, this will define
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
 #
-#  LibArchive_FOUND - system has libarchive
-#  LibArchive_INCLUDE_DIRS - the libarchive include directories
-#  LibArchive_LIBRARIES - link these to use libarchive
+# Try to find LibArchive.  Once done, this will define:
+#  LibArchive_FOUND:          System has LibArchive
+#  LibArchive_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  LibArchive_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  LibArchive_DEFINITIONS:    Preprocessor definitions.
+#  LibArchive_LIBRARIES:      only the libraries (w/o the '-l')
+#  LibArchive_LDFLAGS:        all required linker flags
+#  LibArchive_LDFLAGS_OTHER:  all other linker flags
+#  LibArchive_CFLAGS:         all required cflags
+#  LibArchive_CFLAGS_OTHER:   the other compiler flags
+#  LibArchive_VERSION:        version of the module
+#  LibArchive_PREFIX:         prefix-directory of the module
+#  LibArchive_INCLUDEDIR:     include-dir of the module
+#  LibArchive_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
-IF( LibArchive_FOUND )
-   # in cache already
-   SET( LibArchive_FIND_QUIETLY TRUE )
-ENDIF()
+include(PrintLibraryStatus)
+include(LibFindMacros)
 
-INCLUDE(LibFindMacros)
-INCLUDE(PrintLibraryStatus)
-
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(LibArchive_PKGCONF libarchive)
-
-# Include dir
-find_path(LibArchive_INCLUDE_DIR
-  NAMES archive.h
-  PATHS ${LibArchive_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(LibArchive_LIBRARY
-  NAMES archive
-  PATHS ${LibArchive_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(LibArchive_PROCESS_INCLUDES LibArchive_INCLUDE_DIR)
-set(LibArchive_PROCESS_LIBS LibArchive_LIBRARY)
-libfind_process(LibArchive)
-
-PRINT_LIBRARY_STATUS(LibArchive
-  DETAILS "[${LibArchive_LIBRARIES}][${LibArchive_INCLUDE_DIRS}]"
-)
-
+libfind_lib_with_pkg_config(LibArchive libarchive
+  HEADERS archive.h
+  LIBRARIES archive
+  )

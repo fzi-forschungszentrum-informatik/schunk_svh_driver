@@ -1,39 +1,46 @@
-# - Try to find LibSVM
-# Once done, this will define
-#
-#  SVM_FOUND - system has LibSVM
-#  SVM_INCLUDE_DIR - the LibSVM include directories
-#  SVM_LIBRARY - link these to use LibSVM
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-if ( SVM_FOUND )
-   # in cache already
-   SET( SVM_FIND_QUIETLY TRUE )
-endif ()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find SVM.  Once done, this will define:
+#  SVM_FOUND:          System has SVM
+#  SVM_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  SVM_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  SVM_DEFINITIONS:    Preprocessor definitions.
+#  SVM_LIBRARIES:      only the libraries (w/o the '-l')
+#  SVM_LDFLAGS:        all required linker flags
+#  SVM_LDFLAGS_OTHER:  all other linker flags
+#  SVM_CFLAGS:         all required cflags
+#  SVM_CFLAGS_OTHER:   the other compiler flags
+#  SVM_VERSION:        version of the module
+#  SVM_PREFIX:         prefix-directory of the module
+#  SVM_INCLUDEDIR:     include-dir of the module
+#  SVM_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(SVM_PKGCONF svm)
-
-# Include dir
-find_path(SVM_INCLUDE_DIR
-  NAMES svm.h
-  PATHS ${SVM_PKGCONF_INCLUDE_DIRS} "/usr/include/libsvm/"
-)
-
-# Finally the library itself
-find_library(SVM_LIBRARY
-  NAMES svm
-  PATHS ${SVM_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(SVM_PROCESS_INCLUDES SVM_INCLUDE_DIR)
-set(SVM_PROCESS_LIBS SVM_LIBRARY)
-libfind_process(SVM)
-
-PRINT_LIBRARY_STATUS(SVM
-  DETAILS "[${SVM_LIBRARIES}][${SVM_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(SVM svm
+  HEADERS svm.h
+  LIBRARIES svm
+  HEADER_PATHS /usr/include/libsvm
+  )

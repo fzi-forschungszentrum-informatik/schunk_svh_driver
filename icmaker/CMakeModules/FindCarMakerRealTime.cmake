@@ -1,97 +1,50 @@
-# - Try to find CarMaker
-# Once done this will define
-#  CarMakerRealTime_FOUND - System has CarMaker
-#  CarMakerRealTime_INCLUDE_DIRS - The CarMaker include directories
-#  CarMakerRealTime_LIBRARIES - The libraries needed to use CarMaker
-#  CarMakerRealTime_BIN_DIR - The bin dir of carmaker (used for pre-build steps)
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( CarMakerRealTime_FOUND )
-  SET( CarMakerRealTime_FIND_QUIETLY TRUE )
-ENDIF( CarMakerRealTime_FOUND )
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
 
-INCLUDE(LibFindMacros)
-INCLUDE(PrintLibraryStatus)
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find CarMakerRealTime.  Once done, this will define:
+#  CarMakerRealTime_FOUND:          System has CarMakerRealTime
+#  CarMakerRealTime_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  CarMakerRealTime_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  CarMakerRealTime_DEFINITIONS:    Preprocessor definitions.
+#  CarMakerRealTime_LIBRARIES:      only the libraries (w/o the '-l')
+#  CarMakerRealTime_LDFLAGS:        all required linker flags
+#  CarMakerRealTime_LDFLAGS_OTHER:  all other linker flags
+#  CarMakerRealTime_CFLAGS:         all required cflags
+#  CarMakerRealTime_CFLAGS_OTHER:   the other compiler flags
+#  CarMakerRealTime_VERSION:        version of the module
+#  CarMakerRealTime_PREFIX:         prefix-directory of the module
+#  CarMakerRealTime_INCLUDEDIR:     include-dir of the module
+#  CarMakerRealTime_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
-FIND_PACKAGE( LibUSB REQUIRED )
+include(PrintLibraryStatus)
+include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(CarMakerRealTime_PKGCONF carmakerrealtime)
+find_package(LibUSB REQUIRED)
 
-# Include dir
-find_path(CarMakerRealTime_INCLUDE_DIR
-  NAMES CarMaker.h
-  PATHS ${CarMakerRealTime_PKGCONF_INCLUDE_DIRS} "/opt/ipg/hil/linux-xeno/include"
-)
-
-find_path(CarMakerRealTime_BIN_DIR
-  NAMES CreateCarMakerAppInfo
-  PATHS ${CarMakerRealTime_PKGCONF_INCLUDE_DIRS} "/opt/ipg/hil/linux-xeno/bin"
-)
-
-# Libraries
-find_library(CarMakerRealTime_CM_LIBRARY
-  NAMES carmaker
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_C_LIBRARY
-  NAMES car
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_D_LIBRARY
-  NAMES ipgdriver
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_R_LIBRARY
-  NAMES ipgroad
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_USB_LIBRARY
-  NAMES usb
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_NATIVE_LIBRARY
-  NAMES native
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_RTDM_LIBRARY
-  NAMES rtdm
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_SENSO_LIBRARY
-  NAMES SensoDrive
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_XENOMAI
-  NAMES xenomai
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-find_library(CarMakerRealTime_TIRE
-  NAMES tametire
-  PATHS ${CarMakerRealTime_PKGCONF_LIBRARY_DIRS} "/opt/ipg/hil/linux-xeno/lib"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-# NOTE: The CM does not link against CarMakerRealTime_T_LIBRARY
-
-set(CarMakerRealTime_PROCESS_INCLUDES CarMakerRealTime_INCLUDE_DIR )
-set(CarMakerRealTime_PROCESS_LIBS 
-        CarMakerRealTime_C_LIBRARY 
-        CarMakerRealTime_CM_LIBRARY 
-        CarMakerRealTime_D_LIBRARY 
-        CarMakerRealTime_R_LIBRARY 
-        CarMakerRealTime_TIRE
-        CarMakerRealTime_USB_LIBRARY 
-        CarMakerRealTime_NATIVE_LIBRARY 
-        CarMakerRealTime_XENOMAI
-        CarMakerRealTime_RTDM_LIBRARY
-        CarMakerRealTime_SENSO_LIBRARY
-
-)
-libfind_process(CarMakerRealTime)
-
-IF( DEFINED PRINT_LIBRARY_STATUS )
-  PRINT_LIBRARY_STATUS(CarMakerRealTime
-    DETAILS "[${CarMakerRealTime_LIBRARIES}][${CarMakerRealTime_INCLUDE_DIRS}]"
+libfind_lib_with_pkg_config(CarMakerRealTime carmakerrealtime
+  HEADERS CarMaker.h
+  LIBRARIES carmaker car ipgdriver ipgroad usb native rtdm SensoDrive xenomai tametire
+  EXECUTABLES CreateCarMakerAppInfo
+  HINTS /opt/ipg/hil/linux-xeno
+  DEFINE _IC_BUILDER_CARMAKER_
   )
-ENDIF (DEFINED PRINT_LIBRARY_STATUS )

@@ -1,35 +1,48 @@
-# - Try to find HMMlib
-# Once done, this will define
-#
-#  HMMlib_FOUND - system has HMMlib
-#  HMMlib_INCLUDE_DIRS - the HMMlib include directories
-#  HMMlib_CFLAGS - the HMMlib extra cflags (required for compilation)
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(HMMlib_FOUND)
-   # in cache already
-   SET( HMMlib_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find HMMlib.  Once done, this will define:
+#  HMMlib_FOUND:          System has HMMlib
+#  HMMlib_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  HMMlib_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  HMMlib_DEFINITIONS:    Preprocessor definitions.
+#  HMMlib_LIBRARIES:      only the libraries (w/o the '-l')
+#  HMMlib_LDFLAGS:        all required linker flags
+#  HMMlib_LDFLAGS_OTHER:  all other linker flags
+#  HMMlib_CFLAGS:         all required cflags
+#  HMMlib_CFLAGS_OTHER:   the other compiler flags
+#  HMMlib_VERSION:        version of the module
+#  HMMlib_PREFIX:         prefix-directory of the module
+#  HMMlib_INCLUDEDIR:     include-dir of the module
+#  HMMlib_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(HMMlib_PKGCONF hmmlib)
+libfind_lib_with_pkg_config(HMMlib hmmlib
+  HEADERS HMMlib/hmm.hpp
+  )
 
-# Include dir
-find_path(HMMlib_INCLUDE_DIR
-  NAMES HMMlib/hmm.hpp
-  PATHS ${HMMlib_PKGCONF_INCLUDE_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(HMMlib_PROCESS_INCLUDES HMMlib_INCLUDE_DIR)
-libfind_process(HMMlib)
-IF(HMMlib_FOUND)
-  SET(HMMlib_CFLAGS -msse4 CACHE INTERNAL "")
-ENDIF()
-
-PRINT_LIBRARY_STATUS(HMMlib
-  DETAILS "[${HMMlib_INCLUDE_DIRS}]"
-)
+if (HMMlib_FOUND)
+  set(HMMlib_CFLAGS -msse4 CACHE INTERNAL "")
+endif()

@@ -1,47 +1,45 @@
-# - Try to find Matio
-# Once done, this will define
-#
-#  Matio_FOUND - system has Matio
-#  Matio_INCLUDE_DIRS - the Matio include directories
-#  Matio_LIBRARIES - link these to use Matio
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(Matio_FOUND)
-   # in cache already
-   SET( Matio_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Matio.  Once done, this will define:
+#  Matio_FOUND:          System has Matio
+#  Matio_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Matio_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Matio_DEFINITIONS:    Preprocessor definitions.
+#  Matio_LIBRARIES:      only the libraries (w/o the '-l')
+#  Matio_LDFLAGS:        all required linker flags
+#  Matio_LDFLAGS_OTHER:  all other linker flags
+#  Matio_CFLAGS:         all required cflags
+#  Matio_CFLAGS_OTHER:   the other compiler flags
+#  Matio_VERSION:        version of the module
+#  Matio_PREFIX:         prefix-directory of the module
+#  Matio_INCLUDEDIR:     include-dir of the module
+#  Matio_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-if (MATIO_ROOT STREQUAL "" AND "$ENV{MATIO_ROOT}" STREQUAL "")
-  # Use pkg-config to get hints about paths
-  libfind_pkg_check_modules(Matio_PKGCONF matio)
-else (MATIO_ROOT STREQUAL "" AND "$ENV{MATIO_ROOT}" STREQUAL "")
-  if (MATIO_ROOT STREQUAL "")
-    set(MATIO_ROOT $ENV{MATIO_ROOT})
-  endif (MATIO_ROOT STREQUAL "")
-  set(Matio_PKGCONF_INCLUDE_DIRS ${MATIO_ROOT}/include)
-  set(Matio_PKGCONF_LIBRARY_DIRS ${MATIO_ROOT}/lib)
-endif (MATIO_ROOT STREQUAL "" AND "$ENV{MATIO_ROOT}" STREQUAL "")
-
-# Include dir
-find_path(Matio_INCLUDE_DIR
-  NAMES matio.h
-  PATHS ${Matio_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Matio_LIBRARY
-  NAMES matio
-  PATHS ${Matio_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Matio_PROCESS_INCLUDES Matio_INCLUDE_DIR)
-set(Matio_PROCESS_LIBS Matio_LIBRARY)
-libfind_process(Matio)
-
-PRINT_LIBRARY_STATUS(Matio
-  DETAILS "[${Matio_LIBRARIES}][${Matio_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Matio matio
+  HEADERS matio.h
+  LIBRARIES matio
+  )

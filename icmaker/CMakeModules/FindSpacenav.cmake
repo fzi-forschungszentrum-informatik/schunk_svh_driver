@@ -1,41 +1,45 @@
-# - Try to find Spacenav
-# Once done, this will define
-#
-#  Spacenav_FOUND - system has Spacenav
-#  Spacenav_INCLUDE_DIRS - the Spacenav include directories
-#  Spacenav_LIBRARIES - link these to use Spacenav
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( Spacenav_FOUND )
-   # in cache already
-   SET( Spacenav_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Spacenav.  Once done, this will define:
+#  Spacenav_FOUND:          System has Spacenav
+#  Spacenav_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Spacenav_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Spacenav_DEFINITIONS:    Preprocessor definitions.
+#  Spacenav_LIBRARIES:      only the libraries (w/o the '-l')
+#  Spacenav_LDFLAGS:        all required linker flags
+#  Spacenav_LDFLAGS_OTHER:  all other linker flags
+#  Spacenav_CFLAGS:         all required cflags
+#  Spacenav_CFLAGS_OTHER:   the other compiler flags
+#  Spacenav_VERSION:        version of the module
+#  Spacenav_PREFIX:         prefix-directory of the module
+#  Spacenav_INCLUDEDIR:     include-dir of the module
+#  Spacenav_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Spacenav_PKGCONF spnav)
-
-# Include dir
-find_path(Spacenav_INCLUDE_DIR
-  NAMES spnav.h
-  PATHS ${Spacenav_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Spacenav_LIBRARY
-  NAMES spnav
-  PATHS ${Spacenav_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Spacenav_PROCESS_INCLUDES Spacenav_INCLUDE_DIR)
-set(Spacenav_PROCESS_LIBS Spacenav_LIBRARY)
-libfind_process(Spacenav)
-
-PRINT_LIBRARY_STATUS(Spacenav
-  DETAILS "[${Spacenav_LIBRARIES}][${Spacenav_INCLUDE_DIRS}]"
-)
-
-
+libfind_lib_with_pkg_config(Spacenav spnav
+  HEADERS spnav.h
+  LIBRARIES spnav
+  )

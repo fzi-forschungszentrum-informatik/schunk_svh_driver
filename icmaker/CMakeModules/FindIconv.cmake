@@ -1,47 +1,45 @@
-# - Try to find Iconv
-# Once done, this will define
-#
-#  Iconv_FOUND - system has Iconv
-#  Iconv_INCLUDE_DIR - the Ltdl include directories
-#  Iconv_LIBRARY - link these to use Ltdl
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(Iconv_FOUND)
-  # in cache already
-  SET(Iconv_FIND_QUIETLY TRUE)
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Iconv.  Once done, this will define:
+#  Iconv_FOUND:          System has Iconv
+#  Iconv_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Iconv_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Iconv_DEFINITIONS:    Preprocessor definitions.
+#  Iconv_LIBRARIES:      only the libraries (w/o the '-l')
+#  Iconv_LDFLAGS:        all required linker flags
+#  Iconv_LDFLAGS_OTHER:  all other linker flags
+#  Iconv_CFLAGS:         all required cflags
+#  Iconv_CFLAGS_OTHER:   the other compiler flags
+#  Iconv_VERSION:        version of the module
+#  Iconv_PREFIX:         prefix-directory of the module
+#  Iconv_INCLUDEDIR:     include-dir of the module
+#  Iconv_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-IF(ICONV_ROOT STREQUAL "" AND "$ENV{ICONV_ROOT}" STREQUAL "")
-  # Use pkg-config to get hints about paths
-  libfind_pkg_check_modules(Iconv_PKGCONF iconv)
-ELSE()
-  IF(ICONV_ROOT STREQUAL "")
-    SET(ICONV_ROOT $ENV{ICONV_ROOT})
-  ENDIF()
-  SET(Iconv_PKGCONF_INCLUDE_DIRS ${ICONV_ROOT}/include)
-  SET(Iconv_PKGCONF_LIBRARY_DIRS ${ICONV_ROOT}/lib)
-ENDIF()
-
-# Include dir
-find_path(Iconv_INCLUDE_DIR
-  NAMES iconv.h
-  PATHS ${Iconv_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Iconv_LIBRARY
-  NAMES iconv
-  PATHS ${Iconv_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Iconv_PROCESS_INCLUDES Iconv_INCLUDE_DIR)
-set(Iconv_PROCESS_LIBS Iconv_LIBRARY)
-libfind_process(Iconv)
-
-PRINT_LIBRARY_STATUS(Iconv
-  DETAILS "[${Iconv_LIBRARIES}][${Iconv_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Iconv iconv
+  HEADERS iconv.h
+  LIBRARIES iconv
+  )

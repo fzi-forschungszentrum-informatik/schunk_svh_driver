@@ -1,44 +1,46 @@
-# - Try to find MesaSR
-# Once done, this will define
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
 #
-#  MesaSR_FOUND - system has MesaSR
-#  MesaSR_INCLUDE_DIR - the MesaSR include directories
-#  MesaSR_LIBRARY - link these to use MesaSR
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find MesaSR.  Once done, this will define:
+#  MesaSR_FOUND:          System has MesaSR
+#  MesaSR_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  MesaSR_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  MesaSR_DEFINITIONS:    Preprocessor definitions.
+#  MesaSR_LIBRARIES:      only the libraries (w/o the '-l')
+#  MesaSR_LDFLAGS:        all required linker flags
+#  MesaSR_LDFLAGS_OTHER:  all other linker flags
+#  MesaSR_CFLAGS:         all required cflags
+#  MesaSR_CFLAGS_OTHER:   the other compiler flags
+#  MesaSR_VERSION:        version of the module
+#  MesaSR_PREFIX:         prefix-directory of the module
+#  MesaSR_INCLUDEDIR:     include-dir of the module
+#  MesaSR_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-if ( MesaSR_FOUND )
-   # in cache already
-   SET( MesaSR_FIND_QUIETLY TRUE )
-endif ()
-
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(MesaSR_PKGCONF libMesaSR)
-
-# Include dir
-find_path(MesaSR_INCLUDE_DIR
-  NAMES libMesaSR.h
-  PATHS ${MesaSR_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(MesaSR_LIBRARY
-  NAMES mesasr
-  PATHS ${MesaSR_PKGCONF_LIBRARY_DIRS}
-)
-
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(MesaSR_PROCESS_INCLUDES MesaSR_INCLUDE_DIR)
-set(MesaSR_PROCESS_LIBS MesaSR_LIBRARY)
-libfind_process(MesaSR)
-
-PRINT_LIBRARY_STATUS(MesaSR
-  DETAILS "[${MesaSR_LIBRARIES}][${MesaSR_INCLUDE_DIRS}]"
-)
-
-if(MesaSR_FOUND)
-  set(MesaSR_DEFINITIONS "-D_IC_BUILDER_SWISSRANGER_")
-endif()
+libfind_lib_with_pkg_config(MesaSR libMesaSR
+  HEADERS libMesaSR.h
+  LIBRARIES mesasr
+  DEFINE _IC_BUILDER_SWISSRANGER_
+  )

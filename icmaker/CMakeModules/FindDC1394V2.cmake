@@ -1,39 +1,45 @@
-# - Try to find DC1394V2
-# Once done, this will define
-#
-#  DC1394V2_FOUND - system has DC1394
-#  DC1394V2_INCLUDE_DIRS - the DC1394 include directories
-#  DC1394V2_LIBRARIES - link these to use DC1394
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(DC1394V2_FOUND)
-   # in cache already
-   SET(DC1394V2_FIND_QUIETLY TRUE)
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find DC1394V2.  Once done, this will define:
+#  DC1394V2_FOUND:          System has DC1394V2
+#  DC1394V2_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  DC1394V2_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  DC1394V2_DEFINITIONS:    Preprocessor definitions.
+#  DC1394V2_LIBRARIES:      only the libraries (w/o the '-l')
+#  DC1394V2_LDFLAGS:        all required linker flags
+#  DC1394V2_LDFLAGS_OTHER:  all other linker flags
+#  DC1394V2_CFLAGS:         all required cflags
+#  DC1394V2_CFLAGS_OTHER:   the other compiler flags
+#  DC1394V2_VERSION:        version of the module
+#  DC1394V2_PREFIX:         prefix-directory of the module
+#  DC1394V2_INCLUDEDIR:     include-dir of the module
+#  DC1394V2_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(DC1394V2_PKGCONF libdc1394-2)
-
-# Include dir
-find_path(DC1394V2_INCLUDE_DIR
-  NAMES dc1394/control.h
-  PATHS ${DC1394V2_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(DC1394V2_LIBRARY
-  NAMES dc1394
-  PATHS ${DC1394V2_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(DC1394V2_PROCESS_INCLUDES DC1394V2_INCLUDE_DIR)
-set(DC1394V2_PROCESS_LIBS DC1394V2_LIBRARY)
-libfind_process(DC1394V2)
-
-PRINT_LIBRARY_STATUS(DC1394V2
-  DETAILS "[${DC1394V2_LIBRARIES}][${DC1394V2_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(DC1394V2 libdc1394-2
+  HEADERS dc1394/control.h
+  LIBRARIES dc1394
+  )

@@ -1,40 +1,47 @@
-# - Try to find FuzzyLite
-# Once done, this will define
-#
-#  FuzzyLite_FOUND - system has FuzzyLite
-#  FuzzyLite_INCLUDE_DIRS - the FuzzyLite include directories
-#  FuzzyLite_LIBRARIES - link these to use FuzzyLite
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( FuzzyLite_FOUND )
-   # in cache already
-   SET( FuzzyLite_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find FuzzyLite.  Once done, this will define:
+#  FuzzyLite_FOUND:          System has FuzzyLite
+#  FuzzyLite_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  FuzzyLite_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  FuzzyLite_DEFINITIONS:    Preprocessor definitions.
+#  FuzzyLite_LIBRARIES:      only the libraries (w/o the '-l')
+#  FuzzyLite_LDFLAGS:        all required linker flags
+#  FuzzyLite_LDFLAGS_OTHER:  all other linker flags
+#  FuzzyLite_CFLAGS:         all required cflags
+#  FuzzyLite_CFLAGS_OTHER:   the other compiler flags
+#  FuzzyLite_VERSION:        version of the module
+#  FuzzyLite_PREFIX:         prefix-directory of the module
+#  FuzzyLite_INCLUDEDIR:     include-dir of the module
+#  FuzzyLite_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(FuzzyLite_PKGCONF libgps)
-
-# Include dir
-find_path(FuzzyLite_INCLUDE_DIR
-  NAMES fuzzylite/FuzzyLite.h
-  PATHS ${FuzzyLite_PKGCONF_INCLUDE_DIRS} "/opt/local/include" "/opt/tools/fuzzylite-i386/include"
-)
-
-# Finally the library itself
-find_library(FuzzyLite_LIBRARY
-  NAMES fuzzylite
-  PATHS ${FuzzyLite_PKGCONF_LIBRARY_DIRS} "/opt/local/lib" "/opt/tools/fuzzylite-i386/lib"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(FuzzyLite_PROCESS_INCLUDES FuzzyLite_INCLUDE_DIR)
-set(FuzzyLite_PROCESS_LIBS FuzzyLite_LIBRARY)
-libfind_process(FuzzyLite)
-
-PRINT_LIBRARY_STATUS(FuzzyLite
-  DETAILS "[${FuzzyLite_LIBRARIES}][${FuzzyLite_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(FuzzyLite libgps
+  HEADERS fuzzylite/FuzzyLite.h
+  LIBRARIES fuzzylite
+  HINTS /opt/local /opt/tools/fuzzylite-i386
+  )
 

@@ -1,42 +1,45 @@
-# - Try to find HCRF
-# Once done, this will define
-#
-#  HCRF_FOUND - system has HCRF
-#  HCRF_INCLUDE_DIRS - the HCRF include directories
-#  HCRF_LIBRARIES - link these to use HCRF
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(HCRF_FOUND)
-   # in cache already
-   SET( HCRF_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find HCRF.  Once done, this will define:
+#  HCRF_FOUND:          System has HCRF
+#  HCRF_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  HCRF_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  HCRF_DEFINITIONS:    Preprocessor definitions.
+#  HCRF_LIBRARIES:      only the libraries (w/o the '-l')
+#  HCRF_LDFLAGS:        all required linker flags
+#  HCRF_LDFLAGS_OTHER:  all other linker flags
+#  HCRF_CFLAGS:         all required cflags
+#  HCRF_CFLAGS_OTHER:   the other compiler flags
+#  HCRF_VERSION:        version of the module
+#  HCRF_PREFIX:         prefix-directory of the module
+#  HCRF_INCLUDEDIR:     include-dir of the module
+#  HCRF_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(HCRF_PKGCONF hcrf)
-
-# Include dir
-find_path(HCRF_INCLUDE_DIR
-  NAMES hCRF/hCRF.h
-  PATHS ${HCRF_PKGCONF_INCLUDE_DIRS}
-)
-
-SET(libraries cgDescent hCRF lbfgs uncoptim)
-FOREACH(library ${libraries})
-  find_library(HCRF_LIBRARY_${library}
-    NAMES ${library}
-    PATHS ${HCRF_PKGCONF_LIBRARY_DIRS}
+libfind_lib_with_pkg_config(HCRF hcrf
+  HEADERS hCRF/hCRF.h
+  LIBRARIES cgDescent hCRF lbfgs uncoptim
   )
-  LIST(APPEND HCRF_LIBRARIES ${HCRF_LIBRARY_${library}})
-ENDFOREACH()
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(HCRF_PROCESS_INCLUDES HCRF_INCLUDE_DIR)
-set(HCRF_PROCESS_LIBS HCRF_LIBRARIES)
-libfind_process(HCRF)
-
-PRINT_LIBRARY_STATUS(HCRF
-  DETAILS "[${HCRF_LIBRARIES}][${HCRF_INCLUDE_DIRS}]"
-)

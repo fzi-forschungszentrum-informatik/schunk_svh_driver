@@ -1,39 +1,46 @@
-# - Try to find Cantools
-# Once done, this will define
-#
-#  Cantools_FOUND - system has Cantools
-#  Cantools_INCLUDE_DIRS - the Cantools include directories
-#  Cantools_LIBRARIES - link these to use Cantools
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( Cantools_FOUND )
-   # in cache already
-   SET( Cantools_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Cantools.  Once done, this will define:
+#  Cantools_FOUND:          System has Cantools
+#  Cantools_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Cantools_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Cantools_DEFINITIONS:    Preprocessor definitions.
+#  Cantools_LIBRARIES:      only the libraries (w/o the '-l')
+#  Cantools_LDFLAGS:        all required linker flags
+#  Cantools_LDFLAGS_OTHER:  all other linker flags
+#  Cantools_CFLAGS:         all required cflags
+#  Cantools_CFLAGS_OTHER:   the other compiler flags
+#  Cantools_VERSION:        version of the module
+#  Cantools_PREFIX:         prefix-directory of the module
+#  Cantools_INCLUDEDIR:     include-dir of the module
+#  Cantools_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Cantools_PKGCONF cantools)
-
-# Include dir
-find_path(Cantools_INCLUDE_DIR
-  NAMES dbcModel.h
-  PATHS ${Cantools_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(Cantools_LIBRARY
-  NAMES candbc
-  PATHS ${Cantools_PKGCONF_LIBRARY_DIRS} "/opt/local/lib"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Cantools_PROCESS_INCLUDES Cantools_INCLUDE_DIR)
-set(Cantools_PROCESS_LIBS Cantools_LIBRARY)
-libfind_process(Cantools)
-
-PRINT_LIBRARY_STATUS(Cantools
-  DETAILS "[${Cantools_LIBRARIES}][${Cantools_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Cantools cantools
+  HEADERS dbcModel.h
+  LIBRARIES candbc
+  HINTS /opt/local
+  )

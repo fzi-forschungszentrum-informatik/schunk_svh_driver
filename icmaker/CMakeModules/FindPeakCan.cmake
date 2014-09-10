@@ -1,33 +1,46 @@
-# - Try to find PeakCan
-# Once done, this will define
-#
-#  PeakCan_FOUND - system has PeakCan
-#  PeakCan_INCLUDE_DIRS - the PeakCan include directories
-#  PeakCan_LIBRARIES - link these to use PeakCan
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find PeakCan.  Once done, this will define:
+#  PeakCan_FOUND:          System has PeakCan
+#  PeakCan_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  PeakCan_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  PeakCan_DEFINITIONS:    Preprocessor definitions.
+#  PeakCan_LIBRARIES:      only the libraries (w/o the '-l')
+#  PeakCan_LDFLAGS:        all required linker flags
+#  PeakCan_LDFLAGS_OTHER:  all other linker flags
+#  PeakCan_CFLAGS:         all required cflags
+#  PeakCan_CFLAGS_OTHER:   the other compiler flags
+#  PeakCan_VERSION:        version of the module
+#  PeakCan_PREFIX:         prefix-directory of the module
+#  PeakCan_INCLUDEDIR:     include-dir of the module
+#  PeakCan_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
+
+include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(PeakCan_PKGCONF libpcan)
-
-# Include dir
-find_path(PeakCan_INCLUDE_DIR
-  NAMES libpcan.h
-  PATHS ${PeakCan_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(PeakCan_LIBRARY
-  NAMES pcan
-  PATHS ${PeakCan_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(PeakCan_PROCESS_INCLUDES PeakCan_INCLUDE_DIR)
-set(PeakCan_PROCESS_LIBS PeakCan_LIBRARY)
-libfind_process(PeakCan)
-
-if(PeakCan_FOUND)
-  set(PeakCan_DEFINITIONS "-D_IC_BUILDER_CAN_PEAK_")
-endif()
+libfind_lib_with_pkg_config(PeakCan libpcan
+  HEADERS libpcan.h
+  LIBRARIES pcan
+  DEFINE _IC_BUILDER_CAN_PEAK_
+  )

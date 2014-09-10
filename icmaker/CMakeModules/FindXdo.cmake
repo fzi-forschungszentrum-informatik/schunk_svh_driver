@@ -1,39 +1,45 @@
-# - Try to find LibXDO
-# Once done, this will define
-#
-#  XDO_FOUND - system has LibXDO
-#  XDO_INCLUDE_DIR - the LibXDO include directories
-#  XDO_LIBRARY - link these to use LibXDO
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-if ( XDO_FOUND )
-   # in cache already
-   SET( XDO_FIND_QUIETLY TRUE )
-endif ()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Xdo.  Once done, this will define:
+#  Xdo_FOUND:          System has Xdo
+#  Xdo_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Xdo_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Xdo_DEFINITIONS:    Preprocessor definitions.
+#  Xdo_LIBRARIES:      only the libraries (w/o the '-l')
+#  Xdo_LDFLAGS:        all required linker flags
+#  Xdo_LDFLAGS_OTHER:  all other linker flags
+#  Xdo_CFLAGS:         all required cflags
+#  Xdo_CFLAGS_OTHER:   the other compiler flags
+#  Xdo_VERSION:        version of the module
+#  Xdo_PREFIX:         prefix-directory of the module
+#  Xdo_INCLUDEDIR:     include-dir of the module
+#  Xdo_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(XDO_PKGCONF xdo)
-
-# Include dir
-find_path(XDO_INCLUDE_DIR
-  NAMES xdo.h
-  PATHS ${XDO_PKGCONF_INCLUDE_DIRS} "/usr/include/"
-)
-
-# Finally the library itself
-find_library(XDO_LIBRARY
-  NAMES xdo
-  PATHS ${XDO_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(XDO_PROCESS_INCLUDES XDO_INCLUDE_DIR)
-set(XDO_PROCESS_LIBS XDO_LIBRARY)
-libfind_process(XDO)
-
-PRINT_LIBRARY_STATUS(XDO
-  DETAILS "[${XDO_LIBRARIES}][${XDO_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Xdo xdo
+  HEADERS xdo.h
+  LIBRARIES xdo
+  )

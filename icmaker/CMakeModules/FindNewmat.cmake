@@ -1,45 +1,45 @@
-# - Try to find Newmat
-# Once done, this will define
-#
-# Newmat_FOUND - system has Newmat
-# Newmat_INCLUDE_DIRS - the Newmat include directories
-# Newmat_LIBRARIES - link these to use Newmat
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-if (Newmat_INCLUDE_DIRS AND Newmat_LIBRARIES)
-# in cache already
-set(Newmat_FOUND TRUE)
-else (Newmat_INCLUDE_DIRS AND Newmat_LIBRARIES)
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Newmat.  Once done, this will define:
+#  Newmat_FOUND:          System has Newmat
+#  Newmat_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Newmat_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Newmat_DEFINITIONS:    Preprocessor definitions.
+#  Newmat_LIBRARIES:      only the libraries (w/o the '-l')
+#  Newmat_LDFLAGS:        all required linker flags
+#  Newmat_LDFLAGS_OTHER:  all other linker flags
+#  Newmat_CFLAGS:         all required cflags
+#  Newmat_CFLAGS_OTHER:   the other compiler flags
+#  Newmat_VERSION:        version of the module
+#  Newmat_PREFIX:         prefix-directory of the module
+#  Newmat_INCLUDEDIR:     include-dir of the module
+#  Newmat_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
+
+include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Dependencies
-# NOTE: Newmat has no explicit dependencies.
-# libfind_package(Newmat Dependencies)
-
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Newmat_PKGCONF newmat)
-
-# Include dir
-find_path(Newmat_INCLUDE_DIR
-NAMES newmat/newmat.h
-PATHS
-${Newmat_PKGCONF_INCLUDE_DIRS}
-/usr/include
-/usr/local/include
-)
-
-# Finally the library itself
-find_library(Newmat_LIBRARY
-NAMES newmat
-PATHS ${Newmat_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Newmat_PROCESS_INCLUDES Newmat_INCLUDE_DIR)
-set(Newmat_PROCESS_LIBS Newmat_LIBRARY)
-libfind_process(Newmat)
-
-if (Newmat_INCLUDE_DIRS AND Newmat_LIBRARIES)
-set(Newmat_FOUND TRUE)
-endif (Newmat_INCLUDE_DIRS AND Newmat_LIBRARIES)
-endif (Newmat_INCLUDE_DIRS AND Newmat_LIBRARIES)
+libfind_lib_with_pkg_config(Newmat newmat
+  HEADERS newmat/newmat.h
+  LIBRARIES newmat
+  )

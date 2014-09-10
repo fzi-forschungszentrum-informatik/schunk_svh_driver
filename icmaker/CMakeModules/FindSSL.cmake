@@ -1,45 +1,45 @@
-# - Try to find SSL
-# Once done, this will define
-#
-#  SSL_FOUND - system has SSL
-#  SSL_INCLUDE_DIRS - the SSL include directories
-#  SSL_LIBRARIES - link these to use SSL
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF(SSL_FOUND)
-   # in cache already
-   SET( SSL_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find SSL.  Once done, this will define:
+#  SSL_FOUND:          System has SSL
+#  SSL_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  SSL_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  SSL_DEFINITIONS:    Preprocessor definitions.
+#  SSL_LIBRARIES:      only the libraries (w/o the '-l')
+#  SSL_LDFLAGS:        all required linker flags
+#  SSL_LDFLAGS_OTHER:  all other linker flags
+#  SSL_CFLAGS:         all required cflags
+#  SSL_CFLAGS_OTHER:   the other compiler flags
+#  SSL_VERSION:        version of the module
+#  SSL_PREFIX:         prefix-directory of the module
+#  SSL_INCLUDEDIR:     include-dir of the module
+#  SSL_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(SSL_PKGCONF ssl)
-
-# Include dir
-find_path(SSL_INCLUDE_DIR
-  NAMES openssl/md5.h
-  PATHS ${SSL_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(SSL_LIBRARY
-  NAMES ssl
-  PATHS ${SSL_PKGCONF_LIBRARY_DIRS}
-)
-
-# Finally the library itself
-find_library(Crypto_LIBRARY
-  NAMES crypto
-  PATHS ${SSL_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(SSL_PROCESS_INCLUDES SSL_INCLUDE_DIR)
-set(SSL_PROCESS_LIBS SSL_LIBRARY Crypto_LIBRARY)
-libfind_process(SSL)
-
-PRINT_LIBRARY_STATUS(SSL
-  DETAILS "[${SSL_LIBRARIES}][${SSL_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(SSL ssl
+  HEADERS openssl/md5.h
+  LIBRARIES ssl crypto
+  )

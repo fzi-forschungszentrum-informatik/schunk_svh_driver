@@ -1,32 +1,45 @@
-IF(DL_FOUND)
-   # in cache already
-   SET(DL_FIND_QUIETLY TRUE)
-ENDIF()
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find DL.  Once done, this will define:
+#  DL_FOUND:          System has DL
+#  DL_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  DL_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  DL_DEFINITIONS:    Preprocessor definitions.
+#  DL_LIBRARIES:      only the libraries (w/o the '-l')
+#  DL_LDFLAGS:        all required linker flags
+#  DL_LDFLAGS_OTHER:  all other linker flags
+#  DL_CFLAGS:         all required cflags
+#  DL_CFLAGS_OTHER:   the other compiler flags
+#  DL_VERSION:        version of the module
+#  DL_PREFIX:         prefix-directory of the module
+#  DL_INCLUDEDIR:     include-dir of the module
+#  DL_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(DL_PKGCONF libdl)
-
-# Include dir
-find_path(DL_INCLUDE_DIR
-  NAMES dlfcn.h
-  PATHS ${DL_PKGCONF_INCLUDE_DIRS}
-)
-
-# Finally the library itself
-find_library(DL_LIBRARY
-  NAMES dl
-  PATHS ${DL_PKGCONF_LIBRARY_DIRS}
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(DL_PROCESS_INCLUDES DL_INCLUDE_DIR)
-set(DL_PROCESS_LIBS DL_LIBRARY)
-libfind_process(DL)
-
-PRINT_LIBRARY_STATUS(DL
-  DETAILS "[${DL_LIBRARIES}][${DL_INCLUDE_DIRS}]"
-) 
+libfind_lib_with_pkg_config(DL libdl
+  HEADERS dlfcn.h
+  LIBRARIES dl
+  )

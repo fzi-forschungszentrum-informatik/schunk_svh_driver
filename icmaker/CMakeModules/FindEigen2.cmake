@@ -1,37 +1,46 @@
-# - Try to find Eigen2
-# Once done, this will define
-#
-#  Eigen2_FOUND - system has Eigen2
-#  Eigen2_INCLUDE_DIRS - the Eigen2 include directories
-#  Eigen2_LIBRARIES - link these to use Eigen2
-# --
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( Eigen2_FOUND )
-   # in cache already
-   SET( Eigen2_FIND_QUIETLY TRUE )
-ENDIF()
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
+
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Eigen2.  Once done, this will define:
+#  Eigen2_FOUND:          System has Eigen2
+#  Eigen2_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Eigen2_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Eigen2_DEFINITIONS:    Preprocessor definitions.
+#  Eigen2_LIBRARIES:      only the libraries (w/o the '-l')
+#  Eigen2_LDFLAGS:        all required linker flags
+#  Eigen2_LDFLAGS_OTHER:  all other linker flags
+#  Eigen2_CFLAGS:         all required cflags
+#  Eigen2_CFLAGS_OTHER:   the other compiler flags
+#  Eigen2_VERSION:        version of the module
+#  Eigen2_PREFIX:         prefix-directory of the module
+#  Eigen2_INCLUDEDIR:     include-dir of the module
+#  Eigen2_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
 include(PrintLibraryStatus)
 include(LibFindMacros)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Eigen2_PKGCONF eigen2)
-
-# Include dir
-find_path(Eigen2_INCLUDE_DIR
-  NAMES Eigen/Core
-  PATHS ${Eigen2_PKGCONF_INCLUDE_DIRS} "/usr/include/eigen2" "${CMAKE_INSTALL_PREFIX}/include/eigen2"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Eigen2_PROCESS_INCLUDES Eigen2_INCLUDE_DIR)
-libfind_process(Eigen2)
-
-IF(Eigen2_INCLUDE_DIR)
-  SET(Eigen2_DEFINITIONS -D_IC_BUILDER_EIGEN_)
-ENDIF()
-
-PRINT_LIBRARY_STATUS(Eigen2
-  DETAILS "[${Eigen2_INCLUDE_DIRS}]"
-)
+libfind_lib_with_pkg_config(Eigen2 eigen2
+  HEADERS Eigen/Core
+  HEADER_PATHS "/usr/include/eigen2" "${CMAKE_INSTALL_PREFIX}/include/eigen2"
+  DEFINE _IC_BUILDER_EIGEN_
+  )

@@ -1,24 +1,44 @@
-# - Try to find Procrustes
-# Once done this will define
-#  Procrustes_FOUND - System has Procrustes
-#  Procrustes_INCLUDE_DIRS - The Procrustes include directories
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
-IF( Procrustes_FOUND )
-  SET( Procrustes_FIND_QUIETLY TRUE )
-ENDIF( Procrustes_FOUND )
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE.txt in the top
+// directory of the source code.
+//
+// © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
+# -- END LICENSE BLOCK ------------------------------------------------
 
-INCLUDE(LibFindMacros)
+#----------------------------------------------------------------------
+# \file
+#
+# \author  Jan Oberlaender <oberlaender@fzi.de>
+# \date    2014-08-13
+#
+# Try to find Procrustes.  Once done, this will define:
+#  Procrustes_FOUND:          System has Procrustes
+#  Procrustes_INCLUDE_DIRS:   The '-I' preprocessor flags (w/o the '-I')
+#  Procrustes_LIBRARY_DIRS:   The paths of the libraries (w/o the '-L')
+# Variables defined if pkg-config was employed:
+#  Procrustes_DEFINITIONS:    Preprocessor definitions.
+#  Procrustes_LIBRARIES:      only the libraries (w/o the '-l')
+#  Procrustes_LDFLAGS:        all required linker flags
+#  Procrustes_LDFLAGS_OTHER:  all other linker flags
+#  Procrustes_CFLAGS:         all required cflags
+#  Procrustes_CFLAGS_OTHER:   the other compiler flags
+#  Procrustes_VERSION:        version of the module
+#  Procrustes_PREFIX:         prefix-directory of the module
+#  Procrustes_INCLUDEDIR:     include-dir of the module
+#  Procrustes_LIBDIR:         lib-dir of the module
+#----------------------------------------------------------------------
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(Procrustes_PKGCONF procrustes)
+include(PrintLibraryStatus)
+include(LibFindMacros)
 
-# Include dir
-find_path(Procrustes_INCLUDE_DIR
-  NAMES Procrustes/qfMahalanobis.hpp
-  PATHS ${Procrustes_PKGCONF_INCLUDE_DIRS} "/usr/include"
-)
-
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(Procrustes_PROCESS_INCLUDES Procrustes_INCLUDE_DIR)
-libfind_process(Procrustes)
+libfind_lib_with_pkg_config(Procrustes procrustes
+  HEADERS Procrustes/qfMahalanobis.hpp
+  )
