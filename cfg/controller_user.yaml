@@ -1,0 +1,75 @@
+############################################################
+####################### WARNING!!!  ########################
+############################################################
+# ONLY CHANGE THESE VALUES IF YOU KNOW WHAT YOU ARE DOING!
+# SETTING WRONG VALUES (especially for the current controller)
+# MIGHT DAMAGE YOUR HARDWARE PERMANENTLY! THERE ARE !!NO!!
+# SAFETY CHECKS FOR THESE (as that would be rather pointless)
+# PLEASE CONSULT AVAILABLE DOCUMENTATION AND ONLY CHANGE THESE
+# VALUES IN SMALL INCREMENTS!!!
+############################################################
+####################### WARNING!!!  ########################
+############################################################
+
+## Position controller Values (in order):
+# Reference signal minimum value
+# Reference signal maximum value
+# Reference signal delta maximum threshold
+# Measurement scaling
+# Time base of controller
+# Integral windup minimum value
+# Integral windup maximum value
+# Proportional gain
+# Integral gain
+# Differential gain
+##
+## Current controller values (in order):
+# Reference signal minimum value
+# Reference signal maximum value
+# measurement scaling
+# time base of controller
+# Integral windup minimum value
+# Integral windup maximum value
+# proportional gain
+# Integral gain
+# Output limiter min
+# Output limiter max
+### Note: Pay Special attention to the output limits as well as the refernce signal min and max value as these limit the
+### overall current that is applied to the motors
+
+THUMB_FLEXION: {
+position_controller: [-1.0e+6, 1.0e+6,  65.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
+current_controller : [-400.0, 400.0, 0.405, 4.0e-6, -500.0, 500.0, 0.6, 0.4, -400.0, 400.0],
+}
+THUMB_OPPOSITION: {
+position_controller: [-1.0e+6, 1.0e+6,  50.0e+3, 1.00, 1.0e-3, -4000.0, 4000.0, 0.05, 0.1, 0.0],
+current_controller : [-400.0, 400.0, 0.405, 4.0e-6, -500.0, 500.0, 0.6, 0.4, -400.0, 400.0],
+}
+INDEX_FINGER_DISTAL: {
+position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
+current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+}
+INDEX_FINGER_PROXIMAL: {
+position_controller: [-1.0e+6, 1.0e+6,  40.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.3, 0.05, 0.0],
+current_controller : [-350.0, 350.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -350.0, 350.0],
+}
+MIDDLE_FINGER_DISTAL: {
+position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
+current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+}
+MIDDLE_FINGER_PROXIMAL: {
+position_controller: [-1.0e+6, 1.0e+6,  40.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.3, 0.05, 0.0],
+current_controller : [-350.0, 350.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -350.0, 350.0],
+}
+RING_FINGER: {
+position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
+current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+}
+PINKY: {
+position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
+current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+}
+FINGER_SPREAD: {
+position_controller: [-1.0e+6, 1.0e+6,  25.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
+current_controller : [-200.0, 200.0, 0.405, 4.0e-6, -300.0, 300.0, 0.850, 85.0, -400.0, 400.0],
+}

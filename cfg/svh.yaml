@@ -1,0 +1,13 @@
+disable_flags : [
+false, # THUMB_FLEXION
+false, # THUMB_OPPOSITION
+false, # INDEX_FINGER_DISTAL
+false, # INDEX_FINGER_PROXIMAL
+false, # MIDDLE_FINGER_DISTAL
+false, # MIDDLE_FINGER_PROXIMAL
+false, # RING_FINGER
+false, # PINKY
+false  # FINGER_SPREAD
+]
+finger_reset_speed : 0.2
+reset_timeout : 5

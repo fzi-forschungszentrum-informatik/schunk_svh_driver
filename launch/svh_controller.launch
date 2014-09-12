@@ -1,36 +1,46 @@
 <launch>
-   
+  <!-- global PARAMS Change here if needed -->
   <arg name="gui" default="True" />
   <arg name="autostart" default="true"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
+  <arg name="simulation" default="False"/>
 
+  <!-- load basic configuration -->
+  <rosparam file="$(find svh_controller)/cfg/svh.yaml" command="load" ns="svh_controller"/>
+  <!-- Load Yaml Configuration file-->
+  <rosparam file="$(find svh_controller)/cfg/controller_default.yaml" command="load" ns="svh_controller"/>
+  <!-- Load the User Config file which will overwrite values from default -->
+  <rosparam file="$(find svh_controller)/cfg/controller_user.yaml" command="load" ns="svh_controller"/>
  
- 
+  <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
-  <param name="use_gui" value="$(arg gui)"/>
-  <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"-->
+  <!--param name="use_gui" value="$(arg gui)"-->
 
-  <node name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
+
+  <!-- Launch actual driver node (if not in simulation)-->
+  <node unless="$(arg simulation)" name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
-        
-    <param name="disable_flags0" value="false" /> <!-- THUMB_FLEXION -->
-    <param name="disable_flags1" value="false" /> <!-- THUMB_OPPOSITION // wrist -->
-    <param name="disable_flags2" value="false" /> <!-- INDEX_FINGER_DISTAL -->
-    <param name="disable_flags3" value="false" /> <!-- INDEX_FINGER_PROXIMAL -->
-    <param name="disable_flags4" value="false" /> <!-- MIDDLE_FINGER_DISTAL -->
-    <param name="disable_flags5" value="false" /> <!-- MIDDLE_FINGER_PROXIMAL -->
-    <param name="disable_flags6" value="false" /> <!-- RING_FINGER -->
-    <param name="disable_flags7" value="false" /> <!-- PINKY -->
-    <param name="disable_flags8" value="false" /> <!-- FINGER_SPREAD -->
-    
-    <remap from="svh_controller/channel_targets" to="joint_states"/>
   </node>
 
+  <!-- Start RQT by default if not specified otherwise -->
   <node if="$(arg gui)" name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
 
+  <!-- Joint state publisher is needed in order to use the mimic tag within the URDF (needed for propper visualization) Hardware will work without it thoug -->
+    <node name="output_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+            <rosparam unless="$(arg simulation)" param="source_list">["svh_controller/channel_feedback"] </rosparam>
+            <!-- only show the gui if simulation was selected, otherwise this joint state publisher is just used for the tags -->
+            <param name="use_gui" value="$(arg simulation)"/>
+    </node>
+
+
+  <!-- Robot state publisher for the TFs -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
-    <remap from="joint_states" to="svh_controller/channel_feedback"/>
+  </node>
+
+  <!-- Joint state publisher to provide easy control of the real hardware. Enable this node if you want to have fast input with sliders -->
+  <node name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <remap from="joint_states" to="svh_controller/channel_targets" />
   </node>
   
 </launch>

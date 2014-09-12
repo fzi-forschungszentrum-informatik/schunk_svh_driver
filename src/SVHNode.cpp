@@ -11,12 +11,80 @@
  * Callback functions
  *------------------------------------------------------------------*/
 
-SVHNode::SVHNode(const bool &autostart,const std::vector<bool> & disable_flags_vec)
+SVHNode::SVHNode(const ros::NodeHandle & nh)
 {
   // Initialize the icl_library logging framework
   icl_core::logging::initialize();
 
-  serial_device_name_ = "";
+
+  //==========
+  // Params
+  //==========
+
+  bool autostart;
+  int reset_timeout;
+  std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
+  try
+  {
+    nh.param<bool>("autostart",autostart,false);
+    nh.param<std::string>("serial_device",serial_device_name_,"/dev/ttyUSB0");
+    // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
+    nh.getParam("disable_flags",disable_flags);
+    nh.getParam("reset_timeout",reset_timeout);
+  }
+  catch (ros::InvalidNameException e)
+  {
+    ROS_ERROR("Parameter Error!");
+  }
+
+  for (size_t i = 0; i < 9; ++i)
+  {
+    if(disable_flags[i])
+    {
+      ROS_WARN("svh_controller disabling channel nr %i", i);
+    }
+  }
+
+  // Init the actual driver hook (after logging initialize)
+  fm_.reset(new driver_svh::SVHFingerManager(disable_flags,serial_device_name_,reset_timeout));
+
+  std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);
+  std::vector< std::vector<float> > current_settings(driver_svh::eSVH_DIMENSION);
+
+
+  // get the the indidividual finger params
+  // We will read out all of them, so that in case we fail half way we do not set anything
+  try
+  {
+    nh.getParam("THUMB_FLEXION/position_controller",position_settings[driver_svh::eSVH_THUMB_FLEXION]);
+    nh.getParam("THUMB_FLEXION/current_controller",current_settings[driver_svh::eSVH_THUMB_FLEXION]);
+    nh.getParam("THUMB_OPPOSITION/position_controller",position_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
+    nh.getParam("THUMB_OPPOSITION/current_controller",current_settings[driver_svh::eSVH_THUMB_OPPOSITION]);
+    nh.getParam("INDEX_FINGER_DISTAL/position_controller",position_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
+    nh.getParam("INDEX_FINGER_DISTAL/current_controller",current_settings[driver_svh::eSVH_INDEX_FINGER_DISTAL]);
+    nh.getParam("INDEX_FINGER_PROXIMAL/position_controller",position_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
+    nh.getParam("INDEX_FINGER_PROXIMAL/current_controller",current_settings[driver_svh::eSVH_INDEX_FINGER_PROXIMAL]);
+    nh.getParam("MIDDLE_FINGER_DISTAL/position_controller",position_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
+    nh.getParam("MIDDLE_FINGER_DISTAL/current_controller",current_settings[driver_svh::eSVH_MIDDLE_FINGER_DISTAL]);
+    nh.getParam("MIDDLE_FINGER_PROXIMAL/position_controller",position_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
+    nh.getParam("MIDDLE_FINGER_PROXIMAL/current_controller",current_settings[driver_svh::eSVH_MIDDLE_FINGER_PROXIMAL]);
+    nh.getParam("RING_FINGER/position_controller",position_settings[driver_svh::eSVH_RING_FINGER]);
+    nh.getParam("RING_FINGER/current_controller",current_settings[driver_svh::eSVH_RING_FINGER]);
+    nh.getParam("PINKY/position_controller",position_settings[driver_svh::eSVH_PINKY]);
+    nh.getParam("PINKY/current_controller",current_settings[driver_svh::eSVH_PINKY]);
+    nh.getParam("FINGER_SPREAD/position_controller",position_settings[driver_svh::eSVH_FINGER_SPREAD]);
+    nh.getParam("FINGER_SPREAD/current_controller",current_settings[driver_svh::eSVH_FINGER_SPREAD]);
+
+    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    {
+      setCurrentControllerParams(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHCurrentSettings(current_settings[channel]));
+      setPositionControllerParams(static_cast<driver_svh::SVHChannel>(channel),driver_svh::SVHPositionSettings(position_settings[channel]));
+    }
+  }
+  catch (ros::InvalidNameException e)
+  {
+    ROS_ERROR("Parameter Error! While reading the controller settings. Will use default settings");
+  }
 
   // prepare the channel position message for later sending
   channel_pos_.name.resize(driver_svh::eSVH_DIMENSION);
@@ -26,8 +94,17 @@ SVHNode::SVHNode(const bool &autostart,const std::vector<bool> & disable_flags_v
     channel_pos_.name[channel] = driver_svh::SVHController::m_channel_description[channel];
   }
 
-  // Init the actual driver hook (after logging initialize)
-  fm_.reset(new driver_svh::SVHFingerManager(autostart, disable_flags_vec));
+  // Connect and start the reset so that the hand is ready for use
+  if (autostart && fm_->connect(serial_device_name_))
+  {
+    fm_->resetChannel(driver_svh::eSVH_ALL);
+    ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
+  }
+  else
+  {
+    ROS_INFO("SVH Driver Ready, you will need to connect and reset the fingers before you can use the hand.");
+  }
+
 }
 
 SVHNode::~SVHNode()
@@ -40,6 +117,8 @@ SVHNode::~SVHNode()
 void SVHNode::dynamic_reconfigure_callback(svh_controller::svhConfig &config, uint32_t level)
 {
   serial_device_name_ = config.serial_device;
+  setFingerResetSpeed(config.finger_reset_speed);
+  fm_->setResetTimeout(config.reset_timeout);
 }
 
 // Callback function for connecting to SCHUNK five finger hand
@@ -117,7 +196,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
   {
     if (!fm_->setAllTargetPositions(target_positions))
     {
-      ROS_WARN("Set target position command rejected!");
+      ROS_WARN_ONCE("Set target position command rejected!");
     }
   }
   // not all positions has been set: send only the available positions
@@ -151,8 +230,28 @@ sensor_msgs::JointState SVHNode::getCurrentPositions()
     }
   }
 
+  channel_pos_.header.stamp = ros::Time::now();
   return  channel_pos_;
 }
+
+void SVHNode::setFingerResetSpeed(const float &resetSpeed)
+{
+  fm_->setResetSpeed(resetSpeed);
+}
+
+
+// overwrite current parameters
+bool SVHNode::setCurrentControllerParams(const driver_svh::SVHChannel &channel, const driver_svh::SVHCurrentSettings &current_settings)
+{
+   fm_->setCurrentControllerParams(channel,current_settings);
+}
+
+// overwrite position parameters
+bool SVHNode::setPositionControllerParams(const driver_svh::SVHChannel &channel, const driver_svh::SVHPositionSettings &position_settings)
+{
+  fm_->setPositionControllerParams(channel, position_settings);
+}
+
 
 /*--------------------------------------------------------------------
  * main()
@@ -167,59 +266,18 @@ int main(int argc, char **argv)
 
   // Set up ROS.
   ros::init(argc, argv, "svh_controller");
-  // Private NH for params
+  // Private NH for general params
   ros::NodeHandle nh("~");
+
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
   ros::Rate rate(100);
 
   //==========
-  // Params
-  //==========
-
-  bool autostart;
-  // ugly workaround, but ros param can not deal with the std::vector type ):
-  bool disable_flags[9];
-  std::vector<bool> disable_flags_vec(9, false);
-
-  try
-  {
-    nh.param<bool>("autostart",autostart,false);
-
-    nh.param<bool>("disable_flags0",disable_flags[0],false);
-    nh.param<bool>("disable_flags1",disable_flags[1],false);
-    nh.param<bool>("disable_flags2",disable_flags[2],false);
-    nh.param<bool>("disable_flags3",disable_flags[3],false);
-    nh.param<bool>("disable_flags4",disable_flags[4],false);
-    nh.param<bool>("disable_flags5",disable_flags[5],false);
-    nh.param<bool>("disable_flags6",disable_flags[6],false);
-    nh.param<bool>("disable_flags7",disable_flags[7],false);
-    nh.param<bool>("disable_flags8",disable_flags[8],false);
-
-    // TODO: What About the Serial Device Name? Rad up on dynamic reconfigure first
-
-  }
-  catch (ros::InvalidNameException e)
-  {
-    ROS_ERROR("Parameter Error!");
-  }
-
-  for (size_t i = 0; i < 9; ++i)
-  {
-    // ugly workaround, but ros param can not deal with the std::vector type ):
-    disable_flags_vec[i] = disable_flags[i];
-    if(disable_flags[i])
-    {
-      ROS_WARN("svh_controller disabling channel nr %i", i);
-    }
-  }
-
-
-  //==========
   // Logic
   //==========
   // Node object holding all the relevant functions
-  SVHNode svh_node(autostart,disable_flags_vec);
+  SVHNode svh_node(nh);
 
   //==========
   // Dynamic Reconfigure
