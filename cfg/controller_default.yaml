@@ -1,6 +1,10 @@
 ############################################################
 ####################### WARNING!!!  ########################
 ############################################################
+# DEFAULT SETTINGS! DO NOT CHANGE THESE, ONLY CHANGE THE
+# controllerr_default.yaml, these will be used as fallback
+#
+#
 # ONLY CHANGE THESE VALUES IF YOU KNOW WHAT YOU ARE DOING!
 # SETTING WRONG VALUES (especially for the current controller)
 # MIGHT DAMAGE YOUR HARDWARE PERMANENTLY! THERE ARE !!NO!!
@@ -34,42 +38,59 @@
 # Integral gain
 # Output limiter min
 # Output limiter max
+##
+## home settings (in order):
+# Movement direction for reset (+1 or -1)
+# Minimum allowed tick position (soft stop)
+# Maximum allowed tick position (soft stop)
+# idle position -> finger will drive there after reset
+# Rad range -> angle in rad that the finger is able to move (used for conversion)
+#
 ### Note: Pay Special attention to the output limits as well as the refernce signal min and max value as these limit the
 ### overall current that is applied to the motors
 
 THUMB_FLEXION: {
 position_controller: [-1.0e+6, 1.0e+6,  65.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
 current_controller : [-400.0, 400.0, 0.405, 4.0e-6, -500.0, 500.0, 0.6, 0.4, -400.0, 400.0],
+home_settings : [+1, -175.0e+3,  -5.0e+3, -15.0e+3, 0.97],
 }
 THUMB_OPPOSITION: {
 position_controller: [-1.0e+6, 1.0e+6,  50.0e+3, 1.00, 1.0e-3, -4000.0, 4000.0, 0.05, 0.1, 0.0],
 current_controller : [-400.0, 400.0, 0.405, 4.0e-6, -500.0, 500.0, 0.6, 0.4, -400.0, 400.0],
+home_settings : [+1, -105.0e+3,  -5.0e+3, -15.0e+3, 0.99],
 }
 INDEX_FINGER_DISTAL: {
 position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
 current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+home_settings : [+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 1.33],
 }
 INDEX_FINGER_PROXIMAL: {
 position_controller: [-1.0e+6, 1.0e+6,  40.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.3, 0.05, 0.0],
 current_controller : [-350.0, 350.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -350.0, 350.0],
+home_settings : [-1,    2.0e+3,  42.0e+3,   8.0e+3, 0.8],
 }
 MIDDLE_FINGER_DISTAL: {
 position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
 current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+home_settings : [+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 1.33],
 }
 MIDDLE_FINGER_PROXIMAL: {
 position_controller: [-1.0e+6, 1.0e+6,  40.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.3, 0.05, 0.0],
 current_controller : [-350.0, 350.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -350.0, 350.0],
+home_settings : [-1,    2.0e+3,  42.0e+3,   8.0e+3, 0.8],
 }
 RING_FINGER: {
 position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
 current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+home_settings : [+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 0.98],
 }
 PINKY: {
 position_controller: [-1.0e+6, 1.0e+6,  45.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
 current_controller : [-300.0, 300.0, 0.405, 4.0e-6, -300.0, 300.0, 0.85, 2.0, -300.0, 300.0],
+home_settings : [+1,  -47.0e+3,  -2.0e+3,  -8.0e+3, 0.98],
 }
 FINGER_SPREAD: {
 position_controller: [-1.0e+6, 1.0e+6,  25.0e+3, 1.00, 1.0e-3, -500.0, 500.0, 0.5, 0.05, 0.0],
 current_controller : [-200.0, 200.0, 0.405, 4.0e-6, -300.0, 300.0, 0.850, 85.0, -400.0, 400.0],
+home_settings : [+1,  -47.0e+3,  -2.0e+3,  -25.0e+3,0.58],
 }

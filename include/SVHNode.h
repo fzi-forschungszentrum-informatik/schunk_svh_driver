@@ -59,28 +59,6 @@ public:
   //!
   sensor_msgs::JointState getCurrentPositions();
 
-  //!
-  //! \brief overwrite current parameters
-  //! \param channel
-  //! \param current_settings
-  //! \return
-  //!
-  bool setCurrentControllerParams(const driver_svh::SVHChannel &channel, const driver_svh::SVHCurrentSettings &current_settings);
-
-  //!
-  //! \brief overwrite position parameters
-  //! \param channel
-  //! \param position_settings
-  //! \return
-  //!
-  bool setPositionControllerParams(const driver_svh::SVHChannel &channel, const driver_svh::SVHPositionSettings &position_settings);
-
-  //!
-  //! \brief setFingerResetSpeed Set the reset speed as percentage of the normal finger speed
-  //! \param resetSpeed percentage of the reset Speed only values from 0.0 to 1.0 are allowed
-  //!
-  void setFingerResetSpeed(const float & resetSpeed);
-
 
 private:
   //! Handle to the SVH finger manager for hardware acces
