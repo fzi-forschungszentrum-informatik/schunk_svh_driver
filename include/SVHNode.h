@@ -23,7 +23,7 @@
 
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
-#include <svh_controller/svhConfig.h>
+#include <schunk_svh_driver/svhConfig.h>
 
 // Driver Specific things
 #include <driver_svh/SVHFingerManager.h>
