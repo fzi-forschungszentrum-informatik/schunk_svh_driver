@@ -4,6 +4,7 @@
   <arg name="autostart" default="true"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
+  <arg name="log_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
 
   <!-- load basic configuration -->
   <rosparam file="$(find schunk_svh_driver)/etc/svh.yaml" command="load" ns="svh_controller"/>
@@ -14,13 +15,15 @@
  
   <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
-  <!--param name="use_gui" value="$(arg gui)"-->
-
 
   <!-- Launch actual driver node (if not in simulation)-->
   <node unless="$(arg simulation)" name="svh_controller" pkg="schunk_svh_driver" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
+    <!-- Params for the ICL (driver internal) logging. General configuration in the given logging.xml, output will be saved to the who given files -->
+    <param name="log_config" value="$(arg log_config)" />
+    <param name="log_debug_file" value="$(find schunk_svh_driver)/log/DriverSVH_Debug.log" />
+    <param name="log_trace_file" value="$(find schunk_svh_driver)/log/DriverSVH_Trace.log" />
   </node>
 
   <!-- Start RQT by default if not specified otherwise -->
