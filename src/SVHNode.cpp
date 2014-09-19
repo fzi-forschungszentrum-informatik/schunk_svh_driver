@@ -89,7 +89,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   }
 
   // Init the actual driver hook (after logging initialize)
-  fm_.reset(new driver_svh::SVHFingerManager(disable_flags,serial_device_name_,reset_timeout));
+  fm_.reset(new driver_svh::SVHFingerManager(disable_flags,reset_timeout));
 
   // Rosparam can only fill plain vectors so we will have to go through them
   std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);
