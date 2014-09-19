@@ -6,19 +6,19 @@
   <arg name="simulation" default="False"/>
 
   <!-- load basic configuration -->
-  <rosparam file="$(find svh_controller)/cfg/svh.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/cfg/svh.yaml" command="load" ns="svh_controller"/>
   <!-- Load Yaml Configuration file-->
-  <rosparam file="$(find svh_controller)/cfg/controller_default.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/cfg/controller_default.yaml" command="load" ns="svh_controller"/>
   <!-- Load the User Config file which will overwrite values from default -->
-  <rosparam file="$(find svh_controller)/cfg/controller_user.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/cfg/controller_user.yaml" command="load" ns="svh_controller"/>
  
   <!-- Robot description for State publishers -->
-  <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
   <!--param name="use_gui" value="$(arg gui)"-->
 
 
   <!-- Launch actual driver node (if not in simulation)-->
-  <node unless="$(arg simulation)" name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
+  <node unless="$(arg simulation)" name="svh_controller" pkg="schunk_svh_driver" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
   </node>
@@ -39,8 +39,11 @@
   </node>
 
   <!-- Joint state publisher to provide easy control of the real hardware. Enable this node if you want to have fast input with sliders -->
-  <node name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  <!-- will only be used if no "simulation" is selecten. NOTE: In order to provide input from you software -> remove this complete node -->
+  <node unless="$(arg simulation)" name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
         <remap from="joint_states" to="svh_controller/channel_targets" />
+        <!-- if this node is used we always want to see its output -->
+        <param name="use_gui" value="true"/>
   </node>
   
 </launch>

@@ -17,7 +17,7 @@
       <visual>
 	<origin xyz="0 0 -0.032" rpy="0 0 0" />
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/base10.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/base10.dae" />
 	</geometry>
       </visual>
     </link>
@@ -56,7 +56,7 @@
       <visual>
 	<origin rpy="0 0 0" xyz="0 0.01313 0" />
 	<geometry>
-	  <mesh scale="${side*(1)} 1 1" filename="package://svh_controller/description/meshes/h10.dae" />
+          <mesh scale="${side*(1)} 1 1" filename="package://schunk_svh_driver/description/meshes/h10.dae" />
 	</geometry>
       </visual>
     </link>
@@ -66,7 +66,7 @@
       <visual>
 	<origin xyz="${side*(-0.0007)} 0 -0.01002" />
 	<geometry>
-	  <mesh scale="${side*(1)} 1 1" filename="package://svh_controller/description/meshes/h11.dae" />
+          <mesh scale="${side*(1)} 1 1" filename="package://schunk_svh_driver/description/meshes/h11.dae" />
 	</geometry>
       </visual>
     </link>
@@ -113,7 +113,7 @@
       <visual>
 	<origin xyz="0 0 0.02442" />
 	<geometry>
-	  <mesh scale="1 ${side*(1)} 1" filename="package://svh_controller/description/meshes/d10.dae" />
+          <mesh scale="1 ${side*(1)} 1" filename="package://schunk_svh_driver/description/meshes/d10.dae" />
 	</geometry>
       </visual>
     </link>
@@ -122,7 +122,7 @@
     <link name="a">
       <visual>
 	<geometry>
-	  <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://svh_controller/description/meshes/d11.dae" />
+          <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d11.dae" />
 	</geometry>
       </visual>
     </link>
@@ -130,7 +130,7 @@
     <link name="b">
       <visual>
 	<geometry>
-	  <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://svh_controller/description/meshes/d12.dae" />
+          <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d12.dae" />
 	</geometry>
       </visual>
     </link>
@@ -138,7 +138,7 @@
     <link name="c">
       <visual>
 	<geometry>
-	  <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://svh_controller/description/meshes/d13.dae" />
+          <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d13.dae" />
 	</geometry>
       </visual>
     </link>
@@ -149,7 +149,7 @@
       <visual>
 	<origin xyz="0 0 0.01321" />
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f10.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f10.dae" />
 	</geometry>
       </visual>
     </link>
@@ -157,7 +157,7 @@
     <link name="l">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f11.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f11.dae" />
 	</geometry>
       </visual>
     </link>
@@ -165,7 +165,7 @@
     <link name="p">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f12.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f12.dae" />
 	</geometry>
       </visual>
     </link>
@@ -173,7 +173,7 @@
     <link name="t">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f13.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f13.dae" />
 	</geometry>
       </visual>
     </link>
@@ -184,7 +184,7 @@
       <visual>
 	<origin xyz="0 0 0.01321" />
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f20.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f20.dae" />
 	</geometry>
       </visual>
     </link>
@@ -192,7 +192,7 @@
     <link name="k">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f21.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f21.dae" />
 	</geometry>
       </visual>
     </link>
@@ -200,7 +200,7 @@
     <link name="o">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f22.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f22.dae" />
 	</geometry>
       </visual>
     </link>
@@ -208,7 +208,7 @@
     <link name="s">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f23.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f23.dae" />
 	</geometry>
       </visual>
     </link>
@@ -219,7 +219,7 @@
       <visual>
 	<origin xyz="0 0 -0.01321" />
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f30.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f30.dae" />
 	</geometry>
       </visual>
     </link>
@@ -227,7 +227,7 @@
     <link name="j">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f31.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f31.dae" />
 	</geometry>
       </visual>
     </link>
@@ -235,7 +235,7 @@
     <link name="n">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f32.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f32.dae" />
 	</geometry>
       </visual>
     </link>
@@ -243,7 +243,7 @@
     <link name="r">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f33.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f33.dae" />
 	</geometry>
       </visual>
     </link>
@@ -254,7 +254,7 @@
       <visual>
 	<origin xyz="0 0 -0.01321" />
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f40.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f40.dae" />
 	</geometry>
       </visual>
     </link>
@@ -262,7 +262,7 @@
     <link name="i">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f41.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f41.dae" />
 	</geometry>
       </visual>
     </link>
@@ -270,7 +270,7 @@
     <link name="m">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f42.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f42.dae" />
 	</geometry>
       </visual>
     </link>
@@ -278,7 +278,7 @@
     <link name="q">
       <visual>
 	<geometry>
-	  <mesh filename="package://svh_controller/description/meshes/f43.dae" />
+          <mesh filename="package://schunk_svh_driver/description/meshes/f43.dae" />
 	</geometry>
       </visual>
     </link>
