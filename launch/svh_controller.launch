@@ -6,11 +6,11 @@
   <arg name="simulation" default="False"/>
 
   <!-- load basic configuration -->
-  <rosparam file="$(find schunk_svh_driver)/cfg/svh.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/svh.yaml" command="load" ns="svh_controller"/>
   <!-- Load Yaml Configuration file-->
-  <rosparam file="$(find schunk_svh_driver)/cfg/controller_default.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/controller_default.yaml" command="load" ns="svh_controller"/>
   <!-- Load the User Config file which will overwrite values from default -->
-  <rosparam file="$(find schunk_svh_driver)/cfg/controller_user.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/controller_user.yaml" command="load" ns="svh_controller"/>
  
   <!-- Robot description for State publishers -->
   <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
