@@ -33,6 +33,9 @@
 #include <driver_svh/ImportExport.h>
 #include <driver_svh/SVHController.h>
 #include <driver_svh/SVHFeedbackPollingThread.h>
+#include <driver_svh/SVHPositionSettings.h>
+#include <driver_svh/SVHCurrentSettings.h>
+#include <driver_svh/SVHHomeSettings.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -78,14 +81,14 @@ public:
    * \param autostart if set to true, the driver will immediately connect to the hardware and try to reset all fingers
    * \param dev_name the dev to use for autostart. Default is /dev/ttyUSB0
    */
-  SVHFingerManager(const bool &autostart = false, const std::vector<bool> &disable_mask = std::vector<bool>(9,false), const std::string &dev_name = "/dev/ttyUSB0");
+  SVHFingerManager(const std::vector<bool> &disable_mask = std::vector<bool>(9,false), const std::string &dev_name = "/dev/ttyUSB0", const uint32_t &reset_timeout = 5);
 
   virtual ~SVHFingerManager();
 
  /*!
   *  \brief Open connection to SCHUNK five finger hand. Wait until expected return packages are received.
-  *  \param dev_name
-  * \return
+  *  \param dev_name file handle of the serial device e.g. "/dev/ttyUSB0"
+  * \return true if connection was succesful
   */
   bool connect(const std::string &dev_name);
 
@@ -96,112 +99,80 @@ public:
 
   //!
   //! \brief returns connected state of finger manager
-  //! \return bool
+  //! \return bool true if the finger manager is connected to the hardware
   //!
   bool isConnected() { return m_connected; }
 
   //!
   //! \brief reset function for channel
-  //! \param channel
-  //! \return
+  //! \param channel Channel to reset
+  //! \return true if the reset was successful
   //!
   bool resetChannel(const SVHChannel &channel);
 
   //!
   //! \brief enable controller of channel
-  //! \param channel
-  //! \return
+  //! \param channel channel to enable
+  //! \return true if the enabling was successful
   //!
   bool enableChannel(const SVHChannel &channel);
 
   //!
   //! \brief disable controller of channel
-  //! \param channel
-  //! \return
+  //! \param channel channel to disable
   //!
   void disableChannel(const SVHChannel &channel);
 
   //!
   //! \brief sends request controller feedback packet for all channels
-  //! \return
+  //! \return true if the request was successfully send to the hardware
   //!
   bool requestControllerFeedbackAllChannels();
 
   //!
   //! \brief send request controller feedback paket
-  //! \param channel
-  //! \return
+  //! \param channel channel to request the feedback for
+  //! \return true if the request was successfully send to the hardware
   //!
   bool requestControllerFeedback(const SVHChannel &channel);
 
   //!
-  //! \brief returns position value of channel
-  //! \param channel
-  //! \param position
-  //! \return bool
+  //! \brief returns position value of channel (will not acces hardware but return latest value)
+  //! \param channel channel to get the position of
+  //! \param position position the given channel ist at
+  //! \return bool true if a valid result was requested (i.e. an existing channel)
   //!
   bool getPosition(const SVHChannel &channel, double &position);
 
   //!
   //! \brief returns current value of channel
-  //! \param channel
-  //! \param current
-  //! \return bool
+  //! \param channel channel to get the current of
+  //! \param current current of the given channel in [mA]
+  //! \return bool true if a valid result was requested (i.e. an existing channel)
   //!
   bool getCurrent(const SVHChannel &channel, double &current);
 
-  //!
-  //! \brief returns actual current controller settings of channel
-  //! \param channel
-  //! \param current_settings
-  //! \return
-  //!
-  bool getCurrentControllerParams(const SVHChannel &channel, SVHCurrentSettings &current_settings);
-
-  //!
-  //! \brief returns actual position controller settings of channel
-  //! \param channel
-  //! \param position_settings
-  //! \return
-  //!
-  bool getPositionControllerParams(const SVHChannel &channel, SVHPositionSettings &position_settings);
 
   //!
   //! \brief set all target positions at once
-  //! \param positions
-  //! \return
+  //! \param positions Vector of positions to set as targets given in [rad]. Only the first eSVH_CHANNEL_DIMENSION (9) values will be considered. If less values are given all others are set to zero
+  //! \return true if a valid and wellformed Target position for all fingers was given and send to the HW (i.e. inside the bound limits etc.)
   //!
   bool setAllTargetPositions(const std::vector<double>& positions);
 
   //!
   //! \brief set target position of a channel
-  //! \param channel
-  //! \param position
-  //! \param current
-  //! \return
+  //! \param channel channel to set the target position for
+  //! \param position target position in [rad]
+  //! \param current max current to use for that position @note CURRENTLY NOT SUPPORTED!! WILL BE IGNORED
+  //! \return true if a valid target position was given and it could be sent to the hardware
   //!
   bool setTargetPosition(const SVHChannel &channel, double position, double current);
 
   //!
-  //! \brief overwrite current parameters
-  //! \param channel
-  //! \param current_settings
-  //! \return
-  //!
-  bool setCurrentControllerParams(const SVHChannel &channel, const SVHCurrentSettings &current_settings);
-
-  //!
-  //! \brief overwrite position parameters
-  //! \param channel
-  //! \param position_settings
-  //! \return
-  //!
-  bool setPositionControllerParams(const SVHChannel &channel, const SVHPositionSettings &position_settings);
-
-  //!
   //! \brief returns true, if current channel has been enabled
-  //! \param channel
-  //! \return
+  //! \param channel channel to check if it is enabled
+  //! \return true if the channel is enabled, false otherwise
   //!
   bool isEnabled(const SVHChannel &channel);
 
@@ -223,18 +194,72 @@ public:
   //! This is a debuging function. Should not be called by users
   void requestControllerState();
 
+  //!
+  //! \brief returns actual current controller settings of channel
+  //! \param channel channel to get the current controller settings for
+  //! \param current_settings settings currently active for the current controller
+  //! \return true if a valid result was requested (i.e. an existing channel)
+  //!
+  bool getCurrentSettings(const SVHChannel &channel, SVHCurrentSettings &current_settings);
+
+  //!
+  //! \brief returns actual position controller settings of channel
+  //! \param channel channel to get the position settings for
+  //! \param position_settings settings currently active for the position controller
+  //! \return true if a valid result was requested (i.e. an existing channel)
+  //!
+  bool getPositionSettings(const SVHChannel &channel, SVHPositionSettings &position_settings);
+
+
+  //!
+  //! \brief overwrite current parameters
+  //! \param channel channel to set the current settings for
+  //! \param current_settings settings of the current controller for a specific channel
+  //! \return true if a valid channel was selected
+  //!
+  bool setCurrentSettings(const SVHChannel &channel, const SVHCurrentSettings &current_settings);
+
+  //!
+  //! \brief overwrite position parameters
+  //! \param channel channel to set the positoon settings for
+  //! \param position_settings settings of the position controller to be used
+  //! \return true if a valid channel was selected
+  //!
+  bool setPositionSettings(const SVHChannel &channel, const SVHPositionSettings &position_settings);
+
+  //!
+  //! \brief setHomeSettings set the home Settings which are maily used doring reset and provide the soft limit for the fingers
+  //! \param channel channel to set the home settings for
+  //! \param home_settings settings indicating the movement range of a finger, its reset direction and idle position
+  //! \return true if a valid channel was selected
+  //!
+  bool setHomeSettings(const SVHChannel &channel,const SVHHomeSettings& home_settings);
+
+
 
   // These 3 functions could be private but where made public for printing and debug purposes. As there is no harm to it it should not be a problem
 
-  //! \brief get default parameters for position settings DURING RESET
-  std::vector<SVHPositionSettings> getPositionSettingsDefaultResetParameters();
+  //! \brief get default current settings. These are either values previously set from calling software or hardcoded defaults
+  std::vector<SVHCurrentSettings> getDefaultCurrentSettings();
 
-  //! \brief get default parameters for current settings
-  std::vector<SVHCurrentSettings> getCurrentSettingsDefaultParameters();
+  //! \brief get default position settings. These are either values previously set from calling software or hardcoded defaults
+  //! \parm reset true if the Positions settins are to be used during reset (reduced speed)
+  std::vector<SVHPositionSettings> getDefaultPositionSettings(const bool& reset = false);
 
-  //! \brief get default parameters for position settings
-  std::vector<SVHPositionSettings> getPositionSettingsDefaultParameters();
+  //! \brief initialize the homing settings with hardcoded defaults. These can be overwritten by the setHomeSettings function
+  void setDefaultHomeSettings();
 
+  //!
+  //! \brief setResetSpeed Set the speed percentage during reset
+  //! \param speed percent of the normal speed used during reset Allowed values 0.0-1.0
+  //!
+  void setResetSpeed(const float& speed);
+
+  //!
+  //! \brief setResetTimeout Helper function to set the timout durind rest of fingers
+  //! \param resetTimeout timeout in Seconds. Values smaler than 0 will be interpreted as 0
+  //!
+  void setResetTimeout(const int& resetTimeout);
 
 
   #ifdef _IC_BUILDER_ICL_COMM_WEBSOCKET_
@@ -265,20 +290,11 @@ private:
   //! \brief holds the connected state
   bool m_connected;
 
+  //! Helper variable to check if feedback was printed (will be replaced by a better solution in the future)
+  bool m_connection_feedback_given;
+
   //! \brief vector storing reset flags for each finger
   int8_t m_homing_timeout;
-
-  //! data sctructure for home positions
-  struct
-  {
-    int   direction;         // +1 or -1 : home in positive or negative direction
-    float minimumOffset;     // offset from home position to minimum (soft limit)
-    float maximumOffset;     // offset from home position to maximum (soft limit)
-    float idlePosition;      // position to go to after intialization
-  } typedef HomeSettings;
-
-  //! \brief home position default settings vector for each channel
-  std::vector<HomeSettings> m_home_settings;
 
   //! \brief position conversion factor (ticks to RAD) for each channel
   std::vector<double> m_ticks2rad;
@@ -301,6 +317,25 @@ private:
   //! Overall movement State to indicate what the hand is doing at the moment
   MovementState m_movement_state;
 
+  //! Factor for determining the finger speed during reset. Only 0.0-1.0 is allowed
+  float m_reset_speed_factor;
+
+  //! Time in seconds after which the a reset is aborted if no change in current is observable
+  uint32_t m_reset_timeout;
+
+  //! Vector of current controller parameters for each finger (as given by external config)
+  std::vector<SVHCurrentSettings> m_current_settings;
+  //! Information about the validity of externaly given values for the current settings (easier to use this way)
+  std::vector<bool> m_current_settings_given;
+
+  //! Vector of position controller parameters for each finger (as given by external config)
+  std::vector<SVHPositionSettings> m_position_settings;
+  //! Information about the validity of externaly given values for the position settings (easier to use this way)
+  std::vector<bool> m_position_settings_given;
+
+  //! Vector of home settings for each finger (as given by external config)
+  std::vector<SVHHomeSettings> m_home_settings;
+
   //! \brief vector storing the reset order of the channels
   std::vector<SVHChannel> m_reset_order;
 
@@ -311,12 +346,6 @@ private:
     * Beware. Setting this value very high might result in damage to the motors during reset.
     */
   std::vector<double> m_reset_current_factor;
-
-
-
-  //! \brief set default parameters for home position
-  void setHomePositionDefaultParameters();
-
 
 
   //!
@@ -334,12 +363,6 @@ private:
   //! \return
   //!
   bool isInsideBounds(const SVHChannel &channel, const int32_t &target_position);
-
-  //!
-  //! \brief readParametersFromConfigFile
-  //! \return
-  //!
-  bool readParametersFromConfigFile();
 
 
   // DEBUG

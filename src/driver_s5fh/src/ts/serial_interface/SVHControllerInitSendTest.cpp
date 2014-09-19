@@ -39,9 +39,9 @@ int main(int argc, const char* argv[])
 
   // initilize default position settings
   std::vector<SVHPositionSettings> default_position_settings(eSVH_DIMENSION);
-  SVHPositionSettings pos_set_thumb = {-1.0e6f, 1.0e6f,  3.4e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-  SVHPositionSettings pos_set_finger = {-1.0e6f, 1.0e6f,  8.5e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-  SVHPositionSettings pos_set_spread = {-1.0e6f, 1.0e6f, 17.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
+  SVHPositionSettings pos_set_thumb(-1.0e6f, 1.0e6f,  3.4e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_finger(-1.0e6f, 1.0e6f,  8.5e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_spread(-1.0e6f, 1.0e6f, 17.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
 
   default_position_settings[0] = pos_set_thumb;   // thumb flexion
   default_position_settings[1] = pos_set_thumb;   // thumb opposition
@@ -55,9 +55,9 @@ int main(int argc, const char* argv[])
 
   // initilize default current settings
   std::vector<SVHCurrentSettings> default_current_settings(eSVH_DIMENSION);
-  SVHCurrentSettings cur_set_thumb          = {-191.0f, 191.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};
-  SVHCurrentSettings cur_set_distal_joint   = {-176.0f, 176.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};
-  SVHCurrentSettings cur_set_proximal_joint = {-167.0f, 167.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};
+  SVHCurrentSettings cur_set_thumb(-191.0f, 191.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f);
+  SVHCurrentSettings cur_set_distal_joint(-176.0f, 176.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f);
+  SVHCurrentSettings cur_set_proximal_joint(-167.0f, 167.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f);
 
   default_current_settings[0] = cur_set_thumb;          // thumb flexion
   default_current_settings[1] = cur_set_thumb;          // thumb opposition

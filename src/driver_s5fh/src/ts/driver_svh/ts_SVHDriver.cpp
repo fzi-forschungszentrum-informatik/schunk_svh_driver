@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(ConvertPosSettings)
   payload.reset(40);
 
   // Create Structures
-  SVHPositionSettings test_pos_settings_in =  {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1};
+  SVHPositionSettings test_pos_settings_in(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1);
   SVHPositionSettings test_pos_settings_out;
 
   // Conversion
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(ConvertCurSettings)
   payload.reset(40);
 
   // Create Structures
-  SVHCurrentSettings test_cur_settings_in =  {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1};
+  SVHCurrentSettings test_cur_settings_in(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1);
   SVHCurrentSettings test_cur_settings_out;
 
   // Conversion
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE(ConvertSerialPacket)
   ArrayBuilder packet;
   SVHSerialPacket test_serial_packet_in(40,5);
   SVHSerialPacket test_serial_packet_out(40);
-  SVHPositionSettings test_pos_settings_in =  {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1};
+  SVHPositionSettings test_pos_settings_in(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1);
   SVHPositionSettings test_pos_settings_out;
 
   // Conversion
@@ -307,11 +307,11 @@ BOOST_AUTO_TEST_CASE(ControllerreceiveFeedback)
 
 //  // load default position settings before the fingers are resetted
 //  std::vector<SVHPositionSettings> default_position_settings
-//      = finger_manager.getPositionSettingsDefaultResetParameters();
+//      = finger_manager.getPositionSettings(true);
 
 //  // load default current settings
 //  std::vector<SVHCurrentSettings> default_current_settings
-//      = finger_manager.getCurrentSettingsDefaultParameters();
+//      = finger_manager.getCurrentSettings();
 
 
 //  controller_state.pwm_fault = 0x001F;

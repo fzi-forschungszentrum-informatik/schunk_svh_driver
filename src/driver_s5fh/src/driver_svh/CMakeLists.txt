@@ -27,6 +27,7 @@ ICMAKER_ADD_HEADERS(
   SVHReceiveThread.h
   SVHSerialInterface.h
   SVHEncoderSettings.h
+  SVHHomeSettings.h
 )
 
 ICMAKER_LOCAL_CPPDEFINES(-DDRIVER_SVH_EXPORT_SYMBOLS)

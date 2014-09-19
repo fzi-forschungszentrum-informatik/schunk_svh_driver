@@ -48,7 +48,7 @@ struct SVHCurrentSettings
   float imn;
   //! Integral windup maximum value
   float imx;
-  //! proportional gain
+  //! Proportional gain
   float kp;
   //! Integral gain
   float ki;
@@ -73,6 +73,53 @@ struct SVHCurrentSettings
        && umx == other.umx
        );
   }
+
+  //!
+  //! \brief SVHCurrentSettings Construct current settings from a plain vector if the Vector is smaler than 10 values will be filled with 0.0
+  //! \param cur_settings Vector of floats in the order: wmn, wmx, ky, dt, imn, imx, kp, ki , umn, umx
+  //!
+  SVHCurrentSettings(const std::vector<float>& cur_settings)
+  {
+    size_t size = cur_settings.size();
+
+    // is there a nicer way to do this? Please tell me if there is :)
+    wmn = (size > 0) ? cur_settings[0] : 0.0;
+    wmx = (size > 1) ? cur_settings[1] : 0.0;
+    ky  = (size > 2) ? cur_settings[2] : 0.0;
+    dt  = (size > 3) ? cur_settings[3] : 0.0;
+    imn = (size > 4) ? cur_settings[4] : 0.0;
+    imx = (size > 5) ? cur_settings[5] : 0.0;
+    kp  = (size > 6) ? cur_settings[6] : 0.0;
+    ki  = (size > 7) ? cur_settings[7] : 0.0;
+    umn = (size > 8) ? cur_settings[8] : 0.0;
+    umx = (size > 9) ? cur_settings[9] : 0.0;
+  }
+
+  //!
+  //! \brief SVHCurrentSettings Constructs a new current settings object to configure the current controller of a finger
+  //! \param wmn Reference signal minimum value
+  //! \param wmx Reference signal maximum value
+  //! \param ky measurement scaling
+  //! \param dt time base of controller
+  //! \param imn Integral windup minimum value
+  //! \param imx Integral windup maximum value
+  //! \param kp  Proportional gain
+  //! \param ki  Integral gain
+  //! \param umn Output limiter min
+  //! \param umx Output limiter max
+  //!
+  SVHCurrentSettings(const float& wmn,const float& wmx,const float& ky,const float& dt,const float& imn,
+                     const float& imx,const float& kp,const float& ki,const float& umn,const float& umx):
+    wmn(wmn),wmx(wmx),ky (ky),dt (dt),imn(imn), imx(imx), kp (kp), ki (ki), umn(umn), umx(umx)
+  {}
+
+  //!
+  //! \brief SVHCurrentSettings Default constructor, initalizes everything to zero
+  //!
+  SVHCurrentSettings():
+    wmn(0.0),wmx(0.0),ky (0.0), dt (0.0), imn(0.0), imx(0.0), kp (0.0), ki (0.0), umn(0.0), umx(0.0)
+  {}
+
 
 };
 

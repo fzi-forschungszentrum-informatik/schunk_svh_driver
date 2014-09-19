@@ -37,22 +37,29 @@
 
 namespace driver_svh {
 
-SVHFingerManager::SVHFingerManager(const bool &autostart, const std::vector<bool> &disable_mask, const std::string &dev_name) :
+SVHFingerManager::SVHFingerManager(const std::vector<bool> &disable_mask, const std::string &dev_name, const uint32_t &reset_timeout) :
   m_controller(new SVHController()),
   m_feedback_thread(),
   m_connected(false),
+  m_connection_feedback_given(false),
   m_homing_timeout(10),
-  m_home_settings(0),
   m_ticks2rad(0),
   m_position_min(eSVH_DIMENSION, 0),
   m_position_max(eSVH_DIMENSION, 0),
   m_position_home(eSVH_DIMENSION, 0),
   m_is_homed(eSVH_DIMENSION, false),
   m_is_switched_off(eSVH_DIMENSION,false),
-  m_movement_state(eST_DEACTIVATED)
+  m_movement_state(eST_DEACTIVATED),
+  m_reset_speed_factor(0.2),
+  m_reset_timeout(reset_timeout),
+  m_current_settings(eSVH_DIMENSION),
+  m_current_settings_given(eSVH_DIMENSION,false),
+  m_position_settings(eSVH_DIMENSION),
+  m_position_settings_given(eSVH_DIMENSION,false),
+  m_home_settings(eSVH_DIMENSION)
 {
   // load home position default parameters
-  setHomePositionDefaultParameters();
+  setDefaultHomeSettings();
 
   // set default reset order of all channels
   m_reset_order.resize(eSVH_DIMENSION);
@@ -66,6 +73,7 @@ SVHFingerManager::SVHFingerManager(const bool &autostart, const std::vector<bool
   m_reset_order[7] = eSVH_RING_FINGER;
   m_reset_order[8] = eSVH_PINKY;
 
+  // TODO: MOVE THIS to a better place
   // Order is determined by the channel enum
   m_reset_current_factor.resize(eSVH_DIMENSION);
   m_reset_current_factor[eSVH_THUMB_FLEXION]=          0.75;
@@ -87,7 +95,6 @@ SVHFingerManager::SVHFingerManager(const bool &autostart, const std::vector<bool
     }
   }
 
-  // TODO: The WS BROADCASTER IS KIND OF ANNOYING WHEN STARTET BUT NOT ACTIVE.. MAKE THIS BETTER
 #ifdef _IC_BUILDER_ICL_COMM_WEBSOCKET_
   //m_ws_broadcaster =boost::shared_ptr<icl_comm::websocket::WsBroadcaster>(new icl_comm::websocket::WsBroadcaster(icl_comm::websocket::WsBroadcaster::eRT_SVH,"/tmp/ws_broadcaster"));
   if (m_ws_broadcaster)
@@ -96,12 +103,12 @@ SVHFingerManager::SVHFingerManager(const bool &autostart, const std::vector<bool
   }
 #endif
 
-  // Try First Connect and Reset of all Fingers if autostart is enabled
-  if (autostart && connect(dev_name))
-  {
-    resetChannel(eSVH_ALL);
-    LOGGING_INFO_C(DriverSVH, SVHFingerManager, "Driver Autostart succesfull! Input can now be sent. Have a safe and productive day" << endl);
-  }
+//  // Try First Connect and Reset of all Fingers if autostart is enabled
+//  if (autostart && connect(dev_name))
+//  {
+//    resetChannel(eSVH_ALL);
+//    LOGGING_INFO_C(DriverSVH, SVHFingerManager, "Driver Autostart succesfull! Input can now be sent. Have a safe and productive day" << endl);
+//  }
 
 }
 
@@ -134,12 +141,11 @@ bool SVHFingerManager::connect(const std::string &dev_name)
       m_feedback_thread = new SVHFeedbackPollingThread(icl_core::TimeSpan::createFromMSec(100), this);
 
       // load default position settings before the fingers are resetted
-      std::vector<SVHPositionSettings> default_position_settings
-          = getPositionSettingsDefaultResetParameters();
+      std::vector<SVHPositionSettings> position_settings = getDefaultPositionSettings(true);
 
       // load default current settings
-      std::vector<SVHCurrentSettings> default_current_settings
-          = getCurrentSettingsDefaultParameters();
+      std::vector<SVHCurrentSettings> current_settings
+          = getDefaultCurrentSettings();
 
       m_controller->disableChannel(eSVH_ALL);
 
@@ -149,11 +155,11 @@ bool SVHFingerManager::connect(const std::string &dev_name)
         // request controller feedback
         m_controller->requestControllerFeedback(static_cast<SVHChannel>(i));
 
-        // set position settings
-        m_controller->setPositionSettings(static_cast<SVHChannel>(i), default_position_settings[i]);
+        // Actually set the new position settings
+        m_controller->setPositionSettings(static_cast<SVHChannel>(i), position_settings[i]);
 
         // set current settings
-        m_controller->setCurrentSettings(static_cast<SVHChannel>(i), default_current_settings[i]);
+        m_controller->setCurrentSettings(static_cast<SVHChannel>(i), current_settings[i]);
       }
 
       // check for correct response from hardware controller
@@ -173,7 +179,7 @@ bool SVHFingerManager::connect(const std::string &dev_name)
         LOGGING_DEBUG_C(DriverSVH, SVHFingerManager, "Try to connect to SCHUNK five finger hand: Send packages = " << send_count << ", received packages = " << received_count << endl);
 
         // check for timeout
-        if ((icl_core::TimeStamp::now() - start_time).tsSec() > 5.0)  //TODO: Use parameter
+        if ((icl_core::TimeStamp::now() - start_time).tsSec() > m_reset_timeout)
         {
           timeout = true;
           LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Connection timeout! Could not connect to SCHUNK five finger hand." << endl
@@ -200,6 +206,7 @@ bool SVHFingerManager::connect(const std::string &dev_name)
 void SVHFingerManager::disconnect()
 {
   m_connected = false;
+  m_connection_feedback_given = false;
 
   if (m_feedback_thread != NULL)
   {
@@ -258,13 +265,15 @@ bool SVHFingerManager::resetChannel(const SVHChannel &channel)
       if (!m_is_switched_off[channel])
       {
         LOGGING_DEBUG_C(DriverSVH, SVHFingerManager, "Setting reset position values for controller of channel " << channel << endl);
-        m_controller->setPositionSettings(channel, getPositionSettingsDefaultResetParameters()[channel]);
+
+
+        m_controller->setPositionSettings(channel, getDefaultPositionSettings(true)[channel]);
 
         // reset homed flag
         m_is_homed[channel] = false;
 
         // read default home settings for channel
-        HomeSettings home = m_home_settings[channel];
+        SVHHomeSettings home = m_home_settings[channel];
 
         SVHPositionSettings pos_set;
         SVHCurrentSettings cur_set;
@@ -357,7 +366,7 @@ bool SVHFingerManager::resetChannel(const SVHChannel &channel)
         m_controller->disableChannel(eSVH_ALL);
 
         LOGGING_DEBUG_C(DriverSVH, SVHFingerManager, "Restoring default position values for controller of channel " << channel << endl);
-        m_controller->setPositionSettings(channel, getPositionSettingsDefaultParameters()[channel]);
+        m_controller->setPositionSettings(channel, getDefaultPositionSettings(false)[channel]);
       }
       else
       {
@@ -598,32 +607,6 @@ bool SVHFingerManager::getCurrent(const SVHChannel &channel, double &current)
   }
 }
 
-bool SVHFingerManager::getCurrentControllerParams(const SVHChannel &channel, SVHCurrentSettings &current_settings)
-{
-  if (channel >=0 && channel < eSVH_DIMENSION)
-  {
-    return m_controller->getCurrentSettings(channel, current_settings);
-  }
-  else
-  {
-    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not get current settings for unknown/unsupported channel " << channel << endl);
-    return false;
-  }
-}
-
-bool SVHFingerManager::getPositionControllerParams(const SVHChannel &channel, SVHPositionSettings &position_settings)
-{
-  if (channel >=0 && channel < eSVH_DIMENSION)
-  {
-    return m_controller->getPositionSettings(channel, position_settings);
-  }
-  else
-  {
-    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not get position settings for unknown/unsupported channel " << channel << endl);
-    return false;
-  }
-}
-
 // set all target positions at once
 bool SVHFingerManager::setAllTargetPositions(const std::vector<double>& positions)
 {
@@ -677,7 +660,11 @@ bool SVHFingerManager::setAllTargetPositions(const std::vector<double>& position
   }
   else
   {
-    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set target position vector: No connection to SCHUNK five finger hand!" << endl);
+    if (!m_connection_feedback_given)
+    {
+      LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set target position vector: No connection to SCHUNK five finger hand!" << endl);
+      m_connection_feedback_given = true;
+    }
     return false;
   }
 }
@@ -733,36 +720,12 @@ bool SVHFingerManager::setTargetPosition(const SVHChannel &channel, double posit
   }
   else
   {
-    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set target position for channel " << channel << ": No connection to SCHUNK five finger hand!" << endl);
+    if (!m_connection_feedback_given)
+    {
+      LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set target position for channel " << channel << ": No connection to SCHUNK five finger hand!" << endl);
+      m_connection_feedback_given = true;
+    }
     return false;
-  }
-}
-
-// overwrite current parameters
-bool SVHFingerManager::setCurrentControllerParams(const SVHChannel &channel, const SVHCurrentSettings &current_settings)
-{
-  if (channel >=0 && channel < eSVH_DIMENSION)
-  {
-    m_controller->setCurrentSettings(channel, current_settings);
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-// overwrite position parameters
-bool SVHFingerManager::setPositionControllerParams(const SVHChannel &channel, const SVHPositionSettings &position_settings)
-{
-  if (channel >=0 && channel < eSVH_DIMENSION)
-  {
-    m_controller->setPositionSettings(channel, position_settings);
-    return true;
-  }
-  else
-  {
-    return true;
   }
 }
 
@@ -775,10 +738,11 @@ bool SVHFingerManager::isEnabled(const SVHChannel &channel)
     for (size_t i = 0; i < eSVH_DIMENSION; ++i)
     {
       all_enabled = all_enabled && isEnabled(static_cast<SVHChannel>(i));
-      if (!isEnabled(static_cast<SVHChannel>(i)))
-      {
-        LOGGING_WARNING_C(DriverSVH, SVHFingerManager, "All finger enabled check failed: Channel: " << channel << " : " << SVHController::m_channel_description[i] << " is not enabled" << endl);
-      }
+      // disabled for now, to noisy
+//      if (!isEnabled(static_cast<SVHChannel>(i)))
+//      {
+//        LOGGING_WARNING_C(DriverSVH, SVHFingerManager, "All finger enabled check failed: Channel: " << channel << " : " << SVHController::m_channel_description[i] << " is not enabled" << endl);
+//      }
     }
 
     return all_enabled;
@@ -845,118 +809,175 @@ void SVHFingerManager::setMovementState(const SVHFingerManager::MovementState &s
     }
   }
 #endif // _IC_BUILDER_ICL_COMM_WEBSOCKET_
-
-
 }
 
-void SVHFingerManager::setHomePositionDefaultParameters()
+bool SVHFingerManager::getCurrentSettings(const SVHChannel &channel, SVHCurrentSettings &current_settings)
 {
-  m_home_settings.resize(eSVH_DIMENSION);
+  if (channel >=0 && channel < eSVH_DIMENSION)
+  {
+    return m_controller->getCurrentSettings(channel, current_settings);
+  }
+  else
+  {
+    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not get current settings for unknown/unsupported channel " << channel << endl);
+    return false;
+  }
+}
 
+bool SVHFingerManager::getPositionSettings(const SVHChannel &channel, SVHPositionSettings &position_settings)
+{
+  if (channel >=0 && channel < eSVH_DIMENSION)
+  {
+    return m_controller->getPositionSettings(channel, position_settings);
+  }
+  else
+  {
+    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not get position settings for unknown/unsupported channel " << channel << endl);
+    return false;
+  }
+}
+
+// overwrite current parameters
+bool SVHFingerManager::setCurrentSettings(const SVHChannel &channel, const SVHCurrentSettings &current_settings)
+{
+
+  if (channel >=0 && channel < eSVH_DIMENSION)
+  {
+    // First of save the values
+    m_current_settings[channel] = current_settings;
+    m_current_settings_given[channel] = true;
+
+    // In case the Hardware is connected, update the values
+    if (isConnected())
+    {
+        m_controller->setCurrentSettings(channel, current_settings);
+    }
+    return true;
+  }
+  else
+  {
+    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set Current Controller Params for channel " << channel << ": No such channel" << endl);
+    return false;
+  }
+}
+
+// overwrite position parameters
+bool SVHFingerManager::setPositionSettings(const SVHChannel &channel, const SVHPositionSettings &position_settings)
+{
+
+  if (channel >=0 && channel < eSVH_DIMENSION)
+  {
+    // First of save the values
+    m_position_settings[channel] = position_settings;
+    m_position_settings_given[channel] = true;
+
+    // In case the Hardware is connected, update the values
+    if (isConnected())
+    {
+      m_controller->setPositionSettings(channel, position_settings);
+    }
+
+    return true;
+  }
+  else
+  {
+    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set Position Controller Params for channel " << channel << ": No such channel" << endl);
+    return false;
+  }
+}
+
+//overwirte home settings
+bool SVHFingerManager::setHomeSettings(const SVHChannel &channel, const driver_svh::SVHHomeSettings &home_settings)
+{
+  if (channel >=0 && channel < eSVH_DIMENSION)
+  {
+    // First of save the values
+    m_home_settings[channel] = home_settings;
+    LOGGING_TRACE_C(DriverSVH,SVHFingerManager, "Channel " << channel << " setting new homing settings." << endl);
+    return true;
+  }
+  else
+  {
+    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not set homing settings for channel " << channel << ": No such channel" << endl);
+    return false;
+  }
+}
+
+
+void SVHFingerManager::setDefaultHomeSettings()
+{
   // homing parameters are important for software end stops
 
-  // direction, minimum offset, maximum offset, idle position
-  HomeSettings home_set_thumb_flexion   = {+1, -175.0e3f,  -5.0e3f, -15.0e3f};  // RE17, thumb flexion
-  HomeSettings home_set_thumb_oppsition = {+1, -105.0e3f,  -5.0e3f, -15.0e3f};  // RE17, thumb opposition
-  HomeSettings home_set_finger_distal   = {+1,  -47.0e3f,  -2.0e3f,  -8.0e3f};  // RE10, index finger distal joint
-  HomeSettings home_set_finger_proximal = {-1,    2.0e3f,  42.0e3f,   8.0e3f};  // RE13, index finger proximal joint   --> Values based on the "limits" described by the hardware table
-  //HomeSettings home_set_finger_proximal = {-1,    2.0e3f,  47.0e3f,   8.0e3f}; // Better Looking and more homogeneous maximum ;) but wrog compared to the actual hardware limits
-  HomeSettings home_set_ring_finger     = home_set_finger_distal; //{+1,  -47.0e3f,  -2.0e3f,  -8.0e3f};  // RE10, ring finger
-  HomeSettings home_set_pinky           = home_set_finger_distal; //{+1,  -47.0e3f,  -2.0e3f,  -8.0e3f};  // RE10, pinky
-  HomeSettings home_set_finger_spread   = {+1,  -47.0e3f,  -2.0e3f,  -25.0e3f}; //{+1,  -25.0e3f,  -2.0e3f,  -15.0e3f};  //   // RE13, finger spread
+  // All values are based on the hardware description for maximum tics and maximum allowable range of movements
+  // direction, minimum offset, maximum offset, idle position, range in rad
+  m_home_settings[eSVH_THUMB_FLEXION]          =  SVHHomeSettings(+1, -175.0e3f,  -5.0e3f, -15.0e3f, 0.97);    // thumb flexion
+  m_home_settings[eSVH_THUMB_OPPOSITION]       =  SVHHomeSettings(+1, -105.0e3f,  -5.0e3f, -15.0e3f, 0.99); // thumb opposition
+  m_home_settings[eSVH_INDEX_FINGER_DISTAL]    =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -8.0e3f, 1.33);    // index finger distal joint
+  m_home_settings[eSVH_INDEX_FINGER_PROXIMAL]  =  SVHHomeSettings(-1,    2.0e3f,  42.0e3f,   8.0e3f, 0.8);  // index finger proximal joint
+  m_home_settings[eSVH_MIDDLE_FINGER_DISTAL]   =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -8.0e3f, 1.33);    // middle finger distal joint
+  m_home_settings[eSVH_MIDDLE_FINGER_PROXIMAL] =  SVHHomeSettings(-1,    2.0e3f,  42.0e3f,   8.0e3f, 0.8);  // middle finger proximal joint
+  m_home_settings[eSVH_RING_FINGER]            =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -8.0e3f, 0.98);    // ring finger
+  m_home_settings[eSVH_PINKY]                  =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -8.0e3f, 0.98);    // pinky
+  m_home_settings[eSVH_FINGER_SPREAD]          =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -25.0e3f,0.58);    // finger spread
 
-  m_home_settings[0] = home_set_thumb_flexion;    // thumb flexion
-  m_home_settings[1] = home_set_thumb_oppsition;  // thumb opposition
-  m_home_settings[2] = home_set_finger_distal;    // index finger distal joint
-  m_home_settings[3] = home_set_finger_proximal;  // index finger proximal joint
-  m_home_settings[4] = home_set_finger_distal;    // middle finger distal joint
-  m_home_settings[5] = home_set_finger_proximal;  // middle finger proximal joint
-  m_home_settings[6] = home_set_ring_finger;      // ring finger
-  m_home_settings[7] = home_set_pinky;            // pinky
-  m_home_settings[8] = home_set_finger_spread;    // finger spread
-
-  // calculate factors and offset for ticks to rad conversion
-  float range_rad_data[eSVH_DIMENSION] = { 0.97, 0.99, 1.33, 0.8, 1.33, 0.8, 0.98, 0.98, 0.58 };
-  std::vector<float> range_rad(&range_rad_data[0], &range_rad_data[0] + eSVH_DIMENSION);
+  // NOTE / TODO
+  // Currently we map the Range in rad, which is given as the range between to hard stops to the range between to soft stops. By this we of course loose
+  // the ability to move to propoer positons... which might be very important
+  // Option 1: We use the hard stop to hard stop range, without any more conversions. Meaning if the HS range is 0.9 we might be able to move from 0.1 to 0.8 because of the soft stops
+  // Option 2: (preferred) We use the hard stop to hard stop range, but subtract the soft stopds, resulting in that we can always go to 0. But we might never reach more than 0,7 because all of the soft limits is cut of later on
+  // Option 3: Everything stays at it is
+  // NOTE2: Thats not completely correct as we are using the whole tick range that was given.. however we need to investigate this further...
 
   m_ticks2rad.resize(eSVH_DIMENSION, 0.0);
   for (size_t i = 0; i < eSVH_DIMENSION; ++i)
   {
     float range_ticks = m_home_settings[i].maximumOffset - m_home_settings[i].minimumOffset;
-    m_ticks2rad[i] = range_rad[i] / range_ticks * (-m_home_settings[i].direction);
+    m_ticks2rad[i] = m_home_settings[i].rangeRad / range_ticks * (-m_home_settings[i].direction);
   }
+
 }
 
-std::vector<SVHCurrentSettings> SVHFingerManager::getCurrentSettingsDefaultParameters()
+std::vector<SVHCurrentSettings> SVHFingerManager::getDefaultCurrentSettings()
 {
   // BEWARE! Only change these values if you know what you are doing !! Setting wrong values could damage the hardware!!!
-  // TODO: This will be read from config files in later releases
 
-  std::vector<SVHCurrentSettings> default_current_settings(eSVH_DIMENSION);
+  std::vector<SVHCurrentSettings> current_settings(eSVH_DIMENSION);
+
+
+  //SVHCurrentSettings cur_set_thumb            = {-400.0f, 400.0f, 0.405f, 4e-6f, -400.0f, 400.0f, 0.850f, 85.0f, -500.0f, 500.0f};  // Backup values that are based on  MeCoVis suggestions
+  //SVHCurrentSettings cur_set_thumb_opposition = {-400.0f, 400.0f, 0.405f, 4e-6f, -400.0f, 400.0f, 0.90f, 85.0f, -800.0f, 800.0f}; // Backup values that are based on  MeCoVis suggestions
+  //SVHCurrentSettings cur_set_distal_joint     = {-176.0f, 176.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};  // Backup values that are based on  MeCoVis suggestions
+  //SVHCurrentSettings cur_set_proximal_joint   = {-167.0f, 167.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};  // Backup values that are based on  MeCoVis suggestions
+  //SVHCurrentSettings cur_set_finger_spread    = {-200.0f, 200.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};  // Backup values that are based on  MeCoVis suggestions
+
   // curr min, Curr max,ky(error output scaling),dt(time base),imn (integral windup min), imx (integral windup max), kp,ki,umn,umx (output limter)
-
-  //SVHCurrentSettings cur_set_thumb          = {-400.0f, 400.0f, 0.405f, 4e-6f, -400.0f, 400.0f, 0.850f, 85.0f, -500.0f, 500.0f}; // Backup values that are based on orginal MeCoVis Software
-  SVHCurrentSettings cur_set_thumb         = {-400.0f, 400.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 0.4f, -400.0f, 400.0f}; // Much Smoother values that produce nice motions and are actually reasonable
-
-  //SVHCurrentSettings cur_set_thumb_opposition = {-400.0f, 400.0f, 0.405f, 4e-6f, -400.0f, 400.0f, 0.90f, 85.0f, -800.0f, 800.0f}; // Backup values that are based on orginal MeCoVis Software
-  SVHCurrentSettings cur_set_thumb_opposition = {-400.0f, 400.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 0.4f, -400.0f, 400.0f}; // Much Smoother values that produce nice motions and are actually reasonable
-
-  //SVHCurrentSettings cur_set_distal_joint   = {-176.0f, 176.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};  // Backup values that are based on orginal MeCoVis Software
-  SVHCurrentSettings cur_set_distal_joint   = {-300.0f, 300.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.85f, 2.0f, -300.0f, 300.0f}; // Much Smoother values that produce nice motions and are actually reasonable
-  //SVHCurrentSettings cur_set_proximal_joint = {-167.0f, 167.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};  // Backup values that are based on orginal MeCoVis Software
-  SVHCurrentSettings cur_set_proximal_joint = {-350.0f, 350.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.85f, 2.0f, -350.0f, 350.0f}; // Much Smoother values that produce nice motions and are actually reasonable
+  SVHCurrentSettings cur_set_thumb(-400.0f, 400.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 0.4f, -400.0f, 400.0f); // Much Smoother values that produce nice motions and are actually reasonabl
+  SVHCurrentSettings cur_set_thumb_opposition(-400.0f, 400.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 0.4f, -400.0f, 400.0f); // Much Smoother values that produce nice motions and are actually reasonable
+  SVHCurrentSettings cur_set_distal_joint(-300.0f, 300.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.85f, 2.0f, -300.0f, 300.0f); // Much Smoother values that produce nice motions and are actually reasonable
+  SVHCurrentSettings cur_set_proximal_joint(-350.0f, 350.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.85f, 2.0f, -350.0f, 350.0f); // Much Smoother values that produce nice motions and are actually reasonable
+  SVHCurrentSettings cur_set_finger_spread(-200.0f, 200.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -400.0f, 400.0f); // Somewhat better values based on the MeCoVis software
 
 
-  //SVHCurrentSettings cur_set_finger_spread  = {-200.0f, 200.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f}; // Very Safe values based on MeCoVis software
-  SVHCurrentSettings cur_set_finger_spread  = {-200.0f, 200.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -400.0f, 400.0f}; // Somewhat better values based on the MeCoVis software
-  //SVHCurrentSettings cur_set_finger_spread  = {-200.0f, 200.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.85f, 0.4f, -400.0f, 400.0f}; // Much Smoother values that produce nice motions -> not yet very well working with spread
+  current_settings[eSVH_THUMB_FLEXION]          = m_current_settings_given[eSVH_THUMB_FLEXION]          ? m_current_settings[eSVH_THUMB_FLEXION]          :cur_set_thumb;              // thumb flexion
+  current_settings[eSVH_THUMB_OPPOSITION]       = m_current_settings_given[eSVH_THUMB_OPPOSITION]       ? m_current_settings[eSVH_THUMB_OPPOSITION]       :cur_set_thumb_opposition;   // thumb opposition
+  current_settings[eSVH_INDEX_FINGER_DISTAL]    = m_current_settings_given[eSVH_INDEX_FINGER_DISTAL]    ? m_current_settings[eSVH_INDEX_FINGER_DISTAL]    :cur_set_distal_joint;       // index finger distal joint
+  current_settings[eSVH_INDEX_FINGER_PROXIMAL]  = m_current_settings_given[eSVH_INDEX_FINGER_PROXIMAL]  ? m_current_settings[eSVH_INDEX_FINGER_PROXIMAL]  :cur_set_proximal_joint;     // index finger proximal joint
+  current_settings[eSVH_MIDDLE_FINGER_DISTAL]   = m_current_settings_given[eSVH_MIDDLE_FINGER_DISTAL]   ? m_current_settings[eSVH_MIDDLE_FINGER_DISTAL]   :cur_set_distal_joint;       // middle finger distal joint
+  current_settings[eSVH_MIDDLE_FINGER_PROXIMAL] = m_current_settings_given[eSVH_MIDDLE_FINGER_PROXIMAL] ? m_current_settings[eSVH_MIDDLE_FINGER_PROXIMAL] :cur_set_proximal_joint;     // middle finger proximal joint
+  current_settings[eSVH_RING_FINGER]            = m_current_settings_given[eSVH_RING_FINGER]            ? m_current_settings[eSVH_RING_FINGER]            :cur_set_distal_joint;       // ring finger
+  current_settings[eSVH_PINKY]                  = m_current_settings_given[eSVH_PINKY]                  ? m_current_settings[eSVH_PINKY]                  :cur_set_distal_joint;       // pinky
+  current_settings[eSVH_FINGER_SPREAD]          = m_current_settings_given[eSVH_FINGER_SPREAD]          ? m_current_settings[eSVH_FINGER_SPREAD]          :cur_set_finger_spread;      // finger spread
 
-  default_current_settings[0] = cur_set_thumb;              // thumb flexion
-  default_current_settings[1] = cur_set_thumb_opposition;   // thumb opposition
-  default_current_settings[2] = cur_set_distal_joint;       // index finger distal joint
-  default_current_settings[3] = cur_set_proximal_joint;     // index finger proximal joint
-  default_current_settings[4] = cur_set_distal_joint;       // middle finger distal joint
-  default_current_settings[5] = cur_set_proximal_joint;     // middle finger proximal joint
-  default_current_settings[6] = cur_set_distal_joint;       // ring finger
-  default_current_settings[7] = cur_set_distal_joint;       // pinky
-  default_current_settings[8] = cur_set_finger_spread;      // finger spread
-
-  return default_current_settings;
-}
-
-
-std::vector<SVHPositionSettings> SVHFingerManager::getPositionSettingsDefaultResetParameters()
-{
-  std::vector<SVHPositionSettings> default_position_settings(eSVH_DIMENSION);
-
-  //Wmin Wmax DWMax Ky Dt IMin Imax KP KI KD
-  SVHPositionSettings pos_set_thumb = {-1.0e6f, 1.0e6f,  10.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-  SVHPositionSettings pos_set_finger = {-1.0e6f, 1.0e6f, 15.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-  SVHPositionSettings pos_set_spread = {-1.0e6f, 1.0e6f, 17.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-
-
-  default_position_settings[0] = pos_set_thumb;   // thumb flexion
-  default_position_settings[1] = pos_set_thumb;   // thumb opposition
-  default_position_settings[2] = pos_set_finger;  // index finger distal joint
-  default_position_settings[3] = pos_set_finger;  // index finger proximal joint
-  default_position_settings[4] = pos_set_finger;  // middle finger distal joint
-  default_position_settings[5] = pos_set_finger;  // middle finger proximal joint
-  default_position_settings[6] = pos_set_finger;  // ring finger
-  default_position_settings[7] = pos_set_finger;  // pinky
-  default_position_settings[8] = pos_set_spread;  // finger spread
-
-  return default_position_settings;
+  return current_settings;
 }
 
 
 //!
-//! \brief returns default parameters for position settings
+//! \brief returns parameters for position settings either the default ones or parameters that have been set from outside
 //!
-std::vector<SVHPositionSettings> SVHFingerManager::getPositionSettingsDefaultParameters()
+std::vector<SVHPositionSettings> SVHFingerManager::getDefaultPositionSettings(const bool& reset)
 {
-  std::vector<SVHPositionSettings> default_position_settings(eSVH_DIMENSION);
-
-  // Note: there is a multitude of settings here to try out. These will be moved into config files in a later release.
+  std::vector<SVHPositionSettings> position_settings(eSVH_DIMENSION);
 
   // Original conservative settings
 //  SVHPositionSettings pos_set_thumb = {-1.0e6f, 1.0e6f,  3.4e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
@@ -974,21 +995,7 @@ std::vector<SVHPositionSettings> SVHFingerManager::getPositionSettingsDefaultPar
 //  SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  22.959e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 //  SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f, 21.551e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 
-  // All Fingers with a speed that will close the complete range of the finger in 1 Seconds    (except the thumb that wikll take 4)
-    SVHPositionSettings pos_set_thumb_flexion =          {-1.0e6f, 1.0e6f,  65.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-    //SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f}; // original Value for these settings, but the slightly modified one looks better
-    SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -4000.0f, 4000.0f, 0.05f, 0.1f, 0.0f};
-    SVHPositionSettings pos_set_finger_index_distal =    {-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-    //SVHPositionSettings pos_set_finger_index_proximal =  {-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f}; // original Value for these settings, but the slightly modified one looks better
-    SVHPositionSettings pos_set_finger_index_proximal =  {-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.3f, 0.05f, 0.0f};
-    SVHPositionSettings pos_set_finger_middle_distal =   {-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-    //SVHPositionSettings pos_set_finger_middle_proximal = {-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f}; // original Value for these settings, but the slightly modified one looks better
-    SVHPositionSettings pos_set_finger_middle_proximal = {-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.3f, 0.05f, 0.0f};
-    SVHPositionSettings pos_set_finger_ring =            {-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-    SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-    SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-
-    // All Fingers with a speed that will close the complete range of the finger in 0.5 Seconds (except the thumb that will take 4)
+  // All Fingers with a speed that will close the complete range of the finger in 0.5 Seconds (except the thumb that will take 4)
 //    SVHPositionSettings pos_set_thumb_flexion =          {-1.0e6f, 1.0e6f,  42.5e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 //    SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 //    SVHPositionSettings pos_set_finger_index_distal =    {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
@@ -999,19 +1006,52 @@ std::vector<SVHPositionSettings> SVHFingerManager::getPositionSettingsDefaultPar
 //    SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 //    SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 
+  // All Fingers with a speed that will close the complete range of the finger in 1 Seconds    (except the thumb that wikll take 4)
+  SVHPositionSettings pos_set_thumb_flexion            (-1.0e6f, 1.0e6f,  65.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_thumb_opposition         (-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -4000.0f, 4000.0f, 0.05f, 0.1f, 0.0f);
+  SVHPositionSettings pos_set_finger_index_distal      (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_finger_index_proximal    (-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.3f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_finger_middle_distal     (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_finger_middle_proximal   (-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.3f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_finger_ring              (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_finger_pinky             (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  SVHPositionSettings pos_set_spread                   (-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
 
-  // Do not change this order!
-  default_position_settings[0] = pos_set_thumb_flexion;   // thumb flexion
-  default_position_settings[1] = pos_set_thumb_opposition;   // thumb opposition
-  default_position_settings[2] = pos_set_finger_index_distal;  // index finger distal joint
-  default_position_settings[3] = pos_set_finger_index_proximal;  // index finger proximal joint
-  default_position_settings[4] = pos_set_finger_middle_distal;  // middle finger distal joint
-  default_position_settings[5] = pos_set_finger_middle_proximal;  // middle finger proximal joint
-  default_position_settings[6] = pos_set_finger_ring;  // ring finger
-  default_position_settings[7] = pos_set_finger_pinky;  // pinky
-  default_position_settings[8] = pos_set_spread;  // finger spread
+  //Return either the default values or the ones given from outside
+  position_settings[eSVH_THUMB_FLEXION]           = m_position_settings_given[eSVH_THUMB_FLEXION] ? m_position_settings[eSVH_THUMB_FLEXION] : pos_set_thumb_flexion;   // thumb flexion
+  position_settings[eSVH_THUMB_OPPOSITION]        = m_position_settings_given[eSVH_THUMB_OPPOSITION] ? m_position_settings[eSVH_THUMB_OPPOSITION] :pos_set_thumb_opposition;   // thumb opposition
+  position_settings[eSVH_INDEX_FINGER_DISTAL]     = m_position_settings_given[eSVH_INDEX_FINGER_DISTAL] ? m_position_settings[eSVH_INDEX_FINGER_DISTAL] :pos_set_finger_index_distal;  // index finger distal joint
+  position_settings[eSVH_INDEX_FINGER_PROXIMAL]   = m_position_settings_given[eSVH_INDEX_FINGER_PROXIMAL] ? m_position_settings[eSVH_INDEX_FINGER_PROXIMAL] :pos_set_finger_index_proximal;  // index finger proximal joint
+  position_settings[eSVH_MIDDLE_FINGER_DISTAL]    = m_position_settings_given[eSVH_MIDDLE_FINGER_DISTAL] ? m_position_settings[eSVH_MIDDLE_FINGER_DISTAL] :pos_set_finger_middle_distal;  // middle finger distal joint
+  position_settings[eSVH_MIDDLE_FINGER_PROXIMAL]  = m_position_settings_given[eSVH_MIDDLE_FINGER_PROXIMAL] ? m_position_settings[eSVH_MIDDLE_FINGER_PROXIMAL] :pos_set_finger_middle_proximal;  // middle finger proximal joint
+  position_settings[eSVH_RING_FINGER]             = m_position_settings_given[eSVH_RING_FINGER] ? m_position_settings[eSVH_RING_FINGER] :pos_set_finger_ring;  // ring finger
+  position_settings[eSVH_PINKY]                   = m_position_settings_given[eSVH_PINKY] ? m_position_settings[eSVH_PINKY] :pos_set_finger_pinky;  // pinky
+  position_settings[eSVH_FINGER_SPREAD]           = m_position_settings_given[eSVH_FINGER_SPREAD]  ? m_position_settings[eSVH_FINGER_SPREAD] :pos_set_spread;  // finger spread
 
-  return default_position_settings;
+  // Modify the reset speed in case these position settings are meant to be used during the reset
+  if (reset)
+  {
+    for (size_t i = 0; i < eSVH_DIMENSION; ++i)
+    {
+      position_settings[i].dwmx = position_settings[i].dwmx * m_reset_speed_factor;
+    }
+  }
+
+
+  return position_settings;
+}
+
+// TODO: Move this into the Home settings!
+void driver_svh::SVHFingerManager::setResetSpeed(const float &speed)
+{
+  if ((speed>= 0.0) && (speed <= 1.0))
+  {
+    m_reset_speed_factor = speed;
+  }
+  else
+  {
+    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "The reset speed value given: "<< speed << " is not valid. Please provide a value between 0.0 and 1.0, default is 0.2"<< endl);
+  }
 }
 
 // Converts joint positions of a specific channel from RAD to ticks
@@ -1043,83 +1083,9 @@ void SVHFingerManager::requestControllerState()
   m_controller->requestControllerState();
 }
 
-bool SVHFingerManager::readParametersFromConfigFile()
+void SVHFingerManager::setResetTimeout(const int& resetTimeout)
 {
-  // THIS FUNCTIONALITY IS UNTESTED and will be included in a later release
-
-//  bool read_successful = false;
-
-//  // load position settings from config file
-//  std::vector<SVHPositionSettings> position_config_list;
-//  read_successful =
-//    icc::get(CONFIG_VALUES(
-//               CONFIG_LIST(
-//                 SVHPositionSettings, "/SVH/PositionSettings",
-//                 MEMBER_MAPPING(
-//                   SVHPositionSettings,
-//                   MEMBER_VALUE_1("WMin", SVHPositionSettings, wmn)
-//                   MEMBER_VALUE_1("WMax", SVHPositionSettings, wmx)
-//                   MEMBER_VALUE_1("DWMax", SVHPositionSettings, dwmx)
-//                   MEMBER_VALUE_1("KY", SVHPositionSettings, ky)
-//                   MEMBER_VALUE_1("DT", SVHPositionSettings, dt)
-//                   MEMBER_VALUE_1("IMin", SVHPositionSettings, imn)
-//                   MEMBER_VALUE_1("IMax", SVHPositionSettings, imx)
-//                   MEMBER_VALUE_1("KP", SVHPositionSettings, kp)
-//                   MEMBER_VALUE_1("KI", SVHPositionSettings, ki)
-//                   MEMBER_VALUE_1("KD", SVHPositionSettings, kd)),
-//                 std::back_inserter(position_config_list))),
-//             DriverSVH::instance());
-
-//  // set controller position settings
-//  if (read_successful)
-//  {
-//    for (size_t i = 0; i < position_config_list.size(); i++)
-//    {
-//      m_controller->setPositionSettings(i, position_config_list[i]);
-
-//      LOGGING_ERROR_C(DriverSVH, SVHController, "new position settings recieved: " << endl <<
-//                      "WMin = " << position_config_list[i].wmn << endl);
-//    }
-//  }
-//  else
-//  {
-//    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not load position settings from config file" << endl);
-//  }
-
-//  // load current settings from config file
-//  std::vector<SVHCurrentSettings> current_config_list;
-//  read_successful =
-//    icc::get(CONFIG_VALUES(
-//               CONFIG_LIST(
-//                 SVHCurrentSettings, "/SVH/CurrentSettings",
-//                 MEMBER_MAPPING(
-//                   SVHCurrentSettings,
-//                   MEMBER_VALUE_1("WMin", SVHCurrentSettings, wmn)
-//                   MEMBER_VALUE_1("WMax", SVHCurrentSettings, wmx)
-//                   MEMBER_VALUE_1("KY", SVHCurrentSettings, ky)
-//                   MEMBER_VALUE_1("DT", SVHCurrentSettings, dt)
-//                   MEMBER_VALUE_1("IMin", SVHCurrentSettings, imn)
-//                   MEMBER_VALUE_1("IMax", SVHCurrentSettings, imx)
-//                   MEMBER_VALUE_1("KP", SVHCurrentSettings, kp)
-//                   MEMBER_VALUE_1("KI", SVHCurrentSettings, ki)
-//                   MEMBER_VALUE_1("UMin", SVHCurrentSettings, umn)
-//                   MEMBER_VALUE_1("UMax", SVHCurrentSettings, umx)),
-//                 std::back_inserter(current_config_list))),
-//             icl_core::logging::Nirwana::instance());
-
-//  // set current position settings
-//  if (read_successful)
-//  {
-//    for (size_t i = 0; i < current_config_list.size(); i++)
-//    {
-//      m_controller->setCurrentSettings(i, current_config_list[i]);
-//    }
-//  }
-//  else
-//  {
-//    LOGGING_ERROR_C(DriverSVH, SVHFingerManager, "Could not load current settings from config file" << endl);
-//  }
-  return true;
+  m_reset_timeout = (resetTimeout>0)?resetTimeout:0;
 }
 
 }

@@ -45,7 +45,7 @@ int main(int argc, const char* argv[])
   // build serial packet for sending
   ArrayBuilder payload(40);
   SVHSerialPacket test_serial_packet;
-  SVHPositionSettings test_pos_settings =  {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1};
+  SVHPositionSettings test_pos_settings(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1);
 
   // Get the Position settings as payload
   payload << test_pos_settings;

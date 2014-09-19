@@ -110,7 +110,7 @@ struct SVHControllerFeedbackAllChannels
    * \brief Constructs an empty SVHControllerFeedbackAllChannels objects, prefilled with 9 default channel feedbacks, mainly usefull for deserialization
    */
   SVHControllerFeedbackAllChannels():
-    feedbacks(9,SVHControllerFeedback())
+    feedbacks(9)
   { }
 
 
