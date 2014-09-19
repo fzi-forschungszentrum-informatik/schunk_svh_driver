@@ -22,7 +22,7 @@ ADD_SUBDIRECTORY (src/icl_comm)
 ADD_SUBDIRECTORY (src/driver_s5fh)
 
 cmake_minimum_required(VERSION 2.8.3)
-project(svh_controller)
+project(schunk_svh_driver)
 
 find_package(catkin REQUIRED COMPONENTS
     roscpp
