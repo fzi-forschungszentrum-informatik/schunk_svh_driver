@@ -4,23 +4,26 @@
   <arg name="autostart" default="true"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
+  <arg name="log_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
 
   <!-- load basic configuration -->
-  <rosparam file="$(find svh_controller)/cfg/svh.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/svh.yaml" command="load" ns="svh_controller"/>
   <!-- Load Yaml Configuration file-->
-  <rosparam file="$(find svh_controller)/cfg/controller_default.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/controller_default.yaml" command="load" ns="svh_controller"/>
   <!-- Load the User Config file which will overwrite values from default -->
-  <rosparam file="$(find svh_controller)/cfg/controller_user.yaml" command="load" ns="svh_controller"/>
+  <rosparam file="$(find schunk_svh_driver)/etc/controller_user.yaml" command="load" ns="svh_controller"/>
  
   <!-- Robot description for State publishers -->
-  <param name="robot_description" command="$(find xacro)/xacro.py $(find svh_controller)/description/urdf/svh-standalone.urdf.xacro" />
-  <!--param name="use_gui" value="$(arg gui)"-->
-
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find schunk_svh_driver)/description/urdf/svh-standalone.urdf.xacro" />
 
   <!-- Launch actual driver node (if not in simulation)-->
-  <node unless="$(arg simulation)" name="svh_controller" pkg="svh_controller" type="svh_controller" output="screen">
+  <node unless="$(arg simulation)" name="svh_controller" pkg="schunk_svh_driver" type="svh_controller" output="screen">
     <param name="serial_device" value="$(arg serial_device)"/>
     <param name="autostart" value="$(arg autostart)" />
+    <!-- Params for the ICL (driver internal) logging. General configuration in the given logging.xml, output will be saved to the who given files -->
+    <param name="log_config" value="$(arg log_config)" />
+    <param name="log_debug_file" value="$(find schunk_svh_driver)/log/DriverSVH_Debug.log" />
+    <param name="log_trace_file" value="$(find schunk_svh_driver)/log/DriverSVH_Trace.log" />
   </node>
 
   <!-- Start RQT by default if not specified otherwise -->
@@ -39,8 +42,11 @@
   </node>
 
   <!-- Joint state publisher to provide easy control of the real hardware. Enable this node if you want to have fast input with sliders -->
-  <node name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  <!-- will only be used if no "simulation" is selecten. NOTE: In order to provide input from you software -> remove this complete node -->
+  <node unless="$(arg simulation)" name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
         <remap from="joint_states" to="svh_controller/channel_targets" />
+        <!-- if this node is used we always want to see its output -->
+        <param name="use_gui" value="true"/>
   </node>
   
 </launch>

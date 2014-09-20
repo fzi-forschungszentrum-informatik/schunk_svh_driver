@@ -1,5 +1,6 @@
 // ROS includes.
 #include <ros/ros.h>
+#include <string>
 
 // Custom includes
 #include "SVHNode.h"
@@ -13,17 +14,21 @@
 
 SVHNode::SVHNode(const ros::NodeHandle & nh)
 {
-  // Initialize the icl_library logging framework
-  icl_core::logging::initialize();
-
 
   //==========
   // Params
   //==========
 
-  bool autostart;
+  bool autostart,log_config_available;
   int reset_timeout;
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
+  // Config that contains the log stream configuration without the file names
+  std::string log_config_file;
+  // File to store the debug and log files in
+  std::string log_debug_file,log_trace_file;
+
+
+
   try
   {
     nh.param<bool>("autostart",autostart,false);
@@ -31,11 +36,49 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
     nh.getParam("disable_flags",disable_flags);
     nh.getParam("reset_timeout",reset_timeout);
+    log_config_available = nh.getParam("log_config",log_config_file);
+    nh.getParam("log_debug_file",log_debug_file);
+    nh.getParam("log_trace_file",log_trace_file);
   }
   catch (ros::InvalidNameException e)
   {
     ROS_ERROR("Parameter Error!");
   }
+
+  // Initialize the icl_library logging framework ( THIS NEEDS TO BE DONE BEFORE ANY LIB OBJECT IS CREATED)
+  if (log_config_available)
+  {
+    // Fake an input to the logging call to tell it where to look for the logging config
+
+    // Strdup to create non const chars as it is required by the initialize function.
+    // not realy beatuiful but it works.
+    // Note: The -o is an option to provide parameters that would otherwise be written in the logging.xml config file
+    // As filenames in there are however relative to the execution folder and not to the ros package folder we use everything from the xml
+    // except the filenames which will be provided by the launch script that can resolve the package location.
+    // This quite ugly workaround is neccessary due to the fact that the driver library uses internal logging that was not initially build for use with ros
+    char * argv[]= {
+      strdup("Logging"),
+      strdup("-o/IclCore/Logging/OutputStreamDebug/FileName"),
+      strdup(log_debug_file.c_str()),
+      strdup("-o/IclCore/Logging/OutputStreamTrace/FileName"),
+      strdup(log_trace_file.c_str()),
+      strdup("-c"),
+      strdup(log_config_file.c_str())
+    };
+    int argc = 7; // number of elements above
+
+    // In case the file is not present (event though the parameter is) the logging will just put out a
+    // warning so we dont need to check it further. However the log level will only be Info (out of the available Error, Warning, Info, Debug, Trace)
+    // in that case also the log files will be disregarded
+    icl_core::logging::initialize(argc,argv);
+  }
+  else
+  {
+    icl_core::logging::initialize();
+  }
+
+
+
 
   for (size_t i = 0; i < 9; ++i)
   {
@@ -46,7 +89,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   }
 
   // Init the actual driver hook (after logging initialize)
-  fm_.reset(new driver_svh::SVHFingerManager(disable_flags,serial_device_name_,reset_timeout));
+  fm_.reset(new driver_svh::SVHFingerManager(disable_flags,reset_timeout));
 
   // Rosparam can only fill plain vectors so we will have to go through them
   std::vector< std::vector<float> > position_settings(driver_svh::eSVH_DIMENSION);

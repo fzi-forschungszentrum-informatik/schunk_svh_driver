@@ -45,7 +45,12 @@
 class SVHNode{
 
 public:
+  //!
+  //! \brief SVHNode constructs a new node object that handles most of the functionality
+  //! \param nh ROS Nodehandle
+  //!
   SVHNode(const ros::NodeHandle &nh);
+  //! Default DTOR
   ~SVHNode();
 
   //! Dynamic reconfigure callback to update changing parameters
@@ -71,7 +76,7 @@ public:
 
 
 private:
-  //! Handle to the SVH finger manager for hardware acces
+  //! Handle to the SVH finger manager for library access
   boost::shared_ptr<driver_svh::SVHFingerManager> fm_;
 
   //! Serial device to use for communication with hardware
@@ -79,14 +84,6 @@ private:
 
   //! joint state message template
   sensor_msgs::JointState channel_pos_;
-
-//  //! The current controller settings as given in the parameters
-//  std::vector<driver_svh::SVHCurrentSettings> current_settings_;
-//  //! The postion controller settings as given in the paramters
-//  std::vector<driver_svh::SVHPositionSettings> position_settings_;
-
-
 };
-
 
 #endif // S5FH_CONTROLLER_H
