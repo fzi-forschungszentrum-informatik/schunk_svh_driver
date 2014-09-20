@@ -81,7 +81,7 @@ public:
    * \param autostart if set to true, the driver will immediately connect to the hardware and try to reset all fingers
    * \param dev_name the dev to use for autostart. Default is /dev/ttyUSB0
    */
-  SVHFingerManager(const std::vector<bool> &disable_mask = std::vector<bool>(9,false), const std::string &dev_name = "/dev/ttyUSB0", const uint32_t &reset_timeout = 5);
+  SVHFingerManager(const std::vector<bool> &disable_mask = std::vector<bool>(9,false), const uint32_t &reset_timeout = 5);
 
   virtual ~SVHFingerManager();
 
@@ -90,7 +90,7 @@ public:
   *  \param dev_name file handle of the serial device e.g. "/dev/ttyUSB0"
   * \return true if connection was succesful
   */
-  bool connect(const std::string &dev_name);
+  bool connect(const std::string &dev_name = "/dev/ttyUSB0");
 
   //!
   //! \brief disconnect SCHUNK five finger hand
@@ -191,7 +191,8 @@ public:
   void setMovementState(const MovementState &state);
 
 
-  //! This is a debuging function. Should not be called by users
+  //! requests the current controller state to be updated
+  //! @note This is a debuging function. Should not be called by users
   void requestControllerState();
 
   //!

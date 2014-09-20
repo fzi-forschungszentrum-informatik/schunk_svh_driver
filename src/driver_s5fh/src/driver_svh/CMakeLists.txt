@@ -56,3 +56,10 @@ ICMAKER_DEPENDENCIES(OPTIONAL EXPORT
 
 ICMAKER_BUILD_LIBRARY()
 ICMAKER_INSTALL_HEADERS(${icmaker_target})
+
+#----------------------------------------------------------------------
+# Doxygen configuration
+#----------------------------------------------------------------------
+
+SET(IC_WORKSPACE_DOXYGEN_PROJECT_NAME "driver_svh" CACHE INTERNAL "")
+SET(IC_WORKSPACE_DOXYGEN_CONFIG_OVERRIDES "FILE_PATTERNS = *.h *.hpp *.doxy *.cpp" CACHE INTERNAL "")

@@ -320,7 +320,8 @@ void SVHController::requestControllerFeedback(const SVHChannel& channel)
     SVHSerialPacket serial_packet(40,SVH_GET_CONTROL_FEEDBACK|static_cast<uint8_t>(channel << 4));
     m_serial_interface ->sendPacket(serial_packet);
 
-    LOGGING_TRACE_C(DriverSVH, SVHController, "Controller feedback was requested for channel: "<< channel << endl);
+    // Disabled as it spams the output to much
+    //LOGGING_TRACE_C(DriverSVH, SVHController, "Controller feedback was requested for channel: "<< channel << endl);
 
   }
   else if (channel == eSVH_ALL)
@@ -328,7 +329,8 @@ void SVHController::requestControllerFeedback(const SVHChannel& channel)
     SVHSerialPacket serial_packet(40,SVH_GET_CONTROL_FEEDBACK_ALL);
     m_serial_interface ->sendPacket(serial_packet);
 
-    LOGGING_DEBUG_C(DriverSVH, SVHController, "Controller feedback was requested for all channels " << endl);
+    // Disabled as it spams the output to much
+    //LOGGING_TRACE_C(DriverSVH, SVHController, "Controller feedback was requested for all channels " << endl);
   }
   else
   {
