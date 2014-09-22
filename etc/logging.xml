@@ -15,8 +15,8 @@ from various LogStreams. -->
 and Error. -->
 <OutputStreamDefaultEvents>
 <Name>DefaultEvents</Name>
-<OutputStreamName>Stdout</OutputStreamName>
-<LogLevel>Warning</LogLevel>
+<OutputStreamName>Stderr</OutputStreamName>
+<LogLevel>Info</LogLevel>
 <LogStream1>DriverSVH</LogStream1>
 </OutputStreamDefaultEvents>
 
@@ -28,7 +28,7 @@ and Error. -->
 <!-- this can however be used if you want to just use the lib without any ros components -->
 <!--FileName>log/DriverSVH_Debug.log</FileName-->
 <!-- time is given in DAYS -->
-<DeleteOlderThan>3</DeleteOlderThan>
+<DeleteOlderThan>1</DeleteOlderThan>
 <Rotate>yes</Rotate>
 <LogLevel>Debug</LogLevel>
 <LogStream1>DriverSVH</LogStream1>
@@ -40,9 +40,9 @@ and Error. -->
 <OutputStreamName>File</OutputStreamName>
 <!-- see comment above -->
 <!--FileName>log/DriverSVH_Trace.log</FileName-->
-<DeleteOlderThan>3</DeleteOlderThan>
+<DeleteOlderThan>1</DeleteOlderThan>
 <Rotate>yes</Rotate>
-<LogLevel>Debug</LogLevel>
+<LogLevel>Trace</LogLevel>
 <LogStream1>DriverSVH</LogStream1>
 </OutputStreamTrace>
 
