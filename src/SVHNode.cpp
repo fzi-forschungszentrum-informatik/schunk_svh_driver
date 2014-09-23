@@ -1,3 +1,17 @@
+// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
+
+// -- BEGIN LICENSE BLOCK ----------------------------------------------
+// -- END LICENSE BLOCK ------------------------------------------------
+
+//----------------------------------------------------------------------
+/*!\file
+ *
+ * \author  Lars Pfotzer
+ * \author  Georg Heppner
+ * \date    2014-09-23
+ *
+ */
+//----------------------------------------------------------------------
 // ROS includes.
 #include <ros/ros.h>
 #include <string>
