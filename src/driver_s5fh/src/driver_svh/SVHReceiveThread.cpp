@@ -90,8 +90,6 @@ bool SVHReceiveThread::receiveData()
       uint8_t data_byte = 0;
       if (m_serial_device->Read(&data_byte, sizeof(uint8_t)))
       {
-        LOGGING_TRACE_C(DriverSVH, SVHReceiveThread, "Get eRS_HEADER1 data. data byte = " << static_cast<int>(data_byte) << endl);
-
         if (data_byte == PACKET_HEADER1)
         {
           m_received_state = eRS_HEADER2;

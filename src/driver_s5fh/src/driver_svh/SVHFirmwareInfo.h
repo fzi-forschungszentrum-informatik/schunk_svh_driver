@@ -54,9 +54,10 @@ struct SVHFirmwareInfo
 inline icl_comm::ArrayBuilder& operator << (icl_comm::ArrayBuilder& ab, SVHFirmwareInfo& data)
 {
   // Stream operator can not handle arrays (due to missing size information) to make things easy we just copy the data around. Feel free to do something else
-  // Todo : Can the operator handle this without conversion? Also .. string uses char.. and not unsigned char.. but that is also 8 bit so.. we are save.. maybe we have to use std::basic_string<unsinge_char> ... try it..
-  std::vector<uint8_t> text(48);
-  std::vector<uint8_t> svh(4);
+  // Todo: The conversion in this direction is not properly working, as the readout is working fine so far this is a fix for later.
+  // It is probably something that has to do with the data types and how that is interpreted by the arrayBuilder
+  std::vector<int8_t> text(48);
+  std::vector<int8_t> svh(4);
   svh.insert(svh.begin(),data.svh.begin(),data.svh.end());
   text.insert(text.begin(),data.text.begin(),data.text.end());
 
@@ -74,7 +75,7 @@ inline icl_comm::ArrayBuilder& operator >> (icl_comm::ArrayBuilder& ab, SVHFirmw
 {
   // Stream operator can not handle arrays (due to missing size information) to make things easy we just copy the data around. Feel free to do something else
   std::vector<uint8_t> text(48);
-  std::vector<uint8_t> svh(5);
+  std::vector<uint8_t> svh(4);
 
   ab >> svh
      >> data.version_major

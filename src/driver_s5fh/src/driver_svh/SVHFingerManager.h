@@ -262,6 +262,12 @@ public:
   //!
   void setResetTimeout(const int& resetTimeout);
 
+  //!
+  //! \brief getFirmwareInfo Requests the firmware information from the harware, waits a bit and returns the last one read
+  //! \return the last firmware information read (this may not be the one currently requested)
+  //!
+  SVHFirmwareInfo getFirmwareInfo();
+
 
   #ifdef _IC_BUILDER_ICL_COMM_WEBSOCKET_
   /*!
@@ -347,7 +353,6 @@ private:
     * Beware. Setting this value very high might result in damage to the motors during reset.
     */
   std::vector<double> m_reset_current_factor;
-
 
   //!
   //! \brief Converts joint positions of a specific channel from RAD to ticks
