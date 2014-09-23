@@ -82,8 +82,9 @@ add_executable(svh_controller
   src/SVHNode.cpp
 )
 
-add_executable(svh_testomat
-  src/svh_testomat.cpp
+# Simple test programs
+add_executable(svh_sin_test
+  src/SVHSinTest.cpp
 )
 
 # Add cmake target dependencies of the executable/library
@@ -104,13 +105,13 @@ target_link_libraries(svh_controller
 )
 
 
-add_dependencies(svh_testomat
+add_dependencies(svh_sin_test
   icl_comm
   icl_core
 )
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(svh_testomat
+target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
   ${icl_comm_LIBRARIES}
   ${icl_core_LIBRARIES}

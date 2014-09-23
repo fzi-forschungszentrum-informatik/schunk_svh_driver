@@ -1,6 +1,20 @@
-﻿/*!
- * THIS FILE IS A VERY SIMPLE TEST PROGRAM!
+﻿// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
+
+// -- BEGIN LICENSE BLOCK ----------------------------------------------
+// -- END LICENSE BLOCK ------------------------------------------------
+
+//----------------------------------------------------------------------
+/*!\file
+ *
+ * \author  Georg Heppner
+ * \date    2014-09-23
+ *
+ * This file contains a very very simple test node that will generate a
+ * sin movement for slected fingers of the Schunk Five finger hand.
+ * It is only meant to be used as a quick test and demo program to use the
+ * Schunk five finger hand and test its operation.
  */
+//----------------------------------------------------------------------
 
 // ROS includes.
 #include <ros/ros.h>
@@ -19,24 +33,20 @@
 // Consts
 // Loop Rate (i.e Frequency) of the ROS node -> 50 = 50HZ
 const double loop_rate = 50;
-// Time of a half Sin. i.e. 10 = In 10 Seconds the Pinky and the index finger distal will perform a close and open (Sin to 1PI)
+// Time of a half Sin. i.e. 10 = In 10 Seconds the selected fingers will perform a close and open (Sin to 1PI)
 const double sin_duration = 10;
 
 
 // Local Vars
-bool running =false;
+bool running = false;
 /*--------------------------------------------------------------------
  * Callback functions
  *------------------------------------------------------------------*/
-
-
 // Toggle on off
 void runCallback(const std_msgs::Empty&)
 {
   running = !running;
 }
-
-
 /*--------------------------------------------------------------------
  * main()
  * Main function to set up ROS node.
@@ -45,7 +55,7 @@ void runCallback(const std_msgs::Empty&)
 int main(int argc, char **argv)
 {
   // Set up ROS.
-  ros::init(argc, argv, "svh_testomat");
+  ros::init(argc, argv, "svh_sine_test");
   ros::NodeHandle nh("~");
 
   // Subscribe connect topic (Empty)
@@ -108,11 +118,15 @@ int main(int argc, char **argv)
 
       // Set the Spread to 0.5 (to avoid any collisions)
       channel_pos.position[8] = 0.5;
-      // Calculate a half sin for the fingers
+      // Calculate a halfe sin for the fingers
       double cur_pos = sin(normalized_time*3.14);
       // Set the 2 Test fingers to the sin value
-      channel_pos.position[7] = cur_pos;
-      channel_pos.position[2] = cur_pos;
+      channel_pos.position[7] = cur_pos; //Pinky
+      channel_pos.position[2] = cur_pos; //Index Distal
+      channel_pos.position[3] = cur_pos; //Index proximal
+      channel_pos.position[4] = cur_pos; //Middle Distal
+      channel_pos.position[5] = cur_pos; //Middle proximal
+      channel_pos.position[6] = cur_pos; //Ring Finger
 
       // Publish
       channel_pos_pub.publish(channel_pos);
@@ -121,6 +135,7 @@ int main(int argc, char **argv)
     ros::spinOnce();
 
     // TO INDTRODUCE A VARIIING TIME RATE (in This case 50 - 100 HZ ) Uncomment this (discouraged! Will result in strange things obiously)
+    // Was meant to test jitter in the trajectory generation
     //rate = 50+(rand() % 10 )*5;
   }
 
