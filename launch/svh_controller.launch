@@ -5,6 +5,8 @@
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
   <arg name="log_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
+  <!-- BEWARE SET THIS TO FALSE TO USE THE HAND WITH ANY OTHER ROS TOOL -->
+  <arg name="standalone" default="true"/>
 
   <!-- load basic configuration -->
   <rosparam file="$(find schunk_svh_driver)/etc/svh.yaml" command="load" ns="svh_controller"/>
@@ -42,11 +44,14 @@
   </node>
 
   <!-- Joint state publisher to provide easy control of the real hardware. Enable this node if you want to have fast input with sliders -->
-  <!-- will only be used if no "simulation" is selecten. NOTE: In order to provide input from you software -> remove this complete node -->
-  <node unless="$(arg simulation)" name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  <!-- will only be used if no "simulation" is selected. AND the cdontroller is not started as standalone. -->
+  <!-- NOTE: In order to provide input from you software -> remove this complete node or set the standalone flag to false. Otherwise the joint state publisher will overwrite your values -->
+  <group unless="$(arg simulation)">
+  <node if="$(arg standalone)" name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
         <remap from="joint_states" to="svh_controller/channel_targets" />
         <!-- if this node is used we always want to see its output -->
         <param name="use_gui" value="true"/>
   </node>
+  </group>
   
 </launch>

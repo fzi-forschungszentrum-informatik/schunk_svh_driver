@@ -1,5 +1,5 @@
 #Make a Fist with Some Channels:
-rostopic pub /joint_states sensor_msgs/JointState "header:
+rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
@@ -9,7 +9,7 @@ velocity: [0]
 effort: [0]" 
 
 # Open The fist aggain with some channels:
-rostopic pub /joint_states sensor_msgs/JointState "header:
+rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
@@ -19,7 +19,7 @@ velocity: [0]
 effort: [0]"
 
 # Make a Fist with ALL Channels:
-rostopic pub /joint_states sensor_msgs/JointState "header:
+rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
@@ -29,7 +29,7 @@ velocity: [0]
 effort: [0]"
 
 #Open The fist aggain with ALL channels:
-rostopic pub /joint_states sensor_msgs/JointState "header:
+rostopic pub /svh_controller/channel_targets sensor_msgs/JointState "header:
   seq: 0
   stamp: {secs: 0, nsecs: 0}
   frame_id: ''
@@ -37,11 +37,10 @@ name: ['Index_Finger_Proximal','Index_Finger_Distal','Middle_Finger_Proximal','M
 position: [0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0]
 velocity: [0]
 effort: [0]"
-publishing and latching message. Press ctrl-C to terminate
 
 # FOR THE TESTOMAT:
 # Turn the interpolation ON and OFF
-rostoc pub /s5fh_testomat/toggle_run std_msgs/Empty "{}" 
+rostopic pub -1 /svh_sin_test/toggle_run std_msgs/Empty "{}"
 
 # Read out the rate of the published Topic:
 rostopic hz /s5fh/interpolator/joint_commands 

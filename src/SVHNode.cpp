@@ -1,3 +1,17 @@
+// this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
+
+// -- BEGIN LICENSE BLOCK ----------------------------------------------
+// -- END LICENSE BLOCK ------------------------------------------------
+
+//----------------------------------------------------------------------
+/*!\file
+ *
+ * \author  Lars Pfotzer
+ * \author  Georg Heppner
+ * \date    2014-09-23
+ *
+ */
+//----------------------------------------------------------------------
 // ROS includes.
 #include <ros/ros.h>
 #include <string>
@@ -300,14 +314,17 @@ sensor_msgs::JointState SVHNode::getCurrentPositions()
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
+      double cur_cur = 0.0;
       if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
         fm_->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
+        // Read out currents if you want to
+        //fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
       }
-
       channel_pos_.position[channel] = cur_pos;
     }
   }
+
 
   channel_pos_.header.stamp = ros::Time::now();
   return  channel_pos_;
