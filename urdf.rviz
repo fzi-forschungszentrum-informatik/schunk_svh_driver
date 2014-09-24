@@ -6,10 +6,11 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1/Frames1
+        - /TF1/Tree1
         - /RobotModel1
-        - /TF1
-      Splitter Ratio: 0.5
-    Tree Height: 595
+      Splitter Ratio: 0.772917
+    Tree Height: 579
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -50,6 +51,20 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
+    - Class: rviz/TF
+      Enabled: false
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        {}
+      Update Interval: 0
+      Value: false
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
@@ -65,41 +80,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        arm_0_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_4_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_5_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_6_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         b:
           Alpha: 1
           Show Axes: false
@@ -118,17 +98,14 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         d2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         e:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         e1:
           Alpha: 1
           Show Axes: false
@@ -143,22 +120,18 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         e4:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         e5:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         h:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         i:
           Alpha: 1
           Show Axes: false
@@ -224,12 +197,21 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        virtual_a:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         virtual_i:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         virtual_j:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        virtual_k:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -245,140 +227,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
       Name: RobotModel
-      Robot Description: robot_description
+      Robot Description: /robot_description
       TF Prefix: ""
       Update Interval: 0
       Value: true
       Visual Enabled: true
-    - Class: rviz/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: true
-        a:
-          Value: true
-        arm_0_link:
-          Value: true
-        arm_1_link:
-          Value: true
-        arm_2_link:
-          Value: true
-        arm_3_link:
-          Value: true
-        arm_4_link:
-          Value: true
-        arm_5_link:
-          Value: true
-        arm_6_link:
-          Value: true
-        b:
-          Value: true
-        base_link:
-          Value: true
-        c:
-          Value: true
-        d:
-          Value: true
-        d2:
-          Value: true
-        e:
-          Value: true
-        e1:
-          Value: true
-        e2:
-          Value: true
-        e3:
-          Value: true
-        e4:
-          Value: true
-        e5:
-          Value: true
-        h:
-          Value: true
-        i:
-          Value: true
-        j:
-          Value: true
-        k:
-          Value: true
-        l:
-          Value: true
-        left_hand_base_link:
-          Value: true
-        m:
-          Value: true
-        n:
-          Value: true
-        o:
-          Value: true
-        p:
-          Value: true
-        q:
-          Value: true
-        r:
-          Value: true
-        s:
-          Value: true
-        t:
-          Value: true
-        virtual_i:
-          Value: true
-        virtual_j:
-          Value: true
-        virtual_l:
-          Value: true
-        z:
-          Value: true
-      Marker Scale: 0.1
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: true
-      Tree:
-        base_link:
-          arm_0_link:
-            arm_1_link:
-              arm_2_link:
-                arm_3_link:
-                  arm_4_link:
-                    arm_5_link:
-                      arm_6_link:
-                        left_hand_base_link:
-                          d:
-                            h:
-                              d2:
-                                virtual_l:
-                                  l:
-                                    p:
-                                      t:
-                                        {}
-                            k:
-                              o:
-                                s:
-                                  {}
-                          e1:
-                            e2:
-                              e3:
-                                e:
-                                  e4:
-                                    virtual_i:
-                                      i:
-                                        m:
-                                          q:
-                                            {}
-                                  e5:
-                                    virtual_j:
-                                      j:
-                                        n:
-                                          r:
-                                            {}
-                          z:
-                            a:
-                              b:
-                                c:
-                                  {}
-      Update Interval: 0
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -403,25 +256,30 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.51376
+      Distance: 1.90396
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.06
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
       Focal Point:
-        X: -0.170965
-        Y: -0.11737
-        Z: 0.396428
+        X: 0.0561361
+        Y: -0.890261
+        Z: -0.521505
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.470398
+      Pitch: 0.584797
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.0954
+      Yaw: 1.66529
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 882
+  Height: 910
   Hide Left Dock: false
-  Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000013c000002defc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005300fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000036000002de000000b700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002defc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730100000036000002de0000009b00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004c00000003efc0100000002fb0000000800540069006d00650100000000000004c00000027a00fffffffb0000000800540069006d0065010000000000000450000000000000000000000269000002de00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Hide Right Dock: true
+  QMainWindow State: 000000ff00000000fd000000040000000000000199000002dbfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006800fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000046000002db000000e600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c000002610000000100000113000002dbfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000046000002db000000be00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000004a0000000a9fc0100000002fb0000000a0049006d0061006700650000000000000004a00000000000000000fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000046f00000044fc0100000002fb0000000800540069006d006501000000000000046f0000038800fffffffb0000000800540069006d00650100000000000004500000000000000000000002d0000002db00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -429,7 +287,7 @@ Window Geometry:
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: false
-  Width: 1216
-  X: 2613
-  Y: 179
+    collapsed: true
+  Width: 1135
+  X: 0
+  Y: 26

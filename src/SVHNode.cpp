@@ -49,7 +49,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.param<std::string>("serial_device",serial_device_name_,"/dev/ttyUSB0");
     // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
     nh.getParam("disable_flags",disable_flags);
-    nh.getParam("reset_timeout",reset_timeout);
+    nh.param<int>("reset_timeout",reset_timeout,5);
     log_config_available = nh.getParam("log_config",log_config_file);
     nh.getParam("log_debug_file",log_debug_file);
     nh.getParam("log_trace_file",log_trace_file);
