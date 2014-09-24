@@ -27,6 +27,7 @@ project(schunk_svh_driver)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
+    sensor_msgs
     dynamic_reconfigure
     rospy
     rqt_gui
