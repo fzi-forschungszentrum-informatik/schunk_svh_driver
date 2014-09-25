@@ -1,6 +1,14 @@
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package schunk_svh
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package schunk_svh_driver
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+0.1.1 (2014-09-26)
+------------------
+* Made the launch file a little bit better to support simulation without standalone flag
+* Updated the quick commands to contain speeds and efforts as this is required by the joint state publisher
+* Added UDEV rules to the package
+* Fixed package name
+* Contributors: Andreas Hermann, Georg Heppner
 
 0.1.0 (2014-09-25)
 ------------------
