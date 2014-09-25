@@ -38,7 +38,7 @@ position: [0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0]
 velocity: [0,0,0,0,0,0,0,0,0]
 effort: [0,0,0,0,0,0,0,0,0]"
 
-# FOR THE TESTOMAT:
+# For the sin test:
 # Turn the interpolation ON and OFF
 rostopic pub -1 /svh_sin_test/toggle_run std_msgs/Empty "{}"
 
