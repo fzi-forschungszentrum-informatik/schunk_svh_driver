@@ -1,0 +1,20 @@
+This is the driver package for the SCHUNK SVH Five-Finger-Hand.
+It was developed on behalf of SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar, Germany
+at the FZI Research Center for Information Technology in Karlsruhe, Germany.
+
+All core components are distributed under the LGPL license:
+- The low level hardware driver
+- The ROS abstraction layer
+- 3D model and kinematics description for visualization and grasp planning
+
+The build system "icmaker" is distributed under the BSD License.
+The basis libraries "icl_core" and "icl_comm" are distributed under the LGPL license.
+These components were independently developed at the 
+FZI Research Center for Information Technology in Karlsruhe, Germany and
+are not part of the actual driver.
+
+Also included is the TinyXML Library which was developed by
+Lee Thomason (http://www.grinninglizard.com)
+and is distributed under the zlib/libpng license.
+
+Find the license texts in this folder.

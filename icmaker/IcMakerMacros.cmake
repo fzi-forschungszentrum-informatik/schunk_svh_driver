@@ -1,4 +1,7 @@
 # this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+# -- END LICENSE BLOCK ------------------------------------------------
+
 # ===================================================
 # Macros that checks if module have been installed.
 # After it adds module to build and define
