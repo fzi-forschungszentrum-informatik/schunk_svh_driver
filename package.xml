@@ -38,7 +38,7 @@
   
   <export>
  	<rqt_gui plugin="${prefix}/plugin.xml" />
-        <!--rosdoc config="etc/rosdoc.yaml" /-->
+        <rosdoc config="etc/rosdoc.yaml" />
   </export>
   
 </package>
