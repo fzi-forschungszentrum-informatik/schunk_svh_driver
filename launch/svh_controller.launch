@@ -34,8 +34,10 @@
   <!-- Joint state publisher is needed in order to use the mimic tag within the URDF (needed for propper visualization) Hardware will work without it thoug -->
     <node name="output_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
             <rosparam unless="$(arg simulation)" param="source_list">["svh_controller/channel_feedback"] </rosparam>
-            <!-- only show the gui if simulation was selected, otherwise this joint state publisher is just used for the tags -->
-            <param name="use_gui" value="$(arg simulation)"/>
+            <!-- in case of a simulation the input shall behave like the regular input -->
+            <rosparam if="$(arg simulation)" param="source_list">["svh_controller/channel_targets"] </rosparam>
+            <!-- Never show the output gui of this one. We just use it to get the mimic tag of the urdf right -->
+            <param name="use_gui" value="false" />
     </node>
 
 
@@ -43,15 +45,12 @@
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
   </node>
 
-  <!-- Joint state publisher to provide easy control of the real hardware. Enable this node if you want to have fast input with sliders -->
-  <!-- will only be used if no "simulation" is selected. AND the cdontroller is not started as standalone. -->
-  <!-- NOTE: In order to provide input from you software -> remove this complete node or set the standalone flag to false. Otherwise the joint state publisher will overwrite your values -->
-  <group unless="$(arg simulation)">
+  <!-- Joint state publisher to provide easy control of the real hardware. Just enabled if you want to use it standalone to provide easy acces with sliders -->
   <node if="$(arg standalone)" name="input_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
         <remap from="joint_states" to="svh_controller/channel_targets" />
         <!-- if this node is used we always want to see its output -->
         <param name="use_gui" value="true"/>
   </node>
-  </group>
+
   
 </launch>
