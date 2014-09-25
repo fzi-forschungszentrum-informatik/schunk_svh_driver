@@ -11,7 +11,6 @@ ELSE()
   ICMAKER_REGISTER_PACKAGE(icl_comm)
 
   ADD_SUBDIRECTORY (src/icl_comm)
-  ADD_SUBDIRECTORY (src/icl_comm_rosbridge)
   ADD_SUBDIRECTORY (src/icl_comm_serial)
   ADD_SUBDIRECTORY (src/icl_comm_websocket)
 
