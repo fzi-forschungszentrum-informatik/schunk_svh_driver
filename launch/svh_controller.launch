@@ -34,8 +34,11 @@
   <!-- Joint state publisher is needed in order to use the mimic tag within the URDF (needed for propper visualization) Hardware will work without it thoug -->
     <node name="output_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
             <rosparam unless="$(arg simulation)" param="source_list">["svh_controller/channel_feedback"] </rosparam>
-            <!-- only show the gui if simulation was selected, otherwise this joint state publisher is just used for the tags -->
-            <param name="use_gui" value="$(arg simulation)"/>
+            <!-- in case of a simulation the input shall behave like the regular input -->
+            <rosparam if="$(arg simulation)" param="source_list">["svh_controller/channel_targets"] </rosparam>
+            <!-- only show the gui if simulation was selected AND! the simulation is standalone, otherwise this joint state publisher is just used for the tags -->
+            <param if="$(arg standalone)" name="use_gui" value="$(arg simulation)"/>
+            <param if="$(arg simulation)" name="use_gui" value="$(arg standalone)"/>
     </node>
 
 
