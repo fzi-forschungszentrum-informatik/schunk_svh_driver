@@ -1,15 +1,14 @@
 # this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
 
 # -- BEGIN LICENSE BLOCK ----------------------------------------------
-# This file is part of the SCHUNK SVH Driver suite.
 #
-# This program is free software licensed under the LGPL
-# (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
-# You can find a copy of this license in LICENSE.txt in the top
-# directory of the source code.
+# This file is part of the icmaker build system.
 #
-# © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
-# © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+# This program is free software licensed under the BSD License. You can
+# find a copy of this license in the LICENSE folder in the top directory
+# of the source code.
+#
+# © Copyright 2013 FZI Forschungszentrum Informatik, Karlsruhe, Germany
 #
 # -- END LICENSE BLOCK ------------------------------------------------
 
