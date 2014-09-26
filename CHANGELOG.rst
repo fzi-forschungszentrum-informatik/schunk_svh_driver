@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.4 (2014-09-26)
+------------------
 * Removed preliminary tests that remained from development and where not meant to be published
 * Contributors: Georg Heppner
 
