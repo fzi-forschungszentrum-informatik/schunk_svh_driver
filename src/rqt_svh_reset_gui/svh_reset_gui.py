@@ -13,6 +13,7 @@
 
 import os
 import rospy
+import rospkg
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
@@ -39,7 +40,8 @@ class SVHResetGui(Plugin):
         # Create QWidget
         self._widget = QWidget()
         
-        ui_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'SVHResetGui.ui')
+        rp = rospkg.RosPack()
+        ui_file = os.path.join(rp.get_path('schunk_svh_driver'), 'resource', 'SVHResetGui.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('SVHResetGuiUI')
         if context.serial_number() > 1:
