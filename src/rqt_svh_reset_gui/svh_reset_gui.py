@@ -6,8 +6,8 @@
 # You can find a copy of this license in LICENSE folder in the top
 # directory of the source code.
 #
-# © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
-# © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+# Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+# Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
 #
 # -- END LICENSE BLOCK ------------------------------------------------
 
