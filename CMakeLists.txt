@@ -19,7 +19,7 @@ INCLUDE(${ICMAKER_DIRECTORY}/CMakeLists.txt)
 ADD_SUBDIRECTORY (src/tinyxml)
 ADD_SUBDIRECTORY (src/icl_core)
 ADD_SUBDIRECTORY (src/icl_comm)
-ADD_SUBDIRECTORY (src/driver_s5fh)
+ADD_SUBDIRECTORY (src/driver_svh)
 
 cmake_minimum_required(VERSION 2.8.3)
 project(schunk_svh_driver)
