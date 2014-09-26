@@ -50,7 +50,7 @@ catkin_package(
 #  2. generate convex decomposed .stl
 
 
-foreach(dir meshes urdf)
+foreach(dir description/meshes description/urdf)
    install(DIRECTORY ${dir}/ 
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
@@ -121,7 +121,12 @@ target_link_libraries(svh_sin_test
 ## Install ##
 #############
 install(PROGRAMS
-  scripts/rqt_svh_reset_gui
+  scripts/rqt_svh_reset_gui/svh_reset_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+install(TARGETS svh_controller svh_sin_test
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
