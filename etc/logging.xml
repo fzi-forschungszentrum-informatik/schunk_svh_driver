@@ -29,7 +29,7 @@ and Error. -->
 <!--FileName>log/DriverSVH_Debug.log</FileName-->
 <!-- time is given in DAYS -->
 <DeleteOlderThan>1</DeleteOlderThan>
-<Rotate>yes</Rotate>
+<Rotate>no</Rotate>
 <LogLevel>Debug</LogLevel>
 <LogStream1>DriverSVH</LogStream1>
 </OutputStreamDebug>
@@ -41,7 +41,7 @@ and Error. -->
 <!-- see comment above -->
 <!--FileName>log/DriverSVH_Trace.log</FileName-->
 <DeleteOlderThan>1</DeleteOlderThan>
-<Rotate>yes</Rotate>
+<Rotate>no</Rotate>
 <LogLevel>Mute</LogLevel>  <!-- Set this to TRACE to Enable the output -->
 <LogStream1>DriverSVH</LogStream1>
 </OutputStreamTrace>

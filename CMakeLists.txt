@@ -143,13 +143,40 @@ target_link_libraries(svh_sin_test
 #############
 ## Install ##
 #############
+# Special python handling
 install(PROGRAMS
   src/rqt_svh_reset_gui/svh_reset_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+# Install targets of libs and executables
 install(TARGETS svh_controller svh_sin_test
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# install the headers
+install(DIRECTORY include/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+#launch files
+#install(DIRECTORY launch/
+#  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+
+#config files
+install(DIRECTORY etc/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc)
+
+#As the find directory will point to the share folder we need the log folder there also
+install(DIRECTORY log/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/log)
+
+#udev rules
+install(DIRECTORY udev/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev)
+
+# Individual files (Quick commands and the urdf.rviz)
+install(FILES quick_commands urdf.rviz
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
