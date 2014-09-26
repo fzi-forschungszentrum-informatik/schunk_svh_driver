@@ -9,6 +9,5 @@ ICMAKER_REGISTER_PACKAGE(driver_svh)
 
 ADD_SUBDIRECTORY (src/driver_svh)
 ADD_SUBDIRECTORY (src/ts/driver_svh)
-ADD_SUBDIRECTORY (src/ts/serial_interface)
 
 ICMAKER_CONFIGURE_PACKAGE()
