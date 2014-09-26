@@ -2,6 +2,17 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.3 (2014-09-26)
+-----------
+* Moved the widget gui to a resource folder as it is suggested by the rqt tutorials
+* Changed the includes from using find scripts to use internally set variables to prevent failures in case of multiple icl workspace instances
+* Added missing plugin.xml to install targets
+* Renamed include dir to adhere to currect naming schema
+* Added install directives for launch files, config files and headers, udev ruels, helper files and boilderplate needed for execution
+* Disabled Rotation for log files
+* Fixed install directives
+* Contributors: Georg Heppner
+
 0.1.2 (2014-09-26)
 ------------------
 * Fixed install directives in CMake
