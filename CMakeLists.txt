@@ -154,7 +154,7 @@ install(DIRECTORY udev/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev)
 
 # Individual files (Quick commands and the urdf.rviz)
-install(FILES quick_commands urdf.rviz
+install(FILES quick_commands urdf.rviz plugin.xml
 DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
