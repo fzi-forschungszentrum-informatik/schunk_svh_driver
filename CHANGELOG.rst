@@ -2,6 +2,11 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.2 (2014-09-26)
+------------------
+* Fixed install directives in CMake
+* Contributors: Andreas Hermann
+
 0.1.1 (2014-09-26)
 ------------------
 * Made the launch file a little bit better to support simulation without standalone flag
