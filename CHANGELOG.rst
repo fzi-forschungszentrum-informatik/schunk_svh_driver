@@ -2,6 +2,11 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Removed preliminary tests that remained from development and where not meant to be published
+* Contributors: Georg Heppner
+
 0.1.3 (2014-09-26)
 -----------
 * Moved the widget gui to a resource folder as it is suggested by the rqt tutorials
