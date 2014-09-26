@@ -35,11 +35,6 @@ find_package(catkin REQUIRED COMPONENTS
     xacro
 )
 
-## System dependencies are found with CMake's conventions
-find_package(icl_comm)
-find_package(icl_core)
-find_package(driver_svh)
-
 catkin_python_setup()
 
 #dynamic reconfigure files
@@ -89,15 +84,15 @@ install(DIRECTORY launch
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${icl_comm_INCLUDE_DIRS}
-  ${icl_core_INCLUDE_DIRS}
-  ${driver_svh_INCLUDE_DIRS}
+  ${ICL_COMM_INCLUDE_DIRS}
+  ${ICL_CORE_INCLUDE_DIRS}
+  ${DRIVER_SVH_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
 add_definitions(
-  ${icl_comm_DEFINITIONS}
-  ${icl_core_DEFINITIONS}
+  ${ICL_COMM_DEFINITIONS}
+  ${ICL_CORE_DEFINITIONS}
 )
 
 # Declare a cpp executable
@@ -122,9 +117,9 @@ add_dependencies(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
-  ${icl_core_LIBRARIES}
-  ${driver_svh_LIBRARIES}
+  ${ICL_COMM_LIBRARIES}
+  ${ICL_CORE_LIBRARIES}
+  ${DRIVER_SVH_LIBRARIES}
 )
 
 
@@ -136,8 +131,8 @@ add_dependencies(svh_sin_test
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
-  ${icl_core_LIBRARIES}
+  ${ICL_COMM_LIBRARIES}
+  ${ICL_CORE_LIBRARIES}
 )
 
 #############
