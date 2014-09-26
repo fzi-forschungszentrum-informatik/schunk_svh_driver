@@ -158,3 +158,8 @@ install(FILES quick_commands urdf.rviz plugin.xml
 DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
+# Install resources
+install(DIRECTORY resource
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
