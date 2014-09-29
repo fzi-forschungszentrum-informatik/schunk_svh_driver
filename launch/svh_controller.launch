@@ -1,6 +1,6 @@
 <launch>
   <!-- global PARAMS Change here if needed -->
-  <arg name="gui" default="True" />
+  <arg name="gui" default="False" />
   <arg name="autostart" default="true"/>
   <arg name="serial_device" default="/dev/ttyUSB0"/>
   <arg name="simulation" default="False"/>
