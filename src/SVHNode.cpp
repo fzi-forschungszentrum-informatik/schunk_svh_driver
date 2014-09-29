@@ -252,9 +252,9 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
   // bool vector storing true, if new target position read
   std::vector<bool> pos_read(driver_svh::eSVH_DIMENSION, false);
   // target positions read counter
-  u_int8_t pos_read_counter = 0;
+  uint8_t pos_read_counter = 0;
 
-  int32_t index = 0;
+  size_t index = 0;
   std::vector<std::string>::const_iterator joint_name;
   for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name,++index)
   {
