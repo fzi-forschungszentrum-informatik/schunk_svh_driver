@@ -48,7 +48,7 @@ const double sin_duration = 10;
 
 
 // Local Vars
-bool running = false;
+bool running = true;
 /*--------------------------------------------------------------------
  * Callback functions
  *------------------------------------------------------------------*/

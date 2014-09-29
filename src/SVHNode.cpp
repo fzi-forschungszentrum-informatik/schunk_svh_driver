@@ -43,26 +43,25 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   // Params
   //==========
 
-  bool autostart,log_config_available;
+  bool autostart,use_internal_logging;
   int reset_timeout;
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
-  std::string log_config_file;
+  std::string logging_config_file;
   // File to store the debug and log files in
-  std::string log_debug_file,log_trace_file;
+  //std::string log_debug_file,log_trace_file;
 
 
 
   try
   {
     nh.param<bool>("autostart",autostart,false);
+    nh.param<bool>("use_internal_logging",use_internal_logging,false);
     nh.param<std::string>("serial_device",serial_device_name_,"/dev/ttyUSB0");
     // Note : Wrong values (like numerics) in the launch file will lead to a "true" value here
     nh.getParam("disable_flags",disable_flags);
     nh.param<int>("reset_timeout",reset_timeout,5);
-    log_config_available = nh.getParam("log_config",log_config_file);
-    nh.getParam("log_debug_file",log_debug_file);
-    nh.getParam("log_trace_file",log_trace_file);
+    nh.getParam("logging_config",logging_config_file);
   }
   catch (ros::InvalidNameException e)
   {
@@ -70,31 +69,26 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   }
 
   // Initialize the icl_library logging framework ( THIS NEEDS TO BE DONE BEFORE ANY LIB OBJECT IS CREATED)
-  if (log_config_available)
+  if (use_internal_logging)
   {
     // Fake an input to the logging call to tell it where to look for the logging config
 
     // Strdup to create non const chars as it is required by the initialize function.
-    // not realy beatuiful but it works.
-    // Note: The -o is an option to provide parameters that would otherwise be written in the logging.xml config file
-    // As filenames in there are however relative to the execution folder and not to the ros package folder we use everything from the xml
-    // except the filenames which will be provided by the launch script that can resolve the package location.
-    // This quite ugly workaround is neccessary due to the fact that the driver library uses internal logging that was not initially build for use with ros
+    // not really beatiful but it works.
     char * argv[]= {
       strdup("Logging"),
-      strdup("-o/IclCore/Logging/OutputStreamDebug/FileName"),
-      strdup(log_debug_file.c_str()),
-      strdup("-o/IclCore/Logging/OutputStreamTrace/FileName"),
-      strdup(log_trace_file.c_str()),
       strdup("-c"),
-      strdup(log_config_file.c_str())
+      strdup(logging_config_file.c_str())
     };
-    int argc = 7; // number of elements above
+    int argc = 3; // number of elements above
 
     // In case the file is not present (event though the parameter is) the logging will just put out a
     // warning so we dont need to check it further. However the log level will only be Info (out of the available Error, Warning, Info, Debug, Trace)
     // in that case also the log files will be disregarded
-    icl_core::logging::initialize(argc,argv);
+    if (icl_core::logging::initialize(argc,argv))
+      ROS_INFO("Internal logging was activated, output will be written as configured in logging.xml (default to ~/.ros/log)");
+    else
+      ROS_WARN("Internal logging was enabled but config file could not be read. Please make sure the provided path to the config file is correct.");
   }
   else
   {
@@ -324,7 +318,7 @@ sensor_msgs::JointState SVHNode::getCurrentPositions()
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
-      double cur_cur = 0.0;
+      //double cur_cur = 0.0;
       if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
         fm_->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);

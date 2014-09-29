@@ -26,7 +26,7 @@ and Error. -->
 <OutputStreamName>File</OutputStreamName>
 <!-- due to the fact that we are using ros as calling entity we need to handle the file resolution in the launch file -->
 <!-- this can however be used if you want to just use the lib without any ros components -->
-<!--FileName>log/DriverSVH_Debug.log</FileName-->
+<FileName>~/.ros/log/DriverSVH_Debug.log</FileName>
 <!-- time is given in DAYS -->
 <DeleteOlderThan>1</DeleteOlderThan>
 <Rotate>no</Rotate>
@@ -39,10 +39,10 @@ and Error. -->
 <Name>Trace</Name>
 <OutputStreamName>File</OutputStreamName>
 <!-- see comment above -->
-<!--FileName>log/DriverSVH_Trace.log</FileName-->
+<FileName>~/.ros/log/DriverSVH_Trace.log</FileName>
 <DeleteOlderThan>1</DeleteOlderThan>
 <Rotate>no</Rotate>
-<LogLevel>Mute</LogLevel>  <!-- Set this to TRACE to Enable the output -->
+<LogLevel>Trace</LogLevel>  <!-- Set this to MUTE to disable the output -->
 <LogStream1>DriverSVH</LogStream1>
 </OutputStreamTrace>
 
