@@ -2,6 +2,17 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Moved rviz config to etc and changed gui to a default no show
+* Fixed a counting variable which was comparing signed with unsigned
+* Changed the way to install udev rules to be a script for devel and a rosrun for install targets
+* Enabled the svh_sin_test node by default as this is easier to start
+* Changed the logging mechanism to use ~/.ros/log instead of the project folder as this is not writable in installs
+  Also changed many default values and how the config values are read to provide better user experience
+* Added a queue size to the topics published by the plugin as it is required by hydro
+* Contributors: Georg Heppner
+
 0.1.4 (2014-09-26)
 ------------------
 * Removed preliminary tests that remained from development and where not meant to be published
