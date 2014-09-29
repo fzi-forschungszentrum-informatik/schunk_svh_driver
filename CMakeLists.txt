@@ -137,10 +137,6 @@ install(TARGETS svh_controller svh_sin_test
 install(DIRECTORY include/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-#launch files
-#install(DIRECTORY launch/
-#  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
-
 #config files
 install(DIRECTORY etc/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc)
@@ -157,5 +153,10 @@ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # Install resources
 install(DIRECTORY resource
 DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+# Helper for installing the udev rules in an easy fashion and without any conflicts
+install(PROGRAMS udev/create_udev_rules
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
