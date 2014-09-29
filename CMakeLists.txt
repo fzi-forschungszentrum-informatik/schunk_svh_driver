@@ -145,10 +145,6 @@ install(DIRECTORY include/
 install(DIRECTORY etc/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc)
 
-#As the find directory will point to the share folder we need the log folder there also
-install(DIRECTORY log/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/log)
-
 #udev rules
 install(DIRECTORY udev/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev)
