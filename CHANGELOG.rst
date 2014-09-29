@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.5 (2014-09-29)
+------------------
 * Moved rviz config to etc and changed gui to a default no show
 * Fixed a counting variable which was comparing signed with unsigned
 * Changed the way to install udev rules to be a script for devel and a rosrun for install targets

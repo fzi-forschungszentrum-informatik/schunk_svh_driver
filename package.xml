@@ -2,7 +2,7 @@
 <package>
   
   <name>schunk_svh_driver</name>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
   <description>SVH Driver wrapper to enable control of the Schunk five finger hand</description>
   
   <maintainer email="heppner@fzi.de">Georg Heppner</maintainer>
