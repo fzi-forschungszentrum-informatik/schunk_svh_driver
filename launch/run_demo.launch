@@ -6,10 +6,6 @@
     <arg name="frequency" default="50"/>
     <arg name="serial_device" default="/dev/ttyUSB0"/>
     <arg name="autostart" default="true"/>
-    <arg name="logging_config" default="$(find schunk_svh_driver)/etc/logging.xml" />
-    <arg name="use_internal_logging" default="False"/>
-    <arg name="controller_config" default="$(find schunk_svh_driver)/etc/controller_user.yaml" />
-    <arg name="general_config" default="$(find schunk_svh_driver)/etc/svh.yaml" />
    
 	<!-- load high level -->	
     <include file="$(find pathloader)/launch/trajectoryExecution.launch">
@@ -36,33 +32,22 @@
                 <param name="use_gui" value="False"/>
         </node>
 
-    
     	<!-- load hardware driver -->
         <include unless="$(arg simulation)"  file="$(find ros_canopen_schunk_chain)/launch/canopen_schunk_chain.launch">
 		<arg name="frequency" value="$(arg frequency)" />
                 <arg name="autostart" value="$(arg autostart)" />
 	</include>
-        <!-- Launch actual driver node (if not in simulation)-->
-
-        <!-- load basic configuration -->
-        <rosparam unless="$(arg simulation)" file="$(arg general_config)" command="load" ns="svh_controller"/>
-        <!-- Load Yaml Configuration file-->
-        <rosparam unless="$(arg simulation)" file="$(find schunk_svh_driver)/etc/controller_default.yaml" command="load" ns="svh_controller"/>
-        <!-- Load the User Config file which will overwrite values from default -->
-        <rosparam unless="$(arg simulation)" file="$(arg controller_config)" command="load" ns="svh_controller"/>
 
         <remap from="svh_controller/channel_targets"  to="interpolator/joint_commands" />
-        <node unless="$(arg simulation)" name="svh_controller" pkg="schunk_svh_driver" type="svh_controller" output="screen">
-          <param name="serial_device" value="$(arg serial_device)"/>
-          <param name="autostart" value="$(arg autostart)" />
-          <!-- Params for the ICL (driver internal) logging. General configuration in the given logging.xml, output will be saved to the who given files -->
-          <param name="logging_config" value="$(arg logging_config)" />
-          <param name="use_internal_logging" value="$(arg use_internal_logging)" />
-        </node>
 
+        <!-- Launch actual driver node -->
+        <include unless="$(arg simulation)" file="$(find schunk_svh_driver)/launch/svh_node.launch">
+            <arg name="serial_device" value="$(arg serial_device)"/>
+            <arg name="autostart" value="$(arg autostart)" />
 
-	<!-- start rviz -->
-        
+        </include>
+
+	<!-- start rviz -->      
         <node if="$(arg gui)" name="rviz" pkg="rviz" type="rviz" args="-d $(find schunk_svh_driver)/urdf.rviz" />
     </group>
 </launch>
