@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.6 (2014-09-30)
+------------------
 * Added a mainpage.dox with an image and the corresponing rosdoc config
 * Fixed xacro and run_demo to work with the new package structure
 * Added a new node only launch script
