@@ -2,6 +2,13 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added a mainpage.dox with an image and the corresponing rosdoc config
+* Fixed xacro and run_demo to work with the new package structure
+* Added a new node only launch script
+* Contributors: Georg Heppner
+
 0.1.5 (2014-09-29)
 ------------------
 * Moved rviz config to etc and changed gui to a default no show
