@@ -7,14 +7,12 @@
     <color rgba="0 0 .8 1"/>
   </material>     
  
- <xacro:include filename="$(find svh_controller)/description/urdf/svh.urdf.xacro" />
+ <xacro:include filename="$(find schunk_svh_driver)/description/urdf/svh.urdf.xacro" />
  <xacro:include filename="$(find schunk_description)/urdf/lwa4p/lwa4p.urdf.xacro" />
 
  <link name="base_link" />
  
- 
- 
-  <xacro:schunk_lwa4p parent="base_link" name="arm">
+ <xacro:schunk_lwa4p parent="base_link" name="arm">
       <origin xyz="0 0 0"  rpy= "0 0 0" />
       <xacro:property name="arm_1_ref" value="2.1" />
       <xacro:property name="arm_2_ref" value="2.1" />
