@@ -60,6 +60,9 @@
         <include unless="$(arg simulation)" file="$(find schunk_svh_driver)/launch/svh_node.launch">
             <arg name="serial_device" value="$(arg serial_device)"/>
             <arg name="autostart" value="$(arg autostart)" />
+	    <arg name="logging_config" value="$(arg logging_config)" />
+	    <arg name="use_internal_logging" value="$(arg use_internal_logging)" />
+
 
         </include>
 
