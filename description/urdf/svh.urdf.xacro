@@ -340,7 +340,7 @@
       <limit effort="1000.0" lower="0.0" upper="0.98786" velocity="1" />
       <origin xyz="${side*(0.01840)} 0.006 0.0375" rpy="0 0 0" />
       <axis xyz="0 0 ${side*(1)}" />
-      <mimic joint="Thumb_Opposition" multiplier="1" offset="0" />
+      <mimic joint="${name}_Thumb_Opposition" multiplier="1" offset="0" />
     </joint>
 
     <joint name="${name}_f5" type="fixed">
@@ -374,7 +374,7 @@
       <limit effort="1000.0" lower="0.0" upper="0.98506" velocity="1" />
       <origin xyz="0.0485 0 0" rpy="0 0 0" />
       <axis xyz="0 0 ${side*(1)}" />
-      <mimic joint="Thumb_Flexion" multiplier="1.01511" offset="0" />
+      <mimic joint="${name}_Thumb_Flexion" multiplier="1.01511" offset="0" />
     </joint>
 
     <joint name="${name}_j4" type="revolute">
@@ -383,7 +383,7 @@
       <limit effort="1000.0" lower="0.0" upper="1.406" velocity="1" />
       <origin xyz="0.030 0 0" rpy="0 0 0" />
       <axis xyz="0 0 ${side*(1)}" />
-      <mimic joint="Thumb_Flexion" multiplier="1.44889" offset="0" />
+      <mimic joint="${name}_Thumb_Flexion" multiplier="1.44889" offset="0" />
     </joint>
 
     <!-- INDEX FINGER JOINTS -->
@@ -410,7 +410,7 @@
       <limit effort="1000.0" lower="0" upper="1.394" velocity="1" />
       <origin xyz="0.026 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Index_Finger_Distal" multiplier="1.0450" offset="0" />
+      <mimic joint="${name}_Index_Finger_Distal" multiplier="1.0450" offset="0" />
     </joint>
 
     <!-- MIDDLE FINGER JOINTS -->
@@ -436,7 +436,7 @@
       <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
       <origin xyz="0.032 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Middle_Finger_Distal" multiplier="1.0454" offset="0" />
+      <mimic joint="${name}_Middle_Finger_Distal" multiplier="1.0454" offset="0" />
     </joint>
 
     <!-- RING FINGER JOINTS -->
@@ -454,7 +454,7 @@
       <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
       <origin xyz="0.05004 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Ring_Finger" multiplier="1.3588" offset="0" />
+      <mimic joint="${name}_Ring_Finger" multiplier="1.3588" offset="0" />
     </joint>
 
     <joint name="${name}_j16" type="revolute">
@@ -463,7 +463,7 @@
       <limit effort="1000.0" lower="0" upper="1.395" velocity="1" />
       <origin xyz="0.032 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Ring_Finger" multiplier="1.42093" offset="0" />
+      <mimic joint="${name}_Ring_Finger" multiplier="1.42093" offset="0" />
     </joint>
 
     <!-- PINKY JOINTS -->
@@ -481,7 +481,7 @@
       <limit effort="1000.0" lower="0" upper="1.334" velocity="1" />
       <origin xyz="0.04454 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Pinky" multiplier="1.35880" offset="0" />
+      <mimic joint="${name}_Pinky" multiplier="1.35880" offset="0" />
     </joint>
 
     <joint name="${name}_j17" type="revolute">
@@ -490,7 +490,7 @@
       <limit effort="1000.0" lower="0" upper="1.3971" velocity="1" />
       <origin xyz="0.022 0 0" rpy="0 0 0" />
       <axis xyz="0 0 1" />
-      <mimic joint="Pinky" multiplier="1.42307" offset="0" />
+      <mimic joint="${name}_Pinky" multiplier="1.42307" offset="0" />
     </joint>
 
     <joint name="${name}_index_spread" type="revolute">
@@ -499,7 +499,7 @@
       <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
       <origin xyz="${side*(-0.025)} 0 0.110" rpy="0 -1.5707 1.5707" />
       <axis xyz="0 0 ${side*(1)}" />
-      <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
+      <mimic joint="${name}_Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
 
     <joint name="${name}_middle_spread_dummy" type="fixed">
@@ -515,7 +515,7 @@
       <limit effort="1000.0" lower="0.0" upper="0.28833" velocity="1" />
       <origin xyz="${side*(0.003855)} 0 0.0655" rpy="-1.5707 -1.5707 0" />
       <axis xyz="0 0 ${side*(1)}" />
-      <mimic joint="Finger_Spread" multiplier="0.5" offset="0" />
+      <mimic joint="${name}_Finger_Spread" multiplier="0.5" offset="0" />
     </joint>
 
     <joint name="${name}_Finger_Spread" type="revolute">
