@@ -20,6 +20,12 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/base10.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="0 0 -0.032" rpy="0 0 0" />
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/base10.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_d">
@@ -59,6 +65,12 @@
           <mesh scale="${side*(1)} 1 1" filename="package://schunk_svh_driver/description/meshes/h10.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin rpy="0 0 0" xyz="0 0.01313 0" />
+	<geometry>
+          <mesh scale="${side*(1)} 1 1" filename="package://schunk_svh_driver/description/meshes/h10.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
@@ -69,6 +81,12 @@
           <mesh scale="${side*(1)} 1 1" filename="package://schunk_svh_driver/description/meshes/h11.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="${side*(-0.0007)} 0 -0.01002" />
+	<geometry>
+          <mesh scale="${side*(1)} 1 1" filename="package://schunk_svh_driver/description/meshes/h11.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <!-- LENGTH NOT FOUND IN DATASHEET! GUESSED!!! -->
@@ -116,6 +134,12 @@
           <mesh scale="1 ${side*(1)} 1" filename="package://schunk_svh_driver/description/meshes/d10.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="0 0 0.02442" />
+	<geometry>
+          <mesh scale="1 ${side*(1)} 1" filename="package://schunk_svh_driver/description/meshes/d10.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_virtual_a" />
@@ -125,6 +149,11 @@
           <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d11.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d11.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_b">
@@ -133,6 +162,11 @@
           <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d12.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d12.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_c">
@@ -141,6 +175,11 @@
           <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d13.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh scale="1 ${side*(1)} ${side*(1)}" filename="package://schunk_svh_driver/description/meshes/d13.dae" />
+	</geometry>
+      </collision>
     </link>
 
 
@@ -152,6 +191,12 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f10.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="0 0 0.01321" />
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f10.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_l">
@@ -160,6 +205,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f11.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f11.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_p">
@@ -168,6 +218,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f12.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f12.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_t">
@@ -176,6 +231,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f13.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f13.dae" />
+	</geometry>
+      </collision>
     </link>
 
 
@@ -187,6 +247,12 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f20.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="0 0 0.01321" />
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f20.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_k">
@@ -195,6 +261,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f21.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f21.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_o">
@@ -203,6 +274,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f22.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f22.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_s">
@@ -211,6 +287,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f23.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f23.dae" />
+	</geometry>
+      </collision>
     </link>
 
 
@@ -222,6 +303,12 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f30.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="0 0 -0.01321" />
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f30.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_j">
@@ -230,6 +317,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f31.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f31.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_n">
@@ -238,6 +330,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f32.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f32.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_r">
@@ -246,6 +343,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f33.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f33.dae" />
+	</geometry>
+      </collision>
     </link>
 
 
@@ -257,6 +359,12 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f40.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<origin xyz="0 0 -0.01321" />
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f40.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_i">
@@ -265,6 +373,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f41.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f41.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_m">
@@ -273,6 +386,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f42.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f42.dae" />
+	</geometry>
+      </collision>
     </link>
 
     <link name="${name}_q">
@@ -281,6 +399,11 @@
           <mesh filename="package://schunk_svh_driver/description/meshes/f43.dae" />
 	</geometry>
       </visual>
+      <collision>
+	<geometry>
+          <mesh filename="package://schunk_svh_driver/description/meshes/f43.dae" />
+	</geometry>
+      </collision>
     </link>
 
 
