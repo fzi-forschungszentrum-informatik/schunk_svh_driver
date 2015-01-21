@@ -38,9 +38,6 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
-  // File to store the debug and log files in
-  //std::string log_debug_file,log_trace_file;
-
 
 
   try
@@ -52,11 +49,15 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.getParam("disable_flags",disable_flags);
     nh.param<int>("reset_timeout",reset_timeout,5);
     nh.getParam("logging_config",logging_config_file);
+    nh.param<std::string>("name_prefix",name_prefix,"left_hand");
   }
   catch (ros::InvalidNameException e)
   {
     ROS_ERROR("Parameter Error!");
   }
+
+  // Tell the user what we are using
+  ROS_INFO("Name prefix for this Hand was set to :%s",name_prefix.c_str());
 
   // Initialize the icl_library logging framework ( THIS NEEDS TO BE DONE BEFORE ANY LIB OBJECT IS CREATED)
   if (use_internal_logging)
@@ -177,7 +178,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   channel_pos_.position.resize(driver_svh::eSVH_DIMENSION, 0.0);
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
-    channel_pos_.name[channel] = driver_svh::SVHController::m_channel_description[channel];
+    channel_pos_.name[channel] = name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
   }
 
   // Connect and start the reset so that the hand is ready for use
@@ -259,7 +260,19 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
   for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name,++index)
   {
     int32_t channel = 0;
-    if (icl_core::string2Enum((*joint_name), channel, driver_svh::SVHController::m_channel_description))
+
+    ROS_INFO("Checking Input");
+
+    // Find the corresponding channels to the input joint names
+    bool valid_input = false;
+    for (channel=0;!valid_input && (channel < driver_svh::eSVH_DIMENSION) && (driver_svh::SVHController::m_channel_description[channel] != NULL);++channel)
+    {
+        valid_input = (joint_name->compare(name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel]) == 0);
+        ROS_INFO("Comparing Input Name: %s with: %s and the result is: %i",joint_name->c_str(),(name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel]).c_str(),valid_input);
+    }
+
+
+    if (valid_input)//(icl_core::string2Enum((*joint_name), channel, driver_svh::SVHController::m_channel_description))
     {
       if (input->position.size() > index)
       {

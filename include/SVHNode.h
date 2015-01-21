@@ -72,6 +72,9 @@ private:
   //! Serial device to use for communication with hardware
   std::string serial_device_name_;
 
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  std::string name_prefix;
+
   //! joint state message template
   sensor_msgs::JointState channel_pos_;
 };
