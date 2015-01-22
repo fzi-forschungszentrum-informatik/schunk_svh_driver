@@ -261,15 +261,15 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
   {
     int32_t channel = 0;
 
-    ROS_INFO("Checking Input");
-
     // Find the corresponding channels to the input joint names
     bool valid_input = false;
     for (channel=0;!valid_input && (channel < driver_svh::eSVH_DIMENSION) && (driver_svh::SVHController::m_channel_description[channel] != NULL);++channel)
     {
         valid_input = (joint_name->compare(name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel]) == 0);
-        ROS_INFO("Comparing Input Name: %s with: %s and the result is: %i",joint_name->c_str(),(name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel]).c_str(),valid_input);
     }
+
+    // We count one to high with the for loop so we have to correct that
+    --channel;
 
 
     if (valid_input)//(icl_core::string2Enum((*joint_name), channel, driver_svh::SVHController::m_channel_description))
