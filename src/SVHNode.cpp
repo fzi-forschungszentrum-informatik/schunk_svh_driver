@@ -356,7 +356,7 @@ int main(int argc, char **argv)
 
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
-  ros::Rate rate(100);
+  ros::Rate rate(50);
 
   //==========
   // Logic
@@ -385,7 +385,7 @@ int main(int argc, char **argv)
   // Subscribe enable channel topic (Int8)
   ros::Subscriber enable_sub = nh.subscribe("enable_channel", 1, &SVHNode::enableChannelCallback, &svh_node);
   // Subscribe joint state topic
-  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, &SVHNode::jointStateCallback,&svh_node );
+  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, &SVHNode::jointStateCallback,&svh_node,ros::TransportHints().tcpNoDelay() );
   // Publish current channel positions
   ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_feedback", 1);
 
