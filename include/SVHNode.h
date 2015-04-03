@@ -72,6 +72,9 @@ private:
   //! Serial device to use for communication with hardware
   std::string serial_device_name_;
 
+  //! Number of times the connect routine tries to connect in case that we receive at least one package
+  int connect_retry_count;
+
   //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
   std::string name_prefix;
 

@@ -50,6 +50,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.param<int>("reset_timeout",reset_timeout,5);
     nh.getParam("logging_config",logging_config_file);
     nh.param<std::string>("name_prefix",name_prefix,"left_hand");
+    nh.param<int>("connect_retry_count",connect_retry_count,3);
   }
   catch (ros::InvalidNameException e)
   {
@@ -182,7 +183,7 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   }
 
   // Connect and start the reset so that the hand is ready for use
-  if (autostart && fm_->connect(serial_device_name_))
+  if (autostart && fm_->connect(serial_device_name_,connect_retry_count))
   {
     fm_->resetChannel(driver_svh::eSVH_ALL);
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
@@ -217,9 +218,9 @@ void SVHNode::connectCallback(const std_msgs::Empty&)
     fm_->disconnect();
   }
 
-  if (!fm_->connect(serial_device_name_))
+  if (!fm_->connect(serial_device_name_,connect_retry_count))
   {
-    ROS_ERROR("Could not connect to SCHUNK five finger hand with serial device %s", serial_device_name_.c_str());
+    ROS_ERROR("Could not connect to SCHUNK five finger hand with serial device %s, and retry count %i", serial_device_name_.c_str(),connect_retry_count);
   }
 }
 
