@@ -177,10 +177,21 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   // prepare the channel position message for later sending
   channel_pos_.name.resize(driver_svh::eSVH_DIMENSION);
   channel_pos_.position.resize(driver_svh::eSVH_DIMENSION, 0.0);
+  channel_pos_.effort.resize(driver_svh::eSVH_DIMENSION, 0.0);
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
     channel_pos_.name[channel] = name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
   }
+
+  // Prepare the channel current message for later sending
+  channel_currents.data.clear();
+  channel_currents.data.resize(driver_svh::eSVH_DIMENSION, 0.0);
+  channel_currents.layout.data_offset = 0;
+  std_msgs::MultiArrayDimension dim ;
+  dim.label ="channel currents";
+  dim.size = 9;
+  dim.stride = 0;
+  channel_currents.layout.dim.push_back(dim);
 
   // Connect and start the reset so that the hand is ready for use
   if (autostart && fm_->connect(serial_device_name_,connect_retry_count))
@@ -314,7 +325,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
 }
 
 
-sensor_msgs::JointState SVHNode::getCurrentPositions()
+sensor_msgs::JointState SVHNode::getChannelFeedback()
 {
   if (fm_->isConnected())
   {
@@ -322,20 +333,40 @@ sensor_msgs::JointState SVHNode::getCurrentPositions()
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
-      //double cur_cur = 0.0;
+      double cur_cur = 0.0;
       if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
         fm_->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
         // Read out currents if you want to
-        //fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
+        fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
       }
       channel_pos_.position[channel] = cur_pos;
+      channel_pos_.effort[channel] = cur_cur * driver_svh::SVHController::channel_effort_constants[channel];
     }
   }
 
-
   channel_pos_.header.stamp = ros::Time::now();
   return  channel_pos_;
+}
+
+std_msgs::Float64MultiArray SVHNode::getChannelCurrents()
+{
+  if (fm_->isConnected())
+  {
+    // Get currents
+    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    {
+      double cur_cur = 0.0;
+      if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
+      {
+        fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
+      }
+      channel_currents.data[channel] = cur_cur;
+    }
+  }
+
+  return  channel_currents;
+
 }
 
 
@@ -389,6 +420,8 @@ int main(int argc, char **argv)
   ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, &SVHNode::jointStateCallback,&svh_node,ros::TransportHints().tcpNoDelay() );
   // Publish current channel positions
   ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_feedback", 1);
+  // Additionally publish just the current values of the motors
+  ros::Publisher channel_current_pub = nh.advertise<std_msgs::Float64MultiArray>("channel_currents", 1);
 
   //==========
   // Messaging
@@ -398,7 +431,8 @@ int main(int argc, char **argv)
   while (nh.ok())
   {
     // get the current positions of all joints and publish them
-    channel_pos_pub.publish(svh_node.getCurrentPositions());
+    channel_pos_pub.publish(svh_node.getChannelFeedback());
+    channel_current_pub.publish(svh_node.getChannelCurrents());
 
     ros::spinOnce();
     rate.sleep();
