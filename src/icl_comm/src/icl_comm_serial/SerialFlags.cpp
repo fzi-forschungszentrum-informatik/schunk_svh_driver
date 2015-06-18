@@ -161,7 +161,7 @@ namespace serial {
         return B500000;
       case SerialFlags::eBR_921600:
         return B921600;
-      Default:
+      default:
         return B0;
     }
   }

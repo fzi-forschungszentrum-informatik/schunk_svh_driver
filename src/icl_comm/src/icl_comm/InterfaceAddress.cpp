@@ -44,7 +44,7 @@ InterfaceAddressMap getInterfaceAddresses(bool ipv6_support)
   using namespace boost::asio;
   InterfaceAddressMap result;
 
-#ifdef _SYSTEM_POSIX_
+#if defined(_SYSTEM_POSIX_)
   //--------------------------------------------------------------------
   // POSIX Implementation
   //--------------------------------------------------------------------

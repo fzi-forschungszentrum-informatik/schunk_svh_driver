@@ -1,15 +1,23 @@
-ICMAKER_SET("icl_comm")
+ICMAKER_SET("icl_comm" IDE_FOLDER ${ICL_COMM_IDE_FOLDER})
 
 ICMAKER_ADD_SOURCES(
-  InterfaceAddress.cpp
   ByteOrderConversion.cpp
   )
 
 ICMAKER_ADD_HEADERS(
   ByteOrderConversion.h
   ImportExport.h
-  InterfaceAddress.h
   )
+
+IF (NOT WIN32)
+  ICMAKER_ADD_SOURCES(
+    InterfaceAddress.cpp
+    )
+    
+  ICMAKER_ADD_HEADERS(
+    InterfaceAddress.h
+    )
+ENDIF ()
 
 ICMAKER_LOCAL_CPPDEFINES(-DICL_COMM_EXPORT_SYMBOLS)
 ICMAKER_GLOBAL_CPPDEFINES(-D_IC_BUILDER_ICL_COMM_)
