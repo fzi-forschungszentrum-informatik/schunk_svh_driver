@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.7 (2015-06-18)
+------------------
 * Added correct Reset of package counts
 * Added Retry functionality for connection failures
 * Added Readout of efforts
