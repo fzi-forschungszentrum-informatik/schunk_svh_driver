@@ -30,6 +30,9 @@
 #include <std_msgs/Int8.h>
 #include <std_msgs/Empty.h>
 #include <sensor_msgs/JointState.h>
+#include "std_msgs/MultiArrayLayout.h"
+#include "std_msgs/MultiArrayDimension.h"
+#include "std_msgs/Float64MultiArray.h"
 
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
@@ -69,10 +72,16 @@ public:
   void jointStateCallback(const sensor_msgs::JointStateConstPtr& input);
 
   //!
-  //! \brief SVHNode::getCurrentPositions Gets the latest received positions from the driver
-  //! \returns The current positions of all channels in rad
+  //! \brief SVHNode::getChannelFeedback Gets the latest received positions and efforts from the driver
+  //! \returns The current joint states (Position and Efforts)
   //!
-  sensor_msgs::JointState getCurrentPositions();
+  sensor_msgs::JointState getChannelFeedback();
+
+  //!
+  //! \brief getChannelCurrents Returns the current values of the channels as raw output
+  //! \return Array containing the current values of the channels in mA
+  //!
+  std_msgs::Float64MultiArray getChannelCurrents();
 
 
 private:
@@ -82,8 +91,17 @@ private:
   //! Serial device to use for communication with hardware
   std::string serial_device_name_;
 
+  //! Number of times the connect routine tries to connect in case that we receive at least one package
+  int connect_retry_count;
+
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  std::string name_prefix;
+
   //! joint state message template
   sensor_msgs::JointState channel_pos_;
+
+  //! Current Value message template
+  std_msgs::Float64MultiArray channel_currents;
 };
 
 #endif // S5FH_CONTROLLER_H

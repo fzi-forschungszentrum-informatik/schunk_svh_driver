@@ -48,9 +48,6 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   std::vector<bool> disable_flags(driver_svh::eSVH_DIMENSION, false);
   // Config that contains the log stream configuration without the file names
   std::string logging_config_file;
-  // File to store the debug and log files in
-  //std::string log_debug_file,log_trace_file;
-
 
 
   try
@@ -62,11 +59,16 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
     nh.getParam("disable_flags",disable_flags);
     nh.param<int>("reset_timeout",reset_timeout,5);
     nh.getParam("logging_config",logging_config_file);
+    nh.param<std::string>("name_prefix",name_prefix,"left_hand");
+    nh.param<int>("connect_retry_count",connect_retry_count,3);
   }
   catch (ros::InvalidNameException e)
   {
     ROS_ERROR("Parameter Error!");
   }
+
+  // Tell the user what we are using
+  ROS_INFO("Name prefix for this Hand was set to :%s",name_prefix.c_str());
 
   // Initialize the icl_library logging framework ( THIS NEEDS TO BE DONE BEFORE ANY LIB OBJECT IS CREATED)
   if (use_internal_logging)
@@ -185,13 +187,24 @@ SVHNode::SVHNode(const ros::NodeHandle & nh)
   // prepare the channel position message for later sending
   channel_pos_.name.resize(driver_svh::eSVH_DIMENSION);
   channel_pos_.position.resize(driver_svh::eSVH_DIMENSION, 0.0);
+  channel_pos_.effort.resize(driver_svh::eSVH_DIMENSION, 0.0);
   for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
   {
-    channel_pos_.name[channel] = driver_svh::SVHController::m_channel_description[channel];
+    channel_pos_.name[channel] = name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel];
   }
 
+  // Prepare the channel current message for later sending
+  channel_currents.data.clear();
+  channel_currents.data.resize(driver_svh::eSVH_DIMENSION, 0.0);
+  channel_currents.layout.data_offset = 0;
+  std_msgs::MultiArrayDimension dim ;
+  dim.label ="channel currents";
+  dim.size = 9;
+  dim.stride = 0;
+  channel_currents.layout.dim.push_back(dim);
+
   // Connect and start the reset so that the hand is ready for use
-  if (autostart && fm_->connect(serial_device_name_))
+  if (autostart && fm_->connect(serial_device_name_,connect_retry_count))
   {
     fm_->resetChannel(driver_svh::eSVH_ALL);
     ROS_INFO("Driver was autostarted! Input can now be sent. Have a safe and productive day!");
@@ -226,9 +239,9 @@ void SVHNode::connectCallback(const std_msgs::Empty&)
     fm_->disconnect();
   }
 
-  if (!fm_->connect(serial_device_name_))
+  if (!fm_->connect(serial_device_name_,connect_retry_count))
   {
-    ROS_ERROR("Could not connect to SCHUNK five finger hand with serial device %s", serial_device_name_.c_str());
+    ROS_ERROR("Could not connect to SCHUNK five finger hand with serial device %s, and retry count %i", serial_device_name_.c_str(),connect_retry_count);
   }
 }
 
@@ -269,7 +282,19 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
   for (joint_name = input->name.begin(); joint_name != input->name.end(); ++joint_name,++index)
   {
     int32_t channel = 0;
-    if (icl_core::string2Enum((*joint_name), channel, driver_svh::SVHController::m_channel_description))
+
+    // Find the corresponding channels to the input joint names
+    bool valid_input = false;
+    for (channel=0;!valid_input && (channel < driver_svh::eSVH_DIMENSION) && (driver_svh::SVHController::m_channel_description[channel] != NULL);++channel)
+    {
+        valid_input = (joint_name->compare(name_prefix + "_" + driver_svh::SVHController::m_channel_description[channel]) == 0);
+    }
+
+    // We count one to high with the for loop so we have to correct that
+    --channel;
+
+
+    if (valid_input)//(icl_core::string2Enum((*joint_name), channel, driver_svh::SVHController::m_channel_description))
     {
       if (input->position.size() > index)
       {
@@ -310,7 +335,7 @@ void SVHNode::jointStateCallback(const sensor_msgs::JointStateConstPtr& input )
 }
 
 
-sensor_msgs::JointState SVHNode::getCurrentPositions()
+sensor_msgs::JointState SVHNode::getChannelFeedback()
 {
   if (fm_->isConnected())
   {
@@ -318,20 +343,40 @@ sensor_msgs::JointState SVHNode::getCurrentPositions()
     for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
     {
       double cur_pos = 0.0;
-      //double cur_cur = 0.0;
+      double cur_cur = 0.0;
       if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
       {
         fm_->getPosition(static_cast<driver_svh::SVHChannel>(channel), cur_pos);
         // Read out currents if you want to
-        //fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
+        fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
       }
       channel_pos_.position[channel] = cur_pos;
+      channel_pos_.effort[channel] = cur_cur * driver_svh::SVHController::channel_effort_constants[channel];
     }
   }
 
-
   channel_pos_.header.stamp = ros::Time::now();
   return  channel_pos_;
+}
+
+std_msgs::Float64MultiArray SVHNode::getChannelCurrents()
+{
+  if (fm_->isConnected())
+  {
+    // Get currents
+    for (size_t channel = 0; channel < driver_svh::eSVH_DIMENSION; ++channel)
+    {
+      double cur_cur = 0.0;
+      if (fm_->isHomed(static_cast<driver_svh::SVHChannel>(channel)))
+      {
+        fm_->getCurrent(static_cast<driver_svh::SVHChannel>(channel),cur_cur);
+      }
+      channel_currents.data[channel] = cur_cur;
+    }
+  }
+
+  return  channel_currents;
+
 }
 
 
@@ -353,7 +398,7 @@ int main(int argc, char **argv)
 
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
-  ros::Rate rate(100);
+  ros::Rate rate(50);
 
   //==========
   // Logic
@@ -382,9 +427,11 @@ int main(int argc, char **argv)
   // Subscribe enable channel topic (Int8)
   ros::Subscriber enable_sub = nh.subscribe("enable_channel", 1, &SVHNode::enableChannelCallback, &svh_node);
   // Subscribe joint state topic
-  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, &SVHNode::jointStateCallback,&svh_node );
+  ros::Subscriber channel_target_sub = nh.subscribe<sensor_msgs::JointState>("channel_targets", 1, &SVHNode::jointStateCallback,&svh_node,ros::TransportHints().tcpNoDelay() );
   // Publish current channel positions
   ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_feedback", 1);
+  // Additionally publish just the current values of the motors
+  ros::Publisher channel_current_pub = nh.advertise<std_msgs::Float64MultiArray>("channel_currents", 1);
 
   //==========
   // Messaging
@@ -394,7 +441,8 @@ int main(int argc, char **argv)
   while (nh.ok())
   {
     // get the current positions of all joints and publish them
-    channel_pos_pub.publish(svh_node.getCurrentPositions());
+    channel_pos_pub.publish(svh_node.getChannelFeedback());
+    channel_current_pub.publish(svh_node.getChannelCurrents());
 
     ros::spinOnce();
     rate.sleep();

@@ -18,3 +18,4 @@ false  # FINGER_SPREAD
 ]
 finger_reset_speed : 0.2
 reset_timeout : 5
+connect_retry_count : 3 #Number of times the connect routine is performed when we receiveat least one package (the brainbox is sometines a little picky)
