@@ -43,14 +43,14 @@ template <>
 size_t toLittleEndian<float>(const float& data, std::vector<uint8_t>& array, size_t& write_pos)
 {
   //! As Bit Shifts for floats are dissallowed they have to be given as reinterpreted value to currectly shift each byte individually
-  return toLittleEndian(*(reinterpret_cast<const u_int32_t*>(&data)),array,write_pos);
+  return toLittleEndian(*(reinterpret_cast<const uint32_t*>(&data)),array,write_pos);
 }
 
 template <>
 size_t toLittleEndian<double>(const double& data, std::vector<uint8_t>& array, size_t& write_pos)
 {
   //! As Bit Shifts for doubles are dissallowed they have to be given as reinterpreted value to currectly shift each byte individually
-  return toLittleEndian(*(reinterpret_cast<const u_int64_t*>(&data)),array,write_pos);
+  return toLittleEndian(*(reinterpret_cast<const uint64_t*>(&data)),array,write_pos);
 
 }
 
@@ -58,14 +58,14 @@ template <>
 size_t fromLittleEndian<float>(float& data, std::vector<uint8_t>& array, size_t& read_pos)
 {
   //! As Bit Shifts for floats are dissallowed they have to be given as reinterpreted value to currectly shift each byte individually
-  return fromLittleEndian(*(reinterpret_cast<u_int32_t*>(&data)),array,read_pos);
+  return fromLittleEndian(*(reinterpret_cast<uint32_t*>(&data)),array,read_pos);
 }
 
 template <>
 size_t fromLittleEndian<double>(double& data, std::vector<uint8_t>& array, size_t& read_pos)
 {
   //! As Bit Shifts for doubles are dissallowed they have to be given as reinterpreted value to currectly shift each byte individually
-  return fromLittleEndian(*(reinterpret_cast<u_int64_t*>(&data)),array,read_pos);
+  return fromLittleEndian(*(reinterpret_cast<uint64_t*>(&data)),array,read_pos);
 
 }
 
