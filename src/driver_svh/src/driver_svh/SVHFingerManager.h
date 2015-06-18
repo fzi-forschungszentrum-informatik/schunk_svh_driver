@@ -39,6 +39,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+
 #ifdef _IC_BUILDER_ICL_COMM_WEBSOCKET_
 #include <icl_comm_websocket/WsBroadcaster.h>
 #else
@@ -77,6 +78,21 @@ public:
     eST_DIMENSION
   };
 
+  /*!
+   * \brief The Hints enum provides mapping to hints that can be sent to the web-diagnostic interface
+   */
+  enum Hints
+  {
+    eHT_DEVICE_NOT_FOUND,   /* ttyUSBx could not be found */
+    eHT_CONNECTION_FAILED,  /* ttyUSB could be opened but communication failed */
+    eHT_NOT_RESETTED,       /* the fingers of the hand are not resetted */
+    eHT_NOT_CONNECTED,      /* simply never called connect */
+    eHT_RESET_FAILED,       /* timeout during reset -> this is a serious failure */
+    eHT_CHANNEL_SWITCHED_OF,/* Not realy a problem, however a hint worth noting */
+    eHT_DANGEROUS_CURRENTS, /* Current Values are set to dangerous levels */
+    eHT_DIMENSION           /* dummy entry indicating the size, not used as status */
+  };
+
   /*! Constructs a finger manager for the SCHUNK five finger hand.
    * \param autostart if set to true, the driver will immediately connect to the hardware and try to reset all fingers
    * \param dev_name the dev to use for autostart. Default is /dev/ttyUSB0
@@ -88,9 +104,10 @@ public:
  /*!
   *  \brief Open connection to SCHUNK five finger hand. Wait until expected return packages are received.
   *  \param dev_name file handle of the serial device e.g. "/dev/ttyUSB0"
+  *  \param _retry_count The number of times a connection is tried to be established if at least one package was received
   * \return true if connection was succesful
   */
-  bool connect(const std::string &dev_name = "/dev/ttyUSB0");
+  bool connect(const std::string &dev_name = "/dev/ttyUSB0",const unsigned int &_retry_count = 3);
 
   //!
   //! \brief disconnect SCHUNK five finger hand
@@ -271,12 +288,19 @@ public:
 
   #ifdef _IC_BUILDER_ICL_COMM_WEBSOCKET_
   /*!
-   * \brief updateWebSocket Will gathe the current state of the hand and send it out via websocket
+   * \brief updateWebSocket Will gather the current state of the hand and send it out via websocket
    * \note this function will NOT update everything as it would be to much overhead to ask every single time if a finger is enabled or not. Things
    *       that happen only sometimes will be updated in the corresponding functions (enable, diable, reset and so on)
    *       this function is meant to be used for the periodically changing states
    */
   void updateWebSocket();
+
+  /*!
+   * \brief receivedHintMessage Parser for received Hint commands (via callback from the broadcaster)
+   * \param int the HintCommand received from the websocket
+   */
+  void receivedHintMessage(const int &hint);
+
   #endif // _IC_BUILDER_ICL_COMM_WEBSOCKET_
 
 // ----------------------------------------------------------------------
@@ -343,6 +367,11 @@ private:
   //! Vector of home settings for each finger (as given by external config)
   std::vector<SVHHomeSettings> m_home_settings;
 
+  /*!
+   * \brief m_serial_device Device handle of the device to use, is overwritten if connect is called with an argument
+   */
+  std::string m_serial_device;
+
   //! \brief vector storing the reset order of the channels
   std::vector<SVHChannel> m_reset_order;
 
@@ -355,12 +384,20 @@ private:
   std::vector<double> m_reset_current_factor;
 
   //!
-  //! \brief Converts joint positions of a specific channel from RAD to ticks
-  //! \param channel
-  //! \param position
-  //! \return
+  //! \brief Converts joint positions of a specific channel from RAD to ticks factoring in the offset of the channels
+  //! \param channel Channel to Convert for (each one has different offset)
+  //! \param position The desired position given in RAD
+  //! \return The tick value corresponing to the RAD input
   //!
-  int32_t convertRad2Ticks(const SVHChannel &channel, double position);
+  int32_t convertRad2Ticks(const SVHChannel &channel,const double &position);
+
+  //!
+  //! \brief Converts joint positions of a specific channel from ticks to RAD factoring in the offset of the channels
+  //! \param channel Channel to Convert for (each one has different offset)
+  //! \param ticks The current position in ticks
+  //! \return the RAD Value corresponding to the tick value of a given channel
+  //!
+  double convertTicks2Rad(const SVHChannel &channel, const int32_t &ticks);
 
   //!
   //! \brief Check bounds of target positions
@@ -370,6 +407,13 @@ private:
   //!
   bool isInsideBounds(const SVHChannel &channel, const int32_t &target_position);
 
+  /*!
+   * \brief currentSettingsAreSafe helper function to check for the most important values of the current settings
+   * \param channel the channel the settings are meant for
+   * \param current_settings the settings to evaluate
+   * \return true if they are "reasonable safe". Only the most vile settings will be rejected!
+   */
+  bool currentSettingsAreSafe(const SVHChannel &channel,const SVHCurrentSettings &current_settings);
 
   // DEBUG
   SVHControllerFeedback debug_feedback;

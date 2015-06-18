@@ -46,6 +46,7 @@ ICMAKER_DEPENDENCIES(EXPORT
   icl_core_thread
   icl_comm
   icl_comm_serial
+  Boost_THREAD
 )
 
 # Websockets are a later expansion that is not considered at the moment but prepared for

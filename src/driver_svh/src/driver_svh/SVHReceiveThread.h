@@ -75,6 +75,11 @@ public:
   //! return the count of received packets
   unsigned int receivedPacketCount() { return m_packets_received; }
 
+  /*!
+   * \brief resetReceivedPackageCount Resets the received package count to zero. This can be usefull to set all communication variables to the initial state
+   */
+  void resetReceivedPackageCount() { m_packets_received = 0; }
+
 private:
 
   //! pointer to serial device object

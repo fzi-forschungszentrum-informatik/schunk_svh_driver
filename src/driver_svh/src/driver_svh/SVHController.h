@@ -243,6 +243,9 @@ public:
    //! Description values to get the corresponding string value to a channel enum
    static const char * m_channel_description[];
 
+   //! Effort multipliers to calculate the torque of the motors for the individual channels
+   static const float channel_effort_constants[9];
+
    //! Get all currently available controllerfeedbacks
    void getControllerFeedbackAllChannels(SVHControllerFeedbackAllChannels &controller_feedback);
 private:

@@ -61,6 +61,19 @@ const char * SVHController::m_channel_description[]= {
   NULL
 };
 
+//! Values are given in Nm/mA to be directly compatible to current output of the driver
+const float SVHController::channel_effort_constants[]={
+  0.0000232,  //Thumb Flexion
+  0.0000232,  // Thumb Opposition
+  0.000009,  // Index Finger Distal
+  0.000016,  // Index Finger Proximal
+  0.000009,  // Middle Finger Distal
+  0.000016,  // Middle Finger Proximal
+  0.000009,  // Ring Finger
+  0.000009,  // Pinky
+  0.000016   // Finger Spread
+};
+
 SVHController::SVHController():
   m_current_settings(eSVH_DIMENSION),  // Vectors have to be filled with objects for correct deserialization
   m_position_settings(eSVH_DIMENSION),
@@ -89,8 +102,9 @@ bool SVHController::connect(const std::string &dev_name)
   LOGGING_DEBUG_C(DriverSVH, SVHController, "Connect was called, starting the serial interface..." << endl);
   if (m_serial_interface != NULL)
   {
-    LOGGING_DEBUG_C(DriverSVH, SVHController, "Connect finished succesfully" << endl);
-    return m_serial_interface->connect(dev_name);
+    bool success = m_serial_interface->connect(dev_name);
+    LOGGING_DEBUG_C(DriverSVH, SVHController, "Connect finished " << ((success)?"succesfully":"with an error") << endl);
+    return success ;
   }
   else
   {
@@ -591,6 +605,7 @@ SVHFirmwareInfo SVHController::getFirmwareInfo()
 void SVHController::resetPackageCounts()
 {
   m_received_package_count = 0;
+  // The serial interface also keeps track about these counts
   m_serial_interface->resetTransmitPackageCount();
   LOGGING_TRACE_C(DriverSVH, SVHController, "Received package count resetted" << endl);
 }

@@ -174,6 +174,8 @@ bool SVHSerialInterface::sendPacket(SVHSerialPacket& packet)
 void SVHSerialInterface::resetTransmitPackageCount()
 {
   m_packets_transmitted = 0;
+  // Only the receive thread knows abotu the accurate number it has received
+  m_receive_thread->resetReceivedPackageCount();
 }
 
 void SVHSerialInterface::printPacketOnConsole(SVHSerialPacket &packet)
