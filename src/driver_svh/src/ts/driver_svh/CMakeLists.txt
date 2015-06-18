@@ -23,6 +23,7 @@ ICMAKER_INTERNAL_DEPENDENCIES(
   icl_core
   icl_core_thread
   icl_comm
+  Boost_THREAD
   )
 
 ICMAKER_BUILD_TEST()
