@@ -2,6 +2,29 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added correct Reset of package counts
+* Added Retry functionality for connection failures
+* Added Readout of efforts
+* Correctly use the given homing settings ( fixes #1 )
+* Added safety warning for high current settings
+* Added much debugging output for the reset routine
+* Fixes of typos, comments and other minor things
+* Rudimentary windows support for icl libs
+* Removed icl_comm_websocket as it was not strictly needed for the ROSnode of the driver
+* Added effort feedback
+* Added channel current output
+* Added retry option for the connect routine to make autostart more robust
+* Added the TcoNoDelay transport hint
+* Include name prefix for the channel names
+* add collision meshes to URDF
+* Removed parts that where actually from another project and did not belong into the SVH Driver package
+* Added a name prefix for the hand to allow multiple instantiation of the hand model.
+* Make hand member names dependent of hand name
+* Added a mainpage.dox with an image and the corresponing rosdoc config
+* Contributors: Andreas Hermann, Georg Heppner, Nils Berg, Steffen Ruehl
+
 0.1.6 (2014-09-30)
 ------------------
 * Added a mainpage.dox with an image and the corresponing rosdoc config
