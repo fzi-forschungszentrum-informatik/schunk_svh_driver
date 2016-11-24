@@ -23,6 +23,8 @@
   <build_depend>urdf</build_depend>
   <build_depend>xacro</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>fzi_icl_core</build_depend>
+  <build_depend>fzi_icl_comm</build_depend>
 
 
 
@@ -35,6 +37,8 @@
   <run_depend>urdf</run_depend>
   <run_depend>xacro</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
+  <run_depend>fzi_icl_core</run_depend>
+  <run_depend>fzi_icl_comm</run_depend>
   
   <export>
  	<rqt_gui plugin="${prefix}/plugin.xml" />

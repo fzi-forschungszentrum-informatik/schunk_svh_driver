@@ -21,7 +21,6 @@ ICMAKER_EXTERNAL_DEPENDENCIES(
 ICMAKER_INTERNAL_DEPENDENCIES(
   driver_svh
   icl_core
-  icl_core_thread
   icl_comm
   Boost_THREAD
   )
