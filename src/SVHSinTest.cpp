@@ -30,21 +30,23 @@
 #include <ros/ros.h>
 
 // Messages
-#include <std_msgs/Int8.h>
-#include <std_msgs/Empty.h>
 #include <sensor_msgs/JointState.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Empty.h>
+#include <std_msgs/Int8.h>
 
 #include <icl_core/EnumHelper.h>
 
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <stdlib.h> /* srand, rand */
+#include <time.h>   /* time */
 
 
 // Consts
 // Loop Rate (i.e Frequency) of the ROS node -> 50 = 50HZ
-const double loop_rate = 50;
-// Time of a half Sin. i.e. 10 = In 10 Seconds the selected fingers will perform a close and open (Sin to 1PI)
-const double sin_duration = 10;
+double loop_rate = 50;
+// Time of a half Sin. i.e. 10 = In 10 Seconds the selected fingers will perform a close and open
+// (Sin to 1PI)
+double sin_duration = 10;
 
 
 // Local Vars
@@ -57,14 +59,23 @@ void runCallback(const std_msgs::Empty&)
 {
   running = !running;
 }
+
+void speedCallback(const std_msgs::Float32ConstPtr &msg){
+  sin_duration = msg->data;
+}
+void loopCallback(const std_msgs::Float32ConstPtr &msg){
+  loop_rate = msg->data;
+}
+
 /*--------------------------------------------------------------------
  * main()
  * Main function to set up ROS node.
  *------------------------------------------------------------------*/
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky" than the prefix is left_hand
+  //! Prefix for the driver to identify joint names if the Driver should expext "left_hand_Pinky"
+  //! than the prefix is left_hand
   std::string name_prefix;
 
   // Set up ROS.
@@ -73,7 +84,7 @@ int main(int argc, char **argv)
 
   try
   {
-    nh.param<std::string>("name_prefix",name_prefix,"left_hand");
+    nh.param<std::string>("name_prefix", name_prefix, "left_hand");
   }
   catch (ros::InvalidNameException e)
   {
@@ -82,6 +93,8 @@ int main(int argc, char **argv)
 
   // Subscribe connect topic (Empty)
   ros::Subscriber run_sub = nh.subscribe("toggle_run", 1, runCallback);
+  ros::Subscriber speed_sub = nh.subscribe("speed", 1, speedCallback);
+  ros::Subscriber loop_sub = nh.subscribe("loop", 1, loopCallback);
 
   // Publish current target positions
   ros::Publisher channel_pos_pub = nh.advertise<sensor_msgs::JointState>("channel_targets", 1);
@@ -103,14 +116,13 @@ int main(int argc, char **argv)
   channel_pos.name[8] = name_prefix + "_" + "Finger_Spread";
 
   // Set up the normalized time
-  ros::Time counter = ros::Time::now();
+  ros::Time counter      = ros::Time::now();
   double normalized_time = 0;
 
   // Init the Random
-  srand (time(NULL));
+  srand(time(NULL));
 
   // Tell ROS how fast to run this node. (100 = 100 Hz = 10 ms)
-  ros::Rate rate(50);
 
   // Main loop.
   while (nh.ok())
@@ -122,6 +134,7 @@ int main(int argc, char **argv)
       if ((ros::Time::now() - counter) > ros::Duration(sin_duration))
       {
         counter = ros::Time::now();
+        normalized_time = 0;
       }
       else
       {
@@ -132,33 +145,42 @@ int main(int argc, char **argv)
       // Everything is 0 by default
       for (size_t channel = 0; channel < 9; ++channel)
       {
-
         double cur_pos = 0.0;
 
         channel_pos.position[channel] = cur_pos;
       }
 
-      // Set the Spread to 0.5 (to avoid any collisions)
-      channel_pos.position[8] = 0.5;
+      channel_pos.header.stamp = ros::Time::now();
+
+
       // Calculate a halfe sin for the fingers
-      double cur_pos = sin(normalized_time*3.14);
+      double cur_pos = 0.4 + 0.3 * sin(normalized_time * 2 * 3.14);
+
+      // Set the Spread to 0.3 (to avoid any collisions)
+      channel_pos.position[8] = 0.3; // Finger Spread
+
+      channel_pos.position[0] = 1 - cur_pos; // Thumb_Flexion
+
       // Set the 2 Test fingers to the sin value
-      channel_pos.position[7] = cur_pos; //Pinky
-      channel_pos.position[2] = cur_pos; //Index Distal
-      channel_pos.position[3] = cur_pos; //Index proximal
-      channel_pos.position[4] = cur_pos; //Middle Distal
-      channel_pos.position[5] = cur_pos; //Middle proximal
-      channel_pos.position[6] = cur_pos; //Ring Finger
+      channel_pos.position[7] = cur_pos; // Pinky
+      channel_pos.position[2] = cur_pos; // Index Distal
+      channel_pos.position[3] = cur_pos; // Index proximal
+      channel_pos.position[4] = cur_pos; // Middle Distal
+      channel_pos.position[5] = cur_pos; // Middle proximal
+      channel_pos.position[6] = cur_pos; // Ring Finger
 
       // Publish
       channel_pos_pub.publish(channel_pos);
     }
+
+    ros::Rate rate(loop_rate);
     rate.sleep();
     ros::spinOnce();
 
-    // TO INDTRODUCE A VARIIING TIME RATE (in This case 50 - 100 HZ ) Uncomment this (discouraged! Will result in strange things obiously)
+    // TO INDTRODUCE A VARIIING TIME RATE (in This case 50 - 100 HZ ) Uncomment this (discouraged!
+    // Will result in strange things obiously)
     // Was meant to test jitter in the trajectory generation
-    //rate = 50+(rand() % 10 )*5;
+    // rate = 50+(rand() % 10 )*5;
   }
 
   return 0;
