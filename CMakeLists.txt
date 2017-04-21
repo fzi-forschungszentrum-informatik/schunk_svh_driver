@@ -70,7 +70,7 @@ catkin_package(
 
 
 foreach(dir description/meshes description/urdf)
-   install(DIRECTORY ${dir}/ 
+   install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
 
@@ -97,11 +97,35 @@ add_definitions( ${icl_comm_DEFINITIONS} )
 # Declare a cpp executable
 add_executable(svh_controller
   src/SVHNode.cpp
+  src/DynamicParameterClass.cpp
 )
 
 # Simple test programs
 add_executable(svh_sin_test
   src/SVHSinTest.cpp
+)
+
+## DynamicParametersTest ##
+add_executable(svh_dynamic_parameter_test
+  src/DynamicParameterTest.cpp
+  src/DynamicParameterClass.cpp
+)
+
+add_dependencies(svh_dynamic_parameter_test
+  icl_comm
+  icl_core
+  driver_svh
+  icl_hardware_canopen
+  ${PROJECT_NAME}_gencfg
+  ${PROJECT_NAME}_generate_messages_cpp
+)
+
+target_link_libraries(svh_dynamic_parameter_test
+ ${catkin_LIBRARIES}
+ ${catkin_LIBRARIES}
+ ${icl_comm_LIBRARIES}
+ ${icl_core_LIBRARIES}
+ ${driver_svh_LIBRARIES}
 )
 
 # Add cmake target dependencies of the executable/library
@@ -112,6 +136,7 @@ add_dependencies(svh_controller
   driver_svh
   ${PROJECT_NAME}_gencfg
 )
+
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
@@ -125,6 +150,7 @@ target_link_libraries(svh_controller
 add_dependencies(svh_sin_test
   icl_comm
   icl_core
+  driver_svh
 )
 
 ## Specify libraries to link a library or executable target against
@@ -132,6 +158,7 @@ target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
   ${ICL_COMM_LIBRARIES}
   ${ICL_CORE_LIBRARIES}
+  ${driver_svh_LIBRARIES}
 )
 
 #############
