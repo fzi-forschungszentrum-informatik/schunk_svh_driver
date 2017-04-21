@@ -430,7 +430,7 @@ bool SVHFingerManager::resetChannel(const SVHChannel &channel)
           m_controller->getControllerFeedback(channel, control_feedback);
 
           // Quite extensive Current output!
-          if ((icl_core::TimeStamp::now() - start_time_log).milliSeconds() > 100)
+          if ((icl_core::TimeStamp::now() - start_time_log).milliSeconds() > 250)
           {
             LOGGING_INFO_C(DriverSVH, SVHFingerManager,"Resetting Channel "<< channel << ":" << m_controller->m_channel_description[channel] << " current: " << control_feedback.current << " mA" << endl);
             start_time_log = icl_core::TimeStamp::now();
@@ -1169,7 +1169,10 @@ void SVHFingerManager::setDefaultHomeSettings()
   // All values are based on the hardware description for maximum tics and maximum allowable range of movements
   // direction, minimum offset, maximum offset, idle position, range in rad, resetcurrent(factor)
   m_home_settings[eSVH_THUMB_FLEXION]          =  SVHHomeSettings(+1, -175.0e3f,  -5.0e3f, -15.0e3f, 0.97, 0.75);    // thumb flexion
-  m_home_settings[eSVH_THUMB_OPPOSITION]       =  SVHHomeSettings(+1, -105.0e3f,  -5.0e3f, -15.0e3f, 0.99, 0.75); // thumb opposition
+  // Conservative value
+  //m_home_settings[eSVH_THUMB_OPPOSITION]       =  SVHHomeSettings(+1, -105.0e3f,  -5.0e3f, -15.0e3f, 0.99, 0.75); // thumb opposition
+  // Value using the complete movemment range
+  m_home_settings[eSVH_THUMB_OPPOSITION]       =  SVHHomeSettings(+1, -150.0e3f,  -5.0e3f, -15.0e3f, 0.99, 0.75); // thumb opposition
   m_home_settings[eSVH_INDEX_FINGER_DISTAL]    =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -8.0e3f, 1.33, 0.75);    // index finger distal joint
   m_home_settings[eSVH_INDEX_FINGER_PROXIMAL]  =  SVHHomeSettings(-1,    2.0e3f,  42.0e3f,   8.0e3f, 0.8, 0.75);  // index finger proximal joint
   m_home_settings[eSVH_MIDDLE_FINGER_DISTAL]   =  SVHHomeSettings(+1,  -47.0e3f,  -2.0e3f,  -8.0e3f, 1.33, 0.75);    // middle finger distal joint
@@ -1203,11 +1206,19 @@ std::vector<SVHCurrentSettings> SVHFingerManager::getDefaultCurrentSettings()
   //SVHCurrentSettings cur_set_finger_spread    = {-200.0f, 200.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.850f, 85.0f, -254.0f, 254.0f};  // Backup values that are based on  MeCoVis suggestions
 
   // curr min, Curr max,ky(error output scaling),dt(time base),imn (integral windup min), imx (integral windup max), kp,ki,umn,umx (output limter)
-  SVHCurrentSettings cur_set_thumb(-500.0f, 500.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonabl
-  SVHCurrentSettings cur_set_thumb_opposition(-500.0f, 500.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonable
-  SVHCurrentSettings cur_set_distal_joint(-300.0f, 300.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.3f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonable
-  SVHCurrentSettings cur_set_proximal_joint(-350.0f, 350.0f, 0.405f, 4e-6f, -350.0f, 350.0f, 0.5f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonable
-  SVHCurrentSettings cur_set_finger_spread(-300.0f, 300.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.70f, 60.0f, -255.0f, 255.0f); // Somewhat better values based on the MeCoVis software
+  //SVHCurrentSettings cur_set_thumb(-500.0f, 500.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonabl
+  //SVHCurrentSettings cur_set_thumb_opposition(-500.0f, 500.0f, 0.405f, 4e-6f, -500.0f, 500.0f, 0.6f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonable
+  //SVHCurrentSettings cur_set_distal_joint(-300.0f, 300.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.3f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonable
+  //SVHCurrentSettings cur_set_proximal_joint(-350.0f, 350.0f, 0.405f, 4e-6f, -350.0f, 350.0f, 0.5f, 10.0f, -255.0f, 255.0f); // Much Smoother values that produce nice motions and are actually reasonable
+  //SVHCurrentSettings cur_set_finger_spread(-300.0f, 300.0f, 0.405f, 4e-6f, -300.0f, 300.0f, 0.70f, 60.0f, -255.0f, 255.0f); // Somewhat better values based on the MeCoVis software
+
+  // More accurate values used in the new param files for SVH V1
+  SVHCurrentSettings cur_set_thumb(           -500.0f, 500.0f, 0.405f, 4e-6f, -25.0f, 25.0f, 0.6f, 10.0f, -255.0f, 255.0f);
+  SVHCurrentSettings cur_set_thumb_opposition(-500.0f, 500.0f, 0.405f, 4e-6f, -25.0f, 25.0f, 1.0f, 10.0f, -255.0f, 255.0f);
+  SVHCurrentSettings cur_set_distal_joint(    -300.0f, 300.0f, 0.405f, 4e-6f, -25.0f, 25.0f, 1.0f, 10.0f, -255.0f, 255.0f);
+  SVHCurrentSettings cur_set_proximal_joint(  -350.0f, 350.0f, 0.405f, 4e-6f, -25.0f, 25.0f, 1.0f, 10.0f, -255.0f, 255.0f);
+  SVHCurrentSettings cur_set_outer_joint(     -300.0f, 300.0f, 0.405f, 4e-6f, -10.0f, 10.0f, 1.0f, 25.0f, -255.0f, 255.0f);
+  SVHCurrentSettings cur_set_finger_spread(   -500.0f, 500.0f, 0.405f, 4e-6f,  -4.0f,  4.0f, 0.7f, 60.0f, -255.0f, 255.0f);
 
 
   current_settings[eSVH_THUMB_FLEXION]          = m_current_settings_given[eSVH_THUMB_FLEXION]          ? m_current_settings[eSVH_THUMB_FLEXION]          :cur_set_thumb;              // thumb flexion
@@ -1216,8 +1227,8 @@ std::vector<SVHCurrentSettings> SVHFingerManager::getDefaultCurrentSettings()
   current_settings[eSVH_INDEX_FINGER_PROXIMAL]  = m_current_settings_given[eSVH_INDEX_FINGER_PROXIMAL]  ? m_current_settings[eSVH_INDEX_FINGER_PROXIMAL]  :cur_set_proximal_joint;     // index finger proximal joint
   current_settings[eSVH_MIDDLE_FINGER_DISTAL]   = m_current_settings_given[eSVH_MIDDLE_FINGER_DISTAL]   ? m_current_settings[eSVH_MIDDLE_FINGER_DISTAL]   :cur_set_distal_joint;       // middle finger distal joint
   current_settings[eSVH_MIDDLE_FINGER_PROXIMAL] = m_current_settings_given[eSVH_MIDDLE_FINGER_PROXIMAL] ? m_current_settings[eSVH_MIDDLE_FINGER_PROXIMAL] :cur_set_proximal_joint;     // middle finger proximal joint
-  current_settings[eSVH_RING_FINGER]            = m_current_settings_given[eSVH_RING_FINGER]            ? m_current_settings[eSVH_RING_FINGER]            :cur_set_distal_joint;       // ring finger
-  current_settings[eSVH_PINKY]                  = m_current_settings_given[eSVH_PINKY]                  ? m_current_settings[eSVH_PINKY]                  :cur_set_distal_joint;       // pinky
+  current_settings[eSVH_RING_FINGER]            = m_current_settings_given[eSVH_RING_FINGER]            ? m_current_settings[eSVH_RING_FINGER]            :cur_set_outer_joint;        // ring finger
+  current_settings[eSVH_PINKY]                  = m_current_settings_given[eSVH_PINKY]                  ? m_current_settings[eSVH_PINKY]                  :cur_set_outer_joint;        // pinky
   current_settings[eSVH_FINGER_SPREAD]          = m_current_settings_given[eSVH_FINGER_SPREAD]          ? m_current_settings[eSVH_FINGER_SPREAD]          :cur_set_finger_spread;      // finger spread
 
   return current_settings;
@@ -1236,37 +1247,38 @@ std::vector<SVHPositionSettings> SVHFingerManager::getDefaultPositionSettings(co
 //  SVHPositionSettings pos_set_spread = {-1.0e6f, 1.0e6f, 17.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
 
     // All Fingers 0.5rad/sec except the fingers (1.5)
-//  SVHPositionSettings pos_set_thumb_flexion =          {-1.0e6f, 1.0e6f,  26.288e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  15.151e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_finger_index_distal =    {-1.0e6f, 1.0e6f,  16.917e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_finger_index_proximal =  {-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_finger_middle_distal =   {-1.0e6f, 1.0e6f,  16.917e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_finger_middle_proximal = {-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_finger_ring =            {-1.0e6f, 1.0e6f,  22.959e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  22.959e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//  SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f, 21.551e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
+//  SVHPositionSettings pos_set_thumb_flexion =          {-1.0e6f, 1.0e6f,  26.288e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 400.0f};
+//  SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  15.151e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
+//  SVHPositionSettings pos_set_finger_index_distal =    {-1.0e6f, 1.0e6f,  16.917e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 40.0f};
+//  SVHPositionSettings pos_set_finger_index_proximal =  {-1.0e6f, 1.0e6f,  25.0e3f,   1.00f, 1e-3f, -500.0f, 500.0f, 0.8f, 0.0f, 1000.0f};
+//  SVHPositionSettings pos_set_finger_middle_distal =   {-1.0e6f, 1.0e6f,  16.917e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 10.0f};
+//  SVHPositionSettings pos_set_finger_middle_proximal = {-1.0e6f, 1.0e6f,  25.0e3f,   1.00f, 1e-3f, -500.0f, 500.0f, 0.8f, 0.0f, 1000.0f};
+//  SVHPositionSettings pos_set_finger_ring =            {-1.0e6f, 1.0e6f,  22.959e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
+//  SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  22.959e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
+//  SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f, 21.551e3f,  1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
 
   // All Fingers with a speed that will close the complete range of the finger in 0.5 Seconds (except the thumb that will take 4)
-//    SVHPositionSettings pos_set_thumb_flexion =          {-1.0e6f, 1.0e6f,  42.5e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_finger_index_distal =    {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_finger_index_proximal =  {-1.0e6f, 1.0e6f,  80.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_finger_middle_distal =   {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_finger_middle_proximal = {-1.0e6f, 1.0e6f,  80.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_finger_ring =            {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
-//    SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f};
+//    SVHPositionSettings pos_set_thumb_flexion =          {-1.0e6f, 1.0e6f,  42.5e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 400.0f};
+//    SVHPositionSettings pos_set_thumb_opposition =       {-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
+//    SVHPositionSettings pos_set_finger_index_distal =    {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 40.0f};
+//    SVHPositionSettings pos_set_finger_index_proximal =  {-1.0e6f, 1.0e6f,  80.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.8f, 0.0f, 1000.0f};
+//    SVHPositionSettings pos_set_finger_middle_distal =   {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 10.0f};
+//    SVHPositionSettings pos_set_finger_middle_proximal = {-1.0e6f, 1.0e6f,  80.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.8f, 0.0f, 1000.0f};
+//    SVHPositionSettings pos_set_finger_ring =            {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
+//    SVHPositionSettings pos_set_finger_pinky =           {-1.0e6f, 1.0e6f,  90.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
+//    SVHPositionSettings pos_set_spread =                 {-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f};
 
-  // All Fingers with a speed that will close the complete range of the finger in 1 Seconds    (except the thumb that wikll take 4)
-  SVHPositionSettings pos_set_thumb_flexion            (-1.0e6f, 1.0e6f,  65.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_thumb_opposition         (-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -4000.0f, 4000.0f, 0.05f, 0.1f, 0.0f);
-  SVHPositionSettings pos_set_finger_index_distal      (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_finger_index_proximal    (-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.3f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_finger_middle_distal     (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_finger_middle_proximal   (-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.3f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_finger_ring              (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_finger_pinky             (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
-  SVHPositionSettings pos_set_spread                   (-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.05f, 0.0f);
+  // All Fingers with a speed that will close the complete range of the finger in 1 Seconds    (except the thumb that will take 4)
+  SVHPositionSettings pos_set_thumb_flexion            (-1.0e6f, 1.0e6f,  65.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 400.0f);
+  SVHPositionSettings pos_set_thumb_opposition         (-1.0e6f, 1.0e6f,  50.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.1f, 100.0f);
+  SVHPositionSettings pos_set_finger_index_distal      (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 40.0f);
+  SVHPositionSettings pos_set_finger_index_proximal    (-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.8f, 0.0f, 1000.0f);
+  SVHPositionSettings pos_set_finger_middle_distal     (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 10.0f);
+  SVHPositionSettings pos_set_finger_middle_proximal   (-1.0e6f, 1.0e6f,  40.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.8f, 0.0f, 1000.0f);
+  SVHPositionSettings pos_set_finger_ring              (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f);
+  SVHPositionSettings pos_set_finger_pinky             (-1.0e6f, 1.0e6f,  45.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f);
+  SVHPositionSettings pos_set_spread                   (-1.0e6f, 1.0e6f,  25.0e3f, 1.00f, 1e-3f, -500.0f, 500.0f, 0.5f, 0.0f, 100.0f);
+
 
   //Return either the default values or the ones given from outside
   position_settings[eSVH_THUMB_FLEXION]           = m_position_settings_given[eSVH_THUMB_FLEXION] ? m_position_settings[eSVH_THUMB_FLEXION] : pos_set_thumb_flexion;   // thumb flexion

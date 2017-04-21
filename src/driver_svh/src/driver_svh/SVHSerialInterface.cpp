@@ -103,9 +103,8 @@ void SVHSerialInterface::close()
   // cancel and delete receive packet thread
   if (m_receive_thread)
   {
-    // wait until thread has stopped
-    m_receive_thread->stop();
-    m_receive_thread->join();
+    // cancel thread
+    m_receive_thread->cancel();
 
     m_receive_thread.reset();
 
