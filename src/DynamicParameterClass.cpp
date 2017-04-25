@@ -1,6 +1,16 @@
 // this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
+// This file is part of the SCHUNK SVH Driver suite.
+//
+// This program is free software licensed under the LGPL
+// (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+// You can find a copy of this license in LICENSE folder in the top
+// directory of the source code.
+//
+// © Copyright 2017 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+// © Copyright 2017 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+//
 // -- END LICENSE BLOCK ------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -37,12 +47,13 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
   m_name_to_enum[driver_svh::eSVH_PINKY]                  = "PINKY";
   m_name_to_enum[driver_svh::eSVH_FINGER_SPREAD]          = "FINGER_SPREAD";
 
+  // Assertion to test whether the vector sizes are the same. Otherwise fail
   ROS_ASSERT(static_cast<driver_svh::SVHChannel>(m_name_to_enum.size()) ==
              driver_svh::eSVH_DIMENSION);
 
   try
   {
-    read_file(major_version, minor_version, parameters);
+    parse_parameters(major_version, minor_version, parameters);
   }
   catch (XmlRpc::XmlRpcException& e)
   {
@@ -51,17 +62,11 @@ DynamicParameter::DynamicParameter(const uint16_t major_version,
     exit(0);
   }
 
-//   else if (result == 0)
-//   {
-//     ROS_ERROR("DID NOT FIND THE CORRECT PARAMETER FILE FOR THE PROPOSED VERSION! "
-//               "FALLBACK ON THE DEFAULT PARAMETERS");
-//   }
 }
 
 /*
  *  This function converts a RpcValue Vector to a std::vector
  */
-
 
 bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
                                                std::vector<float>& my_vector)
@@ -87,8 +92,11 @@ bool DynamicParameter::xml_rpc_value_to_vector(XmlRpc::XmlRpcValue my_array,
   return true;
 }
 
+/*
+ * This function parses the parameter file and set the corresponding major and minor version
+ */
 
-void DynamicParameter::read_file(const uint16_t major_version_target,
+void DynamicParameter::parse_parameters(const uint16_t major_version_target,
                                 const uint16_t minor_version_target,
                                 XmlRpc::XmlRpcValue& parameters)
 {
@@ -103,7 +111,7 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
     return;
   }
 
-  if (parameters.size() > 0)
+  if (0 < parameters.size())
   {
     ROS_DEBUG("There exist %d different parameter versions", parameters.size());
     for (size_t i = 0; i < (unsigned) parameters.size(); ++i)
@@ -122,14 +130,14 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
         continue;
       }
 
-      bool correct_version    = major_version_read == major_version_target
-                             && minor_version_read == minor_version_target;
-      bool same_major_version = major_version_read == major_version_target
-                             && minor_version_read <= minor_version_target;
-      bool default_state      = major_version_read == 0
-                             && minor_version_read == 0;
+      bool is_correct_version    = major_version_read == major_version_target
+                                && minor_version_read == minor_version_target;
+      bool is_same_major_version = major_version_read == major_version_target
+                                && minor_version_read <= minor_version_target;
+      bool is_default_state      = major_version_read == 0
+                                && minor_version_read == 0;
 
-      if (correct_version || same_major_version || default_state)
+      if (is_correct_version || is_same_major_version || is_default_state)
       {
         ROS_DEBUG("major version: %d minor version: %d", major_version_read, minor_version_read);
 
@@ -159,11 +167,11 @@ void DynamicParameter::read_file(const uint16_t major_version_target,
         }
 
         // First Reading of parameters
-        if (default_state == true)
+        if (is_default_state)
         {
-          default_state = false;
+          is_default_state = false;
         }
-        else if (correct_version)
+        else if (is_correct_version)
         {
           ROS_INFO("Did find correct version");
           return;
