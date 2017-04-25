@@ -58,7 +58,7 @@ Forthcoming
 * Contributors: Georg Heppner
 
 0.1.3 (2014-09-26)
------------
+------------------
 * Moved the widget gui to a resource folder as it is suggested by the rqt tutorials
 * Changed the includes from using find scripts to use internally set variables to prevent failures in case of multiple icl workspace instances
 * Added missing plugin.xml to install targets
