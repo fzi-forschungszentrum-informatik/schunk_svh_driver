@@ -2,6 +2,15 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added hardware support for the 2nd hardware version of the Schunk SVH
+* Added dynamic parameter switcher for automatically setting parameters
+* Improved sine test with increased movement range, thumb movement and possibility to change the speed
+* Extracted ``fzi_icl_core`` and ``fzi_icl_comm``
+* Fixed xacro warnings
+* Contributors: Felix Mauch, Pascal Becker, Johannes Mangler
+
 0.1.7 (2015-06-18)
 ------------------
 * Added correct Reset of package counts
