@@ -2,8 +2,8 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2017-04-25)
+------------------
 * Added hardware support for the 2nd hardware version of the Schunk SVH
 * Added dynamic parameter switcher for automatically setting parameters
 * Improved sine test with increased movement range, thumb movement and possibility to change the speed
