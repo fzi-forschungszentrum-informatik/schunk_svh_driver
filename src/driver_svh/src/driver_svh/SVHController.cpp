@@ -351,7 +351,7 @@ void SVHController::requestControllerFeedback(const SVHChannel& channel)
 void SVHController::requestPositionSettings(const SVHChannel& channel)
 {
   LOGGING_TRACE_C(DriverSVH, SVHController, "Requesting PositionSettings from Hardware for channel: " << channel << endl);
-  SVHSerialPacket serial_packet((SVH_GET_POSITION_SETTINGS| static_cast<uint8_t>(channel << 4)),40);
+  SVHSerialPacket serial_packet(40,(SVH_GET_POSITION_SETTINGS| static_cast<uint8_t>(channel << 4)));
   m_serial_interface ->sendPacket(serial_packet);
 }
 

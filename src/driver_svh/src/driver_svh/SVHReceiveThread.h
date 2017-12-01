@@ -92,10 +92,11 @@ private:
     eRS_HEADER2,
     eRS_INDEX,
     eRS_ADDRESS,
-    eRS_LENGTH,
+    eRS_LENGTH1,
+    eRS_LENGTH2,
     eRS_DATA,
-    eRS_CHECKSUM,
-    eRS_COMPLETE
+    eRS_CHECKSUM1,
+    eRS_CHECKSUM2
   } typedef tState;
 
   //! current state of the state machine
@@ -103,6 +104,9 @@ private:
 
   //! length of received serial data
   uint16_t m_length;
+  //! Checksum of packet
+  uint8_t m_checksum1;
+  uint8_t m_checksum2;
 
   //! length of received serial data
   std::vector<uint8_t> m_data;
@@ -112,6 +116,8 @@ private:
 
   //! packets counter
   unsigned int m_packets_received;
+  //! counter for skipped bytes in case no packet is detected
+  unsigned int m_skipped_bytes;
 
   //! state machine processing received data
   bool receiveData();
