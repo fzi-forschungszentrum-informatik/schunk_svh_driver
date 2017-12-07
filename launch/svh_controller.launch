@@ -35,7 +35,8 @@
   </node>
 
   <!-- Start RQT by default if not specified otherwise -->
-  <node if="$(arg gui)" name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
+  <node if="$(arg gui)" name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find schunk_svh_driver)/etc/urdf.rviz" />
 
   <!-- Joint state publisher is needed in order to use the mimic tag within the URDF (needed for propper visualization) Hardware will work without it thoug -->
     <node name="output_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
