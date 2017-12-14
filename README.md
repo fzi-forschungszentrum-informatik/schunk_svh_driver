@@ -1,5 +1,5 @@
 # Schunk SVH driver
-[![Build Status](https://travis-ci.org/famalgosner/schunk_svh_driver.svg?branch=add_travis_ci)](https://travis-ci.org/famalgosner/schunk_svh_driver)
+[![Build Status](https://travis-ci.org/fzi-forschungszentrum-informatik/schunk_svh_driver.svg?branch=master)](https://travis-ci.org/fzi-forschungszentrum-informatik/schunk_svh_driver)
 
 This is the driver package for the SCHUNK SVH Five-Finger-Hand.
 It was developed on behalf of SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar, Germany
