@@ -40,7 +40,7 @@
 
 #include <driver_svh/Logging.h>
 #include <icl_comm/ByteOrderConversion.h>
-#include <boost/bind/bind.hpp>
+#include <boost/bind.hpp>
 
 using icl_comm::ArrayBuilder;
 
