@@ -1,5 +1,22 @@
+
+---
+
+# ++ Deprecation Notice ++
+
+This repository has been split and refactured into two components:
+
+- A plain C++ library: [schunk_svh_library](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_library)
+- A ROS1/ROS2 wrapper: [schunk_svh_ros_driver](https://github.com/fzi-forschungszentrum-informatik/schunk_svh_ros_driver)
+
+It's now significantly easier to build and use this driver in all mayor ROS1/ROS2 versions and in custom, non-ROS projects.
+
+Please continue to open issues and pull requests there as usual.
+
+---
+
 # Schunk SVH driver
 [![Build Status](https://travis-ci.org/fzi-forschungszentrum-informatik/schunk_svh_driver.svg?branch=master)](https://travis-ci.org/fzi-forschungszentrum-informatik/schunk_svh_driver)
+
 
 This is the driver package for the SCHUNK SVH Five-Finger-Hand.
 It was developed on behalf of SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar, Germany
